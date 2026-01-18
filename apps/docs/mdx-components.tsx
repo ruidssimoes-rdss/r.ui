@@ -168,36 +168,36 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => <ComponentPageHeader>{children}</ComponentPageHeader>,
     h2: ({ children }) => (
-      <h2 className="text-xl md:text-2xl font-semibold mt-10 mb-3 text-[var(--docs-text)]">{children}</h2>
+      <h2 className="text-sm font-semibold mt-8 mb-2 text-[var(--docs-text)]">{children}</h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-lg font-semibold mt-6 mb-2 text-[var(--docs-text)]">{children}</h3>
+      <h3 className="text-sm font-medium mt-5 mb-1.5 text-[var(--docs-text)]">{children}</h3>
     ),
     p: ({ children }) => (
-      <p className="text-base text-[var(--docs-text-secondary)] mb-4 leading-relaxed">{children}</p>
+      <p className="text-sm text-[var(--docs-text-secondary)] mb-3 leading-relaxed">{children}</p>
     ),
     code: ({ children }) => (
-      <code className="px-1.5 py-0.5 rounded bg-[var(--docs-sidebar-active)] border border-[var(--docs-border)] text-sm font-mono text-[var(--docs-text)]">
+      <code className="px-1 py-0.5 rounded bg-[var(--docs-sidebar-active)] border border-[var(--docs-border)] text-xs font-mono text-[var(--docs-text)]">
         {children}
       </code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-[var(--docs-code-bg)] border border-[var(--docs-code-border)] rounded-xl p-4 overflow-x-auto mb-6 text-sm backdrop-blur-sm transition-colors duration-200">
+      <pre className="bg-[var(--docs-code-bg)] border border-[var(--docs-code-border)] rounded-md p-3 overflow-x-auto mb-4 text-xs backdrop-blur-sm transition-colors duration-200">
         {children}
       </pre>
     ),
     table: ({ children }) => (
-      <div className="overflow-x-auto mb-6 rounded-lg border border-[var(--docs-border)]">
-        <table className="w-full text-sm">{children}</table>
+      <div className="overflow-x-auto mb-4 rounded-md border border-[var(--docs-border)]">
+        <table className="w-full text-xs">{children}</table>
       </div>
     ),
     th: ({ children }) => (
-      <th className="text-left px-3 py-2.5 bg-[var(--docs-sidebar-active)] border-b border-[var(--docs-border)] text-[var(--docs-text-muted)] text-xs font-medium uppercase tracking-wide">
+      <th className="text-left px-2.5 py-2 bg-[var(--docs-sidebar-active)] border-b border-[var(--docs-border)] text-[var(--docs-text-muted)] text-xs font-medium uppercase tracking-wide">
         {children}
       </th>
     ),
     td: ({ children }) => (
-      <td className="px-3 py-2.5 border-b border-[var(--docs-border)] text-[var(--docs-text-secondary)] text-sm">
+      <td className="px-2.5 py-2 border-b border-[var(--docs-border)] text-[var(--docs-text-secondary)] text-xs">
         {children}
       </td>
     ),
