@@ -1,0 +1,146 @@
+# Spinner
+
+Loading indicator for asynchronous operations.
+
+## Installation
+
+```bash
+npx r-ui add spinner
+```
+
+## Usage
+
+```tsx
+import { Spinner } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return <Spinner />
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Spinner />`}>
+  <SpinnerBasicPreview />
+</ComponentPreview>
+
+## Sizes
+
+<ComponentPreview code={`<Spinner size="sm" />
+<Spinner size="md" />
+<Spinner size="lg" />`}>
+  <SpinnerSizesPreview />
+</ComponentPreview>
+
+## Colors
+
+<ComponentPreview code={`<Spinner color="primary" />
+<Spinner color="success" />
+<Spinner color="warning" />
+<Spinner color="error" />`}>
+  <SpinnerColorsPreview />
+</ComponentPreview>
+
+## With Text
+
+<ComponentPreview code={`<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+  <Spinner size="sm" />
+  <Text>Loading...</Text>
+</View>`}>
+  <SpinnerWithTextPreview />
+</ComponentPreview>
+
+## In Button
+
+<ComponentPreview code={`<Button disabled>
+  <Spinner size="sm" />
+  Loading...
+</Button>`}>
+  <SpinnerButtonPreview />
+</ComponentPreview>
+
+## Dots Variant
+
+<ComponentPreview code={`<Spinner variant="dots" size="sm" />
+<Spinner variant="dots" size="md" />
+<Spinner variant="dots" size="lg" />`}>
+  <div className="flex gap-8 items-center">
+    <div className="flex gap-1">
+      <div className="w-1 h-1 rounded-full animate-pulse" style={{ backgroundColor: 'var(--component-text)' }}></div>
+      <div className="w-1 h-1 rounded-full animate-pulse delay-75" style={{ backgroundColor: 'var(--component-text)' }}></div>
+      <div className="w-1 h-1 rounded-full animate-pulse delay-150" style={{ backgroundColor: 'var(--component-text)' }}></div>
+    </div>
+    <div className="flex gap-1.5">
+      <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--component-text)' }}></div>
+      <div className="w-1.5 h-1.5 rounded-full animate-pulse delay-75" style={{ backgroundColor: 'var(--component-text)' }}></div>
+      <div className="w-1.5 h-1.5 rounded-full animate-pulse delay-150" style={{ backgroundColor: 'var(--component-text)' }}></div>
+    </div>
+    <div className="flex gap-2">
+      <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--component-text)' }}></div>
+      <div className="w-2 h-2 rounded-full animate-pulse delay-75" style={{ backgroundColor: 'var(--component-text)' }}></div>
+      <div className="w-2 h-2 rounded-full animate-pulse delay-150" style={{ backgroundColor: 'var(--component-text)' }}></div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Loading Button
+
+Combine with Button for loading states.
+
+```tsx
+import { Button, Spinner } from '@r-ui/react-native'
+
+function LoadingButton() {
+  const [loading, setLoading] = useState(false)
+
+  return (
+    <Button disabled={loading} onPress={() => setLoading(true)}>
+      {loading ? <Spinner size="sm" color="#0a0a0a" /> : 'Submit'}
+    </Button>
+  )
+}
+```
+
+## Inline Loading
+
+<ComponentPreview code={`<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+  <Spinner size="sm" />
+  <Text>Loading data...</Text>
+</View>`}>
+  <div className="flex items-center gap-2">
+    <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--component-text)', borderTopColor: 'transparent' }}></div>
+    <span className="text-sm" style={{ color: 'var(--component-text)' }}>Loading data...</span>
+  </div>
+</ComponentPreview>
+
+## Full Page Loading
+
+```tsx
+import { Spinner } from '@r-ui/react-native'
+import { View, StyleSheet } from 'react-native'
+
+function LoadingScreen() {
+  return (
+    <View style={styles.container}>
+      <Spinner size="lg" />
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Spinner size |
+| `color` | `string` | `colors.text.primary` | Spinner color |
+| `variant` | `'default' \| 'dots'` | `'default'` | Spinner style variant |
+| `style` | `ViewStyle` | - | Additional styles |

@@ -1,0 +1,94 @@
+# Installation
+
+Get started with r.ui in your React Native or Expo project.
+
+## Prerequisites
+
+- React Native 0.70+ or Expo SDK 47+
+- TypeScript (recommended) — all components include full type definitions
+
+## Quick Start
+
+Install the r.ui package in your project:
+
+```bash
+npm install @r-ui/react-native@latest
+```
+
+Or with other package managers:
+
+```bash
+# yarn
+yarn add @r-ui/react-native
+
+# pnpm
+pnpm add @r-ui/react-native
+
+# bun
+bun add @r-ui/react-native
+```
+
+## Usage
+
+Import and use components directly:
+
+```tsx
+import { Button, Text, Card } from '@r-ui/react-native'
+
+export default function App() {
+  return (
+    <Card>
+      <Text variant="heading">Welcome to r.ui</Text>
+      <Button onPress={() => console.log('Hello!')}>
+        Get Started
+      </Button>
+    </Card>
+  )
+}
+```
+
+## Theme Setup
+
+For full theming support (dark/light/oatmeal modes and glassmorphism effects), wrap your app with the ThemeProvider:
+
+```tsx
+import { ThemeProvider } from '@r-ui/react-native'
+
+export default function App() {
+  return (
+    <ThemeProvider defaultTheme="system">
+      {/* Your app content */}
+    </ThemeProvider>
+  )
+}
+```
+
+The ThemeProvider accepts these options:
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `defaultTheme` | `'light' \| 'dark' \| 'oatmeal' \| 'system'` | `'system'` | Initial theme |
+| `storageKey` | `string` | `'r-ui-theme'` | AsyncStorage key for persistence |
+
+Components work without the provider, but theming features require it.
+
+## Web Support
+
+r.ui works with React Native Web out of the box. For Next.js or other web frameworks, ensure you have `react-native-web` configured:
+
+```bash
+npm install react-native-web
+```
+
+## Expo
+
+For Expo projects, r.ui works without additional configuration:
+
+```bash
+npx expo install @r-ui/react-native
+```
+
+## What's Next?
+
+- Browse the [Button](/docs/components/button) component to see r.ui in action
+- [Explore all available components](/docs/components) in the sidebar

@@ -1,0 +1,93 @@
+# Container
+
+Centered max-width wrapper for constraining content width.
+
+## Installation
+
+```bash
+npx r-ui add container
+```
+
+## Usage
+
+```tsx
+import { Container } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Container size="md" padding="md">
+      <Text>Contained content</Text>
+    </Container>
+  )
+}
+```
+
+## Sizes
+
+<ComponentPreview code={`<Container size="sm">Small (640px max)</Container>
+<Container size="md">Medium (768px max)</Container>
+<Container size="lg">Large (1024px max)</Container>
+<Container size="xl">Extra Large (1280px max)</Container>
+<Container size="full">Full width</Container>`}>
+  <div className="flex flex-col gap-4 w-full">
+    <div className="w-full max-w-[640px] mx-auto rounded-lg p-4" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>Small (640px max)</span>
+    </div>
+    <div className="w-full max-w-[768px] mx-auto rounded-lg p-4" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>Medium (768px max)</span>
+    </div>
+    <div className="w-full max-w-[1024px] mx-auto rounded-lg p-4" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>Large (1024px max)</span>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Padding
+
+<ComponentPreview code={`<Container padding="none">No padding</Container>
+<Container padding="sm">Small padding</Container>
+<Container padding="md">Medium padding</Container>
+<Container padding="lg">Large padding</Container>`}>
+  <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
+    <div className="rounded-lg" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>No padding</span>
+    </div>
+    <div className="rounded-lg px-3" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>Small padding (12px)</span>
+    </div>
+    <div className="rounded-lg px-4" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>Medium padding (16px)</span>
+    </div>
+    <div className="rounded-lg px-6" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>Large padding (24px)</span>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Centered
+
+<ComponentPreview code={`<Container centered>
+  Centered content (default)
+</Container>
+
+<Container centered={false}>
+  Left-aligned content
+</Container>`}>
+  <div className="flex flex-col gap-4 w-full">
+    <div className="w-full max-w-md mx-auto rounded-lg p-4" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>Centered content (default)</span>
+    </div>
+    <div className="w-full max-w-md rounded-lg p-4" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <span className="text-sm" style={{ color: 'var(--component-text)' }}>Left-aligned content</span>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'` | `'lg'` | Maximum width size |
+| `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` | Horizontal padding |
+| `centered` | `boolean` | `true` | Center the container horizontally |
+| `style` | `ViewStyle` | - | Additional styles |

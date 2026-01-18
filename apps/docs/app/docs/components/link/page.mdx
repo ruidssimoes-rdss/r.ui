@@ -1,0 +1,115 @@
+# Link
+
+Styled navigation links with external link support for mobile.
+
+## Installation
+
+```bash
+npx r-ui add link
+```
+
+## Usage
+
+```tsx
+import { Link } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Link href="https://example.com" external>
+      Visit Example
+    </Link>
+  )
+}
+```
+
+## Basic Link
+
+<ComponentPreview code={`<Link href="/docs">Documentation</Link>`}>
+  <span className="font-medium underline" style={{ color: 'var(--track-fill)' }}>Documentation</span>
+</ComponentPreview>
+
+## Variants
+
+<ComponentPreview code={`<Link variant="default">Default link</Link>
+<Link variant="muted">Muted link</Link>
+<Link variant="destructive">Destructive link</Link>`}>
+  <div className="flex flex-col gap-3">
+    <span className="font-medium underline" style={{ color: 'var(--track-fill)' }}>Default link</span>
+    <span className="font-medium underline" style={{ color: 'var(--component-text-muted)' }}>Muted link</span>
+    <span className="font-medium underline" style={{ color: 'var(--track-fill-error)' }}>Destructive link</span>
+  </div>
+</ComponentPreview>
+
+## Underline Styles
+
+<ComponentPreview code={`<Link underline="always">Always underlined</Link>
+<Link underline="hover">Underline on press</Link>
+<Link underline="none">No underline</Link>`}>
+  <div className="flex flex-col gap-3">
+    <span className="font-medium underline" style={{ color: 'var(--track-fill)' }}>Always underlined</span>
+    <span className="font-medium" style={{ color: 'var(--track-fill)' }}>Underline on press</span>
+    <span className="font-medium" style={{ color: 'var(--track-fill)' }}>No underline</span>
+  </div>
+</ComponentPreview>
+
+## External Links
+
+External links open in the device browser and display an indicator.
+
+<ComponentPreview code={`<Link href="https://github.com" external>
+  GitHub
+</Link>
+
+<Link href="https://docs.expo.dev" external>
+  Expo Documentation
+</Link>`}>
+  <div className="flex flex-col gap-3">
+    <span className="font-medium underline" style={{ color: 'var(--track-fill)' }}>GitHub <span className="text-xs">↗</span></span>
+    <span className="font-medium underline" style={{ color: 'var(--track-fill)' }}>Expo Documentation <span className="text-xs">↗</span></span>
+  </div>
+</ComponentPreview>
+
+## Custom Press Handler
+
+<ComponentPreview code={`<Link onPress={() => router.push('/settings')}>
+  Go to Settings
+</Link>`}>
+  <span className="font-medium underline cursor-pointer" style={{ color: 'var(--track-fill)' }}>Go to Settings</span>
+</ComponentPreview>
+
+## Disabled State
+
+<ComponentPreview code={`<Link href="/premium" disabled>
+  Premium Feature
+</Link>`}>
+  <span className="font-medium" style={{ color: 'var(--component-text-muted)' }}>Premium Feature</span>
+</ComponentPreview>
+
+## Inline Usage
+
+<ComponentPreview code={`<Text>
+  By continuing, you agree to our{' '}
+  <Link href="/terms">Terms of Service</Link>
+  {' '}and{' '}
+  <Link href="/privacy">Privacy Policy</Link>.
+</Text>`}>
+  <p style={{ color: 'var(--component-text)' }}>
+    By continuing, you agree to our{' '}
+    <span className="font-medium underline" style={{ color: 'var(--track-fill)' }}>Terms of Service</span>
+    {' '}and{' '}
+    <span className="font-medium underline" style={{ color: 'var(--track-fill)' }}>Privacy Policy</span>.
+  </p>
+</ComponentPreview>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `href` | `string` | - | Link destination URL |
+| `external` | `boolean` | `false` | Open link in device browser |
+| `underline` | `'always' \| 'hover' \| 'none'` | `'always'` | Underline behavior |
+| `variant` | `'default' \| 'muted' \| 'destructive'` | `'default'` | Visual variant |
+| `onPress` | `() => void` | - | Custom press handler (overrides href) |
+| `disabled` | `boolean` | `false` | Disable the link |
+| `style` | `ViewStyle` | - | Additional container styles |
+| `textStyle` | `TextStyle` | - | Additional text styles |

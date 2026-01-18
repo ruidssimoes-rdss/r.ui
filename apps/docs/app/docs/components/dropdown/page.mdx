@@ -1,0 +1,179 @@
+# Dropdown
+
+Contextual menu triggered by a button with animated appearance.
+
+## Installation
+
+```bash
+npx r-ui add dropdown
+```
+
+## Usage
+
+```tsx
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownContent,
+  DropdownItem,
+  DropdownSeparator,
+} from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Dropdown>
+      <DropdownTrigger>
+        <Button>Open Menu</Button>
+      </DropdownTrigger>
+      <DropdownContent>
+        <DropdownItem onSelect={() => console.log('Edit')}>Edit</DropdownItem>
+        <DropdownItem onSelect={() => console.log('Duplicate')}>Duplicate</DropdownItem>
+        <DropdownSeparator />
+        <DropdownItem destructive onSelect={() => console.log('Delete')}>
+          Delete
+        </DropdownItem>
+      </DropdownContent>
+    </Dropdown>
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Dropdown>
+  <DropdownTrigger>
+    <Button variant="secondary">Actions</Button>
+  </DropdownTrigger>
+  <DropdownContent>
+    <DropdownItem onSelect={() => {}}>View Profile</DropdownItem>
+    <DropdownItem onSelect={() => {}}>Settings</DropdownItem>
+    <DropdownItem onSelect={() => {}}>Help</DropdownItem>
+  </DropdownContent>
+</Dropdown>`}>
+  <DropdownBasicPreview />
+</ComponentPreview>
+
+## With Icons
+
+<ComponentPreview code={`<Dropdown>
+  <DropdownTrigger>
+    <Button>Actions</Button>
+  </DropdownTrigger>
+  <DropdownContent>
+    <DropdownItem icon={<EditIcon />}>Edit</DropdownItem>
+    <DropdownItem icon={<CopyIcon />}>Duplicate</DropdownItem>
+    <DropdownSeparator />
+    <DropdownItem icon={<TrashIcon />} destructive>Delete</DropdownItem>
+  </DropdownContent>
+</Dropdown>`}>
+  <DropdownWithIconsPreview />
+</ComponentPreview>
+
+## Disabled Items
+
+<ComponentPreview code={`<Dropdown>
+  <DropdownTrigger>
+    <Button>Menu</Button>
+  </DropdownTrigger>
+  <DropdownContent>
+    <DropdownItem>Active Item</DropdownItem>
+    <DropdownItem disabled>Disabled Item</DropdownItem>
+    <DropdownItem>Another Active</DropdownItem>
+  </DropdownContent>
+</Dropdown>`}>
+  <DropdownDisabledItemsPreview />
+</ComponentPreview>
+
+## With Icons
+
+```tsx
+import { EditIcon, CopyIcon, TrashIcon } from './icons'
+
+<Dropdown>
+  <DropdownTrigger>
+    <Button>Actions</Button>
+  </DropdownTrigger>
+  <DropdownContent>
+    <DropdownItem icon={<EditIcon />} onSelect={() => {}}>
+      Edit
+    </DropdownItem>
+    <DropdownItem icon={<CopyIcon />} onSelect={() => {}}>
+      Duplicate
+    </DropdownItem>
+    <DropdownSeparator />
+    <DropdownItem icon={<TrashIcon />} destructive onSelect={() => {}}>
+      Delete
+    </DropdownItem>
+  </DropdownContent>
+</Dropdown>
+```
+
+## Disabled Items
+
+<ComponentPreview code={`<DropdownContent>
+  <DropdownItem>Available action</DropdownItem>
+  <DropdownItem disabled>Disabled action</DropdownItem>
+</DropdownContent>`}>
+  <div className="w-48 bg-bg-elevated border border-white/10 rounded-xl py-1 shadow-lg">
+    <div className="px-3 py-2 text-white text-sm hover:bg-bg-surface cursor-pointer">Available action</div>
+    <div className="px-3 py-2 text-white/40 text-sm cursor-not-allowed">Disabled action</div>
+  </div>
+</ComponentPreview>
+
+## Controlled
+
+```tsx
+const [open, setOpen] = useState(false)
+
+<Dropdown open={open} onOpenChange={setOpen}>
+  <DropdownTrigger>
+    <Button>Menu</Button>
+  </DropdownTrigger>
+  <DropdownContent>
+    <DropdownItem onSelect={() => {}}>Item</DropdownItem>
+  </DropdownContent>
+</Dropdown>
+```
+
+## Props
+
+### Dropdown
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Content alignment relative to trigger |
+
+### DropdownTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactElement` | - | Trigger element |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### DropdownContent
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Menu content |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### DropdownItem
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Item content |
+| `onSelect` | `() => void` | - | Selection callback |
+| `disabled` | `boolean` | `false` | Disable the item |
+| `destructive` | `boolean` | `false` | Destructive styling |
+| `icon` | `ReactNode` | - | Icon element |
+| `style` | `ViewStyle` | - | Additional styles |
+| `textStyle` | `TextStyle` | - | Additional text styles |
+
+### DropdownSeparator
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `ViewStyle` | - | Additional styles |

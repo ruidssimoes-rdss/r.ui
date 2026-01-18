@@ -1,0 +1,166 @@
+# Select
+
+A dropdown select component for choosing from a list of options.
+
+## Installation
+
+```bash
+npx r-ui add select
+```
+
+## Usage
+
+```tsx
+import { Select } from '@r-ui/react-native'
+
+const options = [
+  { label: 'Option 1', value: '1' },
+  { label: 'Option 2', value: '2' },
+  { label: 'Option 3', value: '3' },
+]
+
+export default function MyComponent() {
+  const [value, setValue] = useState('')
+
+  return (
+    <Select
+      label="Choose an option"
+      options={options}
+      value={value}
+      onValueChange={setValue}
+    />
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Select
+  placeholder="Select an option"
+  options={[
+    { label: 'Apple', value: 'apple' },
+    { label: 'Banana', value: 'banana' },
+    { label: 'Orange', value: 'orange' },
+  ]}
+/>`}>
+  <SelectBasicPreview />
+</ComponentPreview>
+
+## With Label
+
+<ComponentPreview code={`<Select
+  label="Country"
+  placeholder="Select country"
+  options={[
+    { label: 'United States', value: 'us' },
+    { label: 'Canada', value: 'ca' },
+    { label: 'United Kingdom', value: 'uk' },
+  ]}
+/>`}>
+  <SelectWithLabelPreview />
+</ComponentPreview>
+
+## Disabled Options
+
+<ComponentPreview code={`<Select
+  options={[
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2', disabled: true },
+    { label: 'Option 3', value: '3' },
+  ]}
+/>`}>
+  <SelectDisabledOptionsPreview />
+</ComponentPreview>
+
+## Disabled State
+
+<ComponentPreview code={`<Select disabled placeholder="Disabled select" />`}>
+  <SelectDisabledPreview />
+</ComponentPreview>
+
+## Error State
+
+<ComponentPreview code={`<Select
+  label="Category"
+  placeholder="Select category"
+  error
+  helperText="Please select a category"
+  options={[
+    { label: 'Technology', value: 'tech' },
+    { label: 'Design', value: 'design' },
+    { label: 'Business', value: 'business' },
+  ]}
+/>`}>
+  <div className="w-full max-w-sm space-y-2">
+    <label className="text-sm font-medium" style={{ color: 'var(--component-text)' }}>Category</label>
+    <button className="w-full flex items-center justify-between px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--component-bg-surface)', border: '1px solid var(--track-fill-error)', color: 'var(--component-text-muted)' }}>
+      <span>Select category</span>
+      <svg className="w-4 h-4" style={{ color: 'var(--component-text-muted)' }} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+      </svg>
+    </button>
+    <p className="text-xs" style={{ color: 'var(--track-fill-error)' }}>Please select a category</p>
+  </div>
+</ComponentPreview>
+
+## Disabled
+
+<ComponentPreview code={`<Select
+  label="Plan"
+  disabled
+  value="pro"
+  options={[
+    { label: 'Free', value: 'free' },
+    { label: 'Pro', value: 'pro' },
+    { label: 'Enterprise', value: 'enterprise' },
+  ]}
+/>`}>
+  <div className="w-full max-w-sm space-y-2">
+    <label className="text-sm font-medium" style={{ color: 'var(--component-text-muted)' }}>Plan</label>
+    <button disabled className="w-full flex items-center justify-between px-4 py-3 rounded-lg cursor-not-allowed" style={{ backgroundColor: 'var(--component-bg-elevated)', border: '1px solid var(--component-border)', color: 'var(--component-text-muted)' }}>
+      <span>Pro</span>
+      <svg className="w-4 h-4" style={{ color: 'var(--component-text-muted)' }} viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+      </svg>
+    </button>
+  </div>
+</ComponentPreview>
+
+## Dropdown Preview
+
+When the select is opened, a modal displays with the available options:
+
+<ComponentPreview code={`// Dropdown modal (shown when opened)
+<SelectDropdown
+  options={options}
+  selectedValue="apple"
+/>`}>
+  <div className="w-full max-w-xs rounded-xl p-2" style={{ backgroundColor: 'var(--component-bg-elevated)', border: '1px solid var(--component-border)' }}>
+    <div className="flex items-center justify-between px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--component-bg-surface)' }}>
+      <span className="font-medium" style={{ color: 'var(--track-fill)' }}>Apple</span>
+      <svg className="w-4 h-4" style={{ color: 'var(--track-fill)' }} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M4 10l4 4 8-8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
+    <div className="flex items-center px-4 py-3 rounded-lg">
+      <span style={{ color: 'var(--component-text)' }}>Banana</span>
+    </div>
+    <div className="flex items-center px-4 py-3 rounded-lg">
+      <span style={{ color: 'var(--component-text)' }}>Orange</span>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Currently selected value |
+| `onValueChange` | `(value: string) => void` | - | Change handler |
+| `options` | `{ label: string; value: string }[]` | Required | Available options |
+| `placeholder` | `string` | `'Select an option'` | Placeholder text |
+| `disabled` | `boolean` | `false` | Disable the select |
+| `label` | `string` | - | Select label |
+| `helperText` | `string` | - | Helper or error text |
+| `error` | `boolean` | `false` | Show error state |
+| `style` | `ViewStyle` | - | Container styles |

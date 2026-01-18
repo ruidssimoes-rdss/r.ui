@@ -1,0 +1,118 @@
+# Card
+
+Container component with elevation or border styling for grouping related content.
+
+## Installation
+
+```bash
+npx r-ui add card
+```
+
+## Usage
+
+```tsx
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Card Title</CardTitle>
+        <CardDescription>Card description goes here</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Text>Card content</Text>
+      </CardContent>
+      <CardFooter>
+        <Button>Action</Button>
+      </CardFooter>
+    </Card>
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Card>
+  <CardContent>
+    <Text>This is a basic card.</Text>
+  </CardContent>
+</Card>`}>
+  <CardBasicPreview />
+</ComponentPreview>
+
+## With Header
+
+<ComponentPreview code={`<Card>
+  <CardHeader>
+    <CardTitle>Card Title</CardTitle>
+    <CardDescription>Card description goes here</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <Text>Card content</Text>
+  </CardContent>
+</Card>`}>
+  <CardWithHeaderPreview />
+</ComponentPreview>
+
+## With Image
+
+<ComponentPreview code={`<Card>
+  <CardImage source={{ uri: 'image.jpg' }} />
+  <CardContent>
+    <CardTitle>Beautiful Sunset</CardTitle>
+    <CardDescription>A stunning view of the sunset</CardDescription>
+  </CardContent>
+</Card>`}>
+  <CardWithImagePreview />
+</ComponentPreview>
+
+## Interactive
+
+<ComponentPreview code={`<Card pressable onPress={() => console.log('pressed')}>
+  <CardContent>
+    <Text>Click me!</Text>
+  </CardContent>
+</Card>`}>
+  <CardInteractivePreview />
+</ComponentPreview>
+
+## Props
+
+### Card
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'elevated' \| 'outlined' \| 'ghost'` | `'elevated'` | Visual style variant |
+| `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` | Internal padding |
+| `style` | `ViewStyle` | - | Additional container styles |
+
+### CardHeader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `ViewStyle` | - | Additional styles |
+
+### CardContent
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `ViewStyle` | - | Additional styles |
+
+### CardFooter
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `ViewStyle` | - | Additional styles |
+
+### CardTitle
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `TextStyle` | - | Additional text styles |
+
+### CardDescription
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `TextStyle` | - | Additional text styles |

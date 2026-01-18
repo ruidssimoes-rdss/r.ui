@@ -1,0 +1,102 @@
+# Avatar
+
+User profile image with fallback support for displaying initials.
+
+## Installation
+
+```bash
+npx r-ui add avatar
+```
+
+## Usage
+
+```tsx
+import { Avatar } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Avatar
+      src="https://example.com/avatar.jpg"
+      alt="User avatar"
+      fallback="JD"
+    />
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Avatar
+  src="https://i.pravatar.cc/150?img=1"
+  fallback="JD"
+/>`}>
+  <AvatarBasicPreview />
+</ComponentPreview>
+
+## Sizes
+
+<ComponentPreview code={`<Avatar size="sm" fallback="SM" />
+<Avatar size="md" fallback="MD" />
+<Avatar size="lg" fallback="LG" />
+<Avatar size="xl" fallback="XL" />`}>
+  <AvatarSizesPreview />
+</ComponentPreview>
+
+## Avatar Group
+
+<ComponentPreview code={`<AvatarGroup max={3}>
+  <Avatar src="..." fallback="JD" />
+  <Avatar src="..." fallback="AB" />
+  <Avatar src="..." fallback="CD" />
+  <Avatar src="..." fallback="EF" />
+</AvatarGroup>`}>
+  <AvatarGroupPreview />
+</ComponentPreview>
+
+## With Status
+
+<ComponentPreview code={`<Avatar src="..." fallback="JD" status="online" />
+<Avatar src="..." fallback="AB" status="offline" />
+<Avatar src="..." fallback="CD" status="busy" />`}>
+  <AvatarWithStatusPreview />
+</ComponentPreview>
+
+## Composable API
+
+For more control, use the sub-components directly.
+
+```tsx
+import { Avatar, AvatarImage, AvatarFallback } from '@r-ui/react-native'
+
+<Avatar size="lg">
+  <AvatarImage src="https://example.com/avatar.jpg" alt="User" />
+  <AvatarFallback>JD</AvatarFallback>
+</Avatar>
+```
+
+## Props
+
+### Avatar
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `src` | `string` | - | Image source URL |
+| `alt` | `string` | - | Alt text for accessibility |
+| `fallback` | `string` | - | Fallback text (usually initials) |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Avatar size |
+| `style` | `ViewStyle` | - | Additional container styles |
+
+### AvatarImage
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `src` | `string` | - | Image source URL |
+| `alt` | `string` | - | Alt text for accessibility |
+| `style` | `ImageStyle` | - | Additional image styles |
+
+### AvatarFallback
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Fallback content |
+| `style` | `TextStyle` | - | Additional text styles |

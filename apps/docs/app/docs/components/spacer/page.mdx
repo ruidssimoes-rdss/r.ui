@@ -1,0 +1,142 @@
+# Spacer
+
+Empty space utility for adding consistent gaps between elements.
+
+## Installation
+
+```bash
+npx r-ui add spacer
+```
+
+## Usage
+
+```tsx
+import { Spacer } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <View>
+      <Text>Top content</Text>
+      <Spacer size={6} />
+      <Text>Bottom content</Text>
+    </View>
+  )
+}
+```
+
+## Vertical Spacing
+
+<ComponentPreview code={`<View>
+  <Box />
+  <Spacer size={2} axis="vertical" />
+  <Box />
+  <Spacer size={4} axis="vertical" />
+  <Box />
+  <Spacer size={8} axis="vertical" />
+  <Box />
+</View>`}>
+  <div className="flex flex-col w-full">
+    <div className="flex items-center gap-2">
+      <div className="h-8 w-full rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      <span className="text-xs whitespace-nowrap" style={{ color: 'var(--component-text-muted)' }}>size=2 (8px)</span>
+    </div>
+    <div className="h-2"></div>
+    <div className="flex items-center gap-2">
+      <div className="h-8 w-full rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      <span className="text-xs whitespace-nowrap" style={{ color: 'var(--component-text-muted)' }}>size=4 (16px)</span>
+    </div>
+    <div className="h-4"></div>
+    <div className="flex items-center gap-2">
+      <div className="h-8 w-full rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      <span className="text-xs whitespace-nowrap" style={{ color: 'var(--component-text-muted)' }}>size=8 (32px)</span>
+    </div>
+    <div className="h-8"></div>
+    <div className="h-8 w-full rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+  </div>
+</ComponentPreview>
+
+## Horizontal Spacing
+
+<ComponentPreview code={`<Flex direction="row" align="center">
+  <Box />
+  <Spacer size={2} axis="horizontal" />
+  <Box />
+  <Spacer size={4} axis="horizontal" />
+  <Box />
+  <Spacer size={8} axis="horizontal" />
+  <Box />
+</Flex>`}>
+  <div className="flex flex-row items-center">
+    <div className="h-8 w-8 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+    <div className="w-2"></div>
+    <div className="h-8 w-8 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+    <div className="w-4"></div>
+    <div className="h-8 w-8 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+    <div className="w-8"></div>
+    <div className="h-8 w-8 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+  </div>
+</ComponentPreview>
+
+## Sizes
+
+Uses the spacing token scale for consistent sizing.
+
+<ComponentPreview code={`<Spacer size={1} />  // 4px
+<Spacer size={2} />  // 8px
+<Spacer size={3} />  // 12px
+<Spacer size={4} />  // 16px
+<Spacer size={6} />  // 24px
+<Spacer size={8} />  // 32px
+<Spacer size={12} /> // 48px`}>
+  <div className="flex flex-col gap-1 w-full">
+    <div className="flex items-center gap-2">
+      <div className="h-1 rounded" style={{width: '4px', backgroundColor: 'var(--track-fill)'}}></div>
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>size=1 (4px)</span>
+    </div>
+    <div className="flex items-center gap-2">
+      <div className="h-1 rounded" style={{width: '8px', backgroundColor: 'var(--track-fill)'}}></div>
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>size=2 (8px)</span>
+    </div>
+    <div className="flex items-center gap-2">
+      <div className="h-1 rounded" style={{width: '12px', backgroundColor: 'var(--track-fill)'}}></div>
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>size=3 (12px)</span>
+    </div>
+    <div className="flex items-center gap-2">
+      <div className="h-1 rounded" style={{width: '16px', backgroundColor: 'var(--track-fill)'}}></div>
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>size=4 (16px)</span>
+    </div>
+    <div className="flex items-center gap-2">
+      <div className="h-1 rounded" style={{width: '24px', backgroundColor: 'var(--track-fill)'}}></div>
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>size=6 (24px)</span>
+    </div>
+    <div className="flex items-center gap-2">
+      <div className="h-1 rounded" style={{width: '32px', backgroundColor: 'var(--track-fill)'}}></div>
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>size=8 (32px)</span>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Flexible Spacer
+
+Use `flex` to make the spacer take up remaining space, useful for pushing content apart.
+
+<ComponentPreview code={`<Flex direction="row" align="center">
+  <Text>Left</Text>
+  <Spacer flex />
+  <Text>Right</Text>
+</Flex>`}>
+  <div className="flex flex-row items-center w-full p-3 rounded" style={{ backgroundColor: 'var(--component-bg-surface)' }}>
+    <span className="text-sm" style={{ color: 'var(--component-text)' }}>Left</span>
+    <div className="flex-1"></div>
+    <span className="text-sm" style={{ color: 'var(--component-text)' }}>Right</span>
+  </div>
+</ComponentPreview>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 8 \| 10 \| 12 \| 16 \| 20 \| 24` | `4` | Space size (uses spacing tokens) |
+| `axis` | `'horizontal' \| 'vertical' \| 'both'` | `'vertical'` | Direction of spacing |
+| `flex` | `boolean` | `false` | Take up remaining space |
+| `style` | `ViewStyle` | - | Additional styles |

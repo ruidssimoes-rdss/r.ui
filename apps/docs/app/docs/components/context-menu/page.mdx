@@ -1,0 +1,259 @@
+# ContextMenu
+
+Long-press triggered menu for mobile (equivalent to right-click on desktop).
+
+## Installation
+
+```bash
+npx r-ui add context-menu
+```
+
+## Usage
+
+```tsx
+import {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+} from '@r-ui/react-native'
+import { Card } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger>
+        <Card>Long press me</Card>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem onSelect={() => console.log('Edit')}>Edit</ContextMenuItem>
+        <ContextMenuItem onSelect={() => console.log('Share')}>Share</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem destructive onSelect={() => console.log('Delete')}>
+          Delete
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
+```
+
+## Basic Example
+
+<ComponentPreview code={`<ContextMenu>
+  <ContextMenuTrigger>
+    <Card>Long press this card</Card>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem onSelect={() => {}}>Edit</ContextMenuItem>
+    <ContextMenuItem onSelect={() => {}}>Share</ContextMenuItem>
+    <ContextMenuItem onSelect={() => {}}>Copy Link</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>`}>
+  <div className="flex gap-4">
+    <div className="p-4 rounded-xl text-sm" style={{ backgroundColor: 'var(--component-bg-elevated)', border: '1px solid var(--component-border)', color: 'var(--component-text)' }}>Long press this card</div>
+  </div>
+</ComponentPreview>
+
+## Menu Preview
+
+<ComponentPreview code={`<ContextMenuContent>
+  <ContextMenuItem>Edit</ContextMenuItem>
+  <ContextMenuItem>Share</ContextMenuItem>
+  <ContextMenuSeparator />
+  <ContextMenuItem destructive>Delete</ContextMenuItem>
+</ContextMenuContent>`}>
+  <div className="w-48 rounded-xl py-1 shadow-lg" style={{ backgroundColor: 'var(--component-bg-elevated)', border: '1px solid var(--component-border)' }}>
+    <div className="px-3 py-2 text-sm cursor-pointer" style={{ color: 'var(--component-text)' }}>Edit</div>
+    <div className="px-3 py-2 text-sm cursor-pointer" style={{ color: 'var(--component-text)' }}>Share</div>
+    <div className="h-px my-1" style={{ backgroundColor: 'var(--component-border)' }}></div>
+    <div className="px-3 py-2 text-sm cursor-pointer" style={{ color: 'var(--track-fill-error)' }}>Delete</div>
+  </div>
+</ComponentPreview>
+
+## With Labels
+
+<ComponentPreview code={`<ContextMenuContent>
+  <ContextMenuLabel>Actions</ContextMenuLabel>
+  <ContextMenuItem>View Details</ContextMenuItem>
+  <ContextMenuItem>Edit</ContextMenuItem>
+  <ContextMenuSeparator />
+  <ContextMenuLabel>Danger Zone</ContextMenuLabel>
+  <ContextMenuItem destructive>Delete</ContextMenuItem>
+</ContextMenuContent>`}>
+  <div className="w-48 rounded-xl py-1 shadow-lg" style={{ backgroundColor: 'var(--component-bg-elevated)', border: '1px solid var(--component-border)' }}>
+    <div className="px-3 py-1 text-xs font-semibold" style={{ color: 'var(--component-text-muted)' }}>Actions</div>
+    <div className="px-3 py-2 text-sm cursor-pointer" style={{ color: 'var(--component-text)' }}>View Details</div>
+    <div className="px-3 py-2 text-sm cursor-pointer" style={{ color: 'var(--component-text)' }}>Edit</div>
+    <div className="h-px my-1" style={{ backgroundColor: 'var(--component-border)' }}></div>
+    <div className="px-3 py-1 text-xs font-semibold" style={{ color: 'var(--component-text-muted)' }}>Danger Zone</div>
+    <div className="px-3 py-2 text-sm cursor-pointer" style={{ color: 'var(--track-fill-error)' }}>Delete</div>
+  </div>
+</ComponentPreview>
+
+## With Icons
+
+```tsx
+import { EditIcon, ShareIcon, TrashIcon } from './icons'
+
+<ContextMenu>
+  <ContextMenuTrigger>
+    <Card>Long press me</Card>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem icon={<EditIcon />} onSelect={() => {}}>
+      Edit
+    </ContextMenuItem>
+    <ContextMenuItem icon={<ShareIcon />} onSelect={() => {}}>
+      Share
+    </ContextMenuItem>
+    <ContextMenuSeparator />
+    <ContextMenuItem icon={<TrashIcon />} destructive onSelect={() => {}}>
+      Delete
+    </ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## Checkbox Items
+
+```tsx
+const [showHidden, setShowHidden] = useState(false)
+const [autoSave, setAutoSave] = useState(true)
+
+<ContextMenu>
+  <ContextMenuTrigger>
+    <Card>Settings</Card>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuCheckboxItem
+      checked={showHidden}
+      onCheckedChange={setShowHidden}
+    >
+      Show Hidden Files
+    </ContextMenuCheckboxItem>
+    <ContextMenuCheckboxItem
+      checked={autoSave}
+      onCheckedChange={setAutoSave}
+    >
+      Auto Save
+    </ContextMenuCheckboxItem>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## Disabled Items
+
+<ComponentPreview code={`<ContextMenuContent>
+  <ContextMenuItem>Available action</ContextMenuItem>
+  <ContextMenuItem disabled>Disabled action</ContextMenuItem>
+</ContextMenuContent>`}>
+  <div className="w-48 rounded-xl py-1 shadow-lg" style={{ backgroundColor: 'var(--component-bg-elevated)', border: '1px solid var(--component-border)' }}>
+    <div className="px-3 py-2 text-sm cursor-pointer" style={{ color: 'var(--component-text)' }}>Available action</div>
+    <div className="px-3 py-2 text-sm cursor-not-allowed" style={{ color: 'var(--component-text-muted)' }}>Disabled action</div>
+  </div>
+</ComponentPreview>
+
+## Custom Long Press Delay
+
+```tsx
+<ContextMenu>
+  <ContextMenuTrigger delayMs={800}>
+    <Card>Requires longer press (800ms)</Card>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem onSelect={() => {}}>Action</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## Controlled
+
+```tsx
+const [open, setOpen] = useState(false)
+
+<ContextMenu open={open} onOpenChange={setOpen}>
+  <ContextMenuTrigger>
+    <Card>Controlled menu</Card>
+  </ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem onSelect={() => {}}>Action</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## Props
+
+### ContextMenu
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `align` | `'start' \| 'center' \| 'end'` | `'start'` | Content alignment relative to press position |
+| `sideOffset` | `number` | `4` | Offset from the press position |
+
+### ContextMenuTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Trigger element |
+| `asChild` | `boolean` | `false` | Render as child element instead of wrapping |
+| `delayMs` | `number` | `500` | Long press delay in milliseconds |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### ContextMenuContent
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Menu content |
+| `align` | `'start' \| 'center' \| 'end'` | - | Override alignment from ContextMenu |
+| `sideOffset` | `number` | - | Override offset from ContextMenu |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### ContextMenuItem
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Item content |
+| `onSelect` | `() => void` | - | Selection callback |
+| `disabled` | `boolean` | `false` | Disable the item |
+| `destructive` | `boolean` | `false` | Destructive styling |
+| `icon` | `ReactNode` | - | Icon element |
+| `style` | `ViewStyle` | - | Additional styles |
+| `textStyle` | `TextStyle` | - | Additional text styles |
+
+### ContextMenuCheckboxItem
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Item content |
+| `checked` | `boolean` | `false` | Whether the item is checked |
+| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when checked state changes |
+| `disabled` | `boolean` | `false` | Disable the item |
+| `style` | `ViewStyle` | - | Additional styles |
+| `textStyle` | `TextStyle` | - | Additional text styles |
+
+### ContextMenuLabel
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Label text |
+| `style` | `ViewStyle` | - | Additional styles |
+| `textStyle` | `TextStyle` | - | Additional text styles |
+
+### ContextMenuSeparator
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `ViewStyle` | - | Additional styles |
+
+## Features
+
+- Long-press to open with configurable delay (default 500ms)
+- Menu positioned near the touch point
+- Haptic feedback on open (when expo-haptics is available)
+- Tap outside to close
+- Animated scale/fade appearance
+- Automatic screen boundary detection

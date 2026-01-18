@@ -1,0 +1,309 @@
+# Sheet
+
+Slide-in panel (bottom sheet / drawer) with gesture support.
+
+## Installation
+
+```bash
+npx r-ui add sheet
+```
+
+## Usage
+
+```tsx
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+  SheetClose,
+} from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Sheet>
+      <SheetTrigger>
+        <Button>Open Sheet</Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Sheet Title</SheetTitle>
+          <SheetDescription>
+            This is a description of the sheet content.
+          </SheetDescription>
+        </SheetHeader>
+        <SheetFooter>
+          <SheetClose>
+            <Button>Done</Button>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Sheet>
+  <SheetTrigger>
+    <Button>Open Sheet</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Settings</SheetTitle>
+      <SheetDescription>Manage your preferences</SheetDescription>
+    </SheetHeader>
+  </SheetContent>
+</Sheet>`}>
+  <SheetBasicPreview />
+</ComponentPreview>
+
+## Bottom Sheet
+
+<ComponentPreview code={`<Sheet side="bottom">
+  <SheetTrigger>
+    <Button>Open Bottom Sheet</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Filters</SheetTitle>
+    </SheetHeader>
+    {/* Filter controls */}
+  </SheetContent>
+</Sheet>`}>
+  <SheetBottomPreview />
+</ComponentPreview>
+
+## With Form
+
+<ComponentPreview code={`<Sheet>
+  <SheetTrigger>
+    <Button>Edit Profile</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Edit Profile</SheetTitle>
+    </SheetHeader>
+    <Input label="Name" />
+    <Input label="Email" />
+    <SheetFooter>
+      <Button>Save Changes</Button>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>`}>
+  <SheetWithFormPreview />
+</ComponentPreview>
+
+## Old Sheet Preview
+
+<ComponentPreview code={`<SheetContent>
+  <SheetHeader>
+    <SheetTitle>Settings</SheetTitle>
+    <SheetDescription>Manage your preferences</SheetDescription>
+  </SheetHeader>
+  {/* Content */}
+</SheetContent>`}>
+  <div className="w-full max-w-sm">
+    <div className="rounded-t-xl" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <div className="w-9 h-1 rounded-full mx-auto mt-2 mb-2" style={{ backgroundColor: 'var(--component-border)' }}></div>
+      <div className="p-4">
+        <p className="text-lg font-semibold" style={{ color: 'var(--component-text)' }}>Settings</p>
+        <p className="text-sm mb-4" style={{ color: 'var(--component-text-muted)' }}>Manage your preferences</p>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between py-2" style={{ borderBottom: '1px solid var(--component-border)' }}>
+            <span className="text-sm" style={{ color: 'var(--component-text)' }}>Dark mode</span>
+            <div className="w-10 h-6 rounded-full relative" style={{ backgroundColor: 'var(--switch-bg-checked)' }}>
+              <div className="absolute right-1 top-1 w-4 h-4 rounded-full" style={{ backgroundColor: 'var(--switch-thumb)' }}></div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between py-2" style={{ borderBottom: '1px solid var(--component-border)' }}>
+            <span className="text-sm" style={{ color: 'var(--component-text)' }}>Notifications</span>
+            <div className="w-10 h-6 rounded-full relative" style={{ backgroundColor: 'var(--switch-bg)', border: '1px solid var(--component-border)' }}>
+              <div className="absolute left-1 top-1 w-4 h-4 rounded-full" style={{ backgroundColor: 'var(--switch-thumb)' }}></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Side Sheets
+
+### Right Drawer
+
+```tsx
+<Sheet side="right">
+  <SheetTrigger>
+    <Button>Open Menu</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Navigation</SheetTitle>
+    </SheetHeader>
+    {/* Menu items */}
+  </SheetContent>
+</Sheet>
+```
+
+### Left Drawer
+
+```tsx
+<Sheet side="left">
+  <SheetTrigger>
+    <Button>Open Sidebar</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Sidebar</SheetTitle>
+    </SheetHeader>
+    {/* Sidebar content */}
+  </SheetContent>
+</Sheet>
+```
+
+### Top Sheet
+
+```tsx
+<Sheet side="top">
+  <SheetTrigger>
+    <Button>Show Notification</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>New Message</SheetTitle>
+      <SheetDescription>You have a new message from John.</SheetDescription>
+    </SheetHeader>
+  </SheetContent>
+</Sheet>
+```
+
+## Gesture Dismissal
+
+The sheet can be dismissed by:
+- Swiping in the dismiss direction (down for bottom, up for top, etc.)
+- Tapping the backdrop
+- Using the `SheetClose` component
+
+```tsx
+<SheetContent>
+  {/* Drag down to dismiss (for bottom sheet) */}
+  <SheetHeader>
+    <SheetTitle>Swipe to dismiss</SheetTitle>
+  </SheetHeader>
+</SheetContent>
+```
+
+## Controlled
+
+```tsx
+const [open, setOpen] = useState(false)
+
+<Sheet open={open} onOpenChange={setOpen}>
+  <SheetTrigger>
+    <Button>Open</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Controlled Sheet</SheetTitle>
+    </SheetHeader>
+    <Button onPress={() => setOpen(false)}>Close</Button>
+  </SheetContent>
+</Sheet>
+```
+
+## Action Sheet Example
+
+<ComponentPreview code={`<Sheet>
+  <SheetTrigger>
+    <Button>Share</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Share via</SheetTitle>
+    </SheetHeader>
+    <View style={{ gap: 8 }}>
+      <Button variant="ghost">Copy Link</Button>
+      <Button variant="ghost">Email</Button>
+      <Button variant="ghost">Twitter</Button>
+    </View>
+  </SheetContent>
+</Sheet>`}>
+  <div className="w-full max-w-sm">
+    <div className="rounded-t-xl" style={{ backgroundColor: 'var(--component-bg-elevated)' }}>
+      <div className="w-9 h-1 rounded-full mx-auto mt-2 mb-2" style={{ backgroundColor: 'var(--component-border)' }}></div>
+      <div className="p-4">
+        <p className="text-lg font-semibold mb-4" style={{ color: 'var(--component-text)' }}>Share via</p>
+        <div className="space-y-1">
+          <button className="w-full text-left px-3 py-2.5 rounded-lg" style={{ color: 'var(--btn-ghost-text)' }}>Copy Link</button>
+          <button className="w-full text-left px-3 py-2.5 rounded-lg" style={{ color: 'var(--btn-ghost-text)' }}>Email</button>
+          <button className="w-full text-left px-3 py-2.5 rounded-lg" style={{ color: 'var(--btn-ghost-text)' }}>Twitter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Props
+
+### Sheet
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `side` | `'bottom' \| 'top' \| 'left' \| 'right'` | `'bottom'` | Side to show sheet |
+
+### SheetTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactElement` | - | Trigger element |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### SheetContent
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Sheet content |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### SheetHeader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Header content |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### SheetFooter
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Footer content |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### SheetTitle
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Title content |
+| `style` | `TextStyle` | - | Additional styles |
+
+### SheetDescription
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Description content |
+| `style` | `TextStyle` | - | Additional styles |
+
+### SheetClose
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Close button content |
+| `style` | `ViewStyle` | - | Additional styles |

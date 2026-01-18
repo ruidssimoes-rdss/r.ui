@@ -1,0 +1,103 @@
+# Alert
+
+Informational banner for displaying important messages to users.
+
+## Installation
+
+```bash
+npx r-ui add alert
+```
+
+## Usage
+
+```tsx
+import { Alert } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Alert
+      title="Heads up!"
+      description="You can add components to your app using the CLI."
+    />
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Alert title="Heads up!" description="You can add components using the CLI." />`}>
+  <AlertBasicPreview />
+</ComponentPreview>
+
+## Variants
+
+<ComponentPreview code={`<Alert variant="default" title="Default" description="This is a default alert." />
+<Alert variant="info" title="Info" description="This is an info alert." />
+<Alert variant="success" title="Success" description="This is a success alert." />
+<Alert variant="warning" title="Warning" description="This is a warning alert." />
+<Alert variant="error" title="Error" description="This is an error alert." />`}>
+  <AlertVariantsPreview />
+</ComponentPreview>
+
+## Without Title
+
+<ComponentPreview code={`<Alert description="This is a simple description-only alert." />`}>
+  <AlertWithoutTitlePreview />
+</ComponentPreview>
+
+## With Custom Icon
+
+```tsx
+import { Alert } from '@r-ui/react-native'
+import { InfoIcon } from './icons'
+
+<Alert
+  variant="info"
+  title="Did you know?"
+  description="You can use custom icons with alerts."
+  icon={<InfoIcon />}
+/>
+```
+
+## Sub-components
+
+For more control, use the sub-components directly.
+
+```tsx
+import { Alert, AlertTitle, AlertDescription } from '@r-ui/react-native'
+
+<Alert variant="success">
+  <AlertTitle>Payment successful</AlertTitle>
+  <AlertDescription>
+    Your payment has been processed. Check your email for confirmation.
+  </AlertDescription>
+</Alert>
+```
+
+## Props
+
+### Alert
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | - | Alert title |
+| `description` | `string` | - | Alert description |
+| `variant` | `'default' \| 'info' \| 'success' \| 'warning' \| 'error'` | `'default'` | Visual style variant |
+| `icon` | `ReactNode` | - | Custom icon element |
+| `closable` | `boolean` | `false` | Show close button |
+| `onClose` | `() => void` | - | Close button callback |
+| `style` | `ViewStyle` | - | Additional container styles |
+
+### AlertTitle
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Title content |
+| `style` | `TextStyle` | - | Additional text styles |
+
+### AlertDescription
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Description content |
+| `style` | `TextStyle` | - | Additional text styles |

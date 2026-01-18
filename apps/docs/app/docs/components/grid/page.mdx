@@ -1,0 +1,158 @@
+# Grid
+
+Grid layout system for React Native with flexible column spanning.
+
+## Installation
+
+```bash
+npx r-ui add grid
+```
+
+## Usage
+
+```tsx
+import { Grid, GridItem } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Grid columns={3} gap={4}>
+      <GridItem>Item 1</GridItem>
+      <GridItem>Item 2</GridItem>
+      <GridItem>Item 3</GridItem>
+      <GridItem colSpan={2}>Wide Item</GridItem>
+      <GridItem>Item 5</GridItem>
+    </Grid>
+  )
+}
+```
+
+## Columns
+
+<ComponentPreview code={`<Grid columns={2} gap={2}>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+</Grid>
+
+<Grid columns={3} gap={2}>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+</Grid>
+
+<Grid columns={4} gap={2}>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+</Grid>`}>
+  <div className="flex flex-col gap-6 w-full">
+    <div className="flex flex-col gap-2">
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>2 columns</span>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      </div>
+    </div>
+    <div className="flex flex-col gap-2">
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>3 columns</span>
+      <div className="grid grid-cols-3 gap-2">
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      </div>
+    </div>
+    <div className="flex flex-col gap-2">
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>4 columns</span>
+      <div className="grid grid-cols-4 gap-2">
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-12 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      </div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Column Spanning
+
+<ComponentPreview code={`<Grid columns={3} gap={2}>
+  <GridItem colSpan={2}>Spans 2 columns</GridItem>
+  <GridItem>1 column</GridItem>
+  <GridItem>1 column</GridItem>
+  <GridItem colSpan={2}>Spans 2 columns</GridItem>
+</Grid>`}>
+  <div className="grid grid-cols-3 gap-2 w-full">
+    <div className="col-span-2 h-12 rounded flex items-center justify-center text-sm" style={{ backgroundColor: 'var(--track-fill)', color: 'var(--component-text-inverse)' }}>Spans 2</div>
+    <div className="h-12 rounded flex items-center justify-center text-sm opacity-60" style={{ backgroundColor: 'var(--track-fill)', color: 'var(--component-text-inverse)' }}>1</div>
+    <div className="h-12 rounded flex items-center justify-center text-sm opacity-60" style={{ backgroundColor: 'var(--track-fill)', color: 'var(--component-text-inverse)' }}>1</div>
+    <div className="col-span-2 h-12 rounded flex items-center justify-center text-sm" style={{ backgroundColor: 'var(--track-fill)', color: 'var(--component-text-inverse)' }}>Spans 2</div>
+  </div>
+</ComponentPreview>
+
+## Gap
+
+<ComponentPreview code={`<Grid columns={2} gap={2}>Small gap</Grid>
+<Grid columns={2} gap={4}>Medium gap</Grid>
+<Grid columns={2} gap={6}>Large gap</Grid>`}>
+  <div className="flex flex-col gap-6 w-full">
+    <div className="flex flex-col gap-2">
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>gap=2 (8px)</span>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      </div>
+    </div>
+    <div className="flex flex-col gap-2">
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>gap=4 (16px)</span>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      </div>
+    </div>
+    <div className="flex flex-col gap-2">
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>gap=6 (24px)</span>
+      <div className="grid grid-cols-2 gap-6">
+        <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+        <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      </div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Separate Row and Column Gap
+
+<ComponentPreview code={`<Grid columns={2} rowGap={6} columnGap={2}>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+  <GridItem><Box /></GridItem>
+</Grid>`}>
+  <div className="flex flex-col gap-2 w-full">
+    <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>rowGap=6, columnGap=2</span>
+    <div className="grid grid-cols-2 gap-x-2 gap-y-6">
+      <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+      <div className="h-10 rounded" style={{ backgroundColor: 'var(--track-fill)' }}></div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Props
+
+### Grid
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 12` | `2` | Number of columns |
+| `gap` | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 8 \| 10 \| 12` | `4` | Gap between all items |
+| `rowGap` | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 8 \| 10 \| 12` | - | Gap between rows (overrides gap) |
+| `columnGap` | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6 \| 8 \| 10 \| 12` | - | Gap between columns (overrides gap) |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### GridItem
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `colSpan` | `number` | `1` | Number of columns to span |
+| `style` | `ViewStyle` | - | Additional styles |

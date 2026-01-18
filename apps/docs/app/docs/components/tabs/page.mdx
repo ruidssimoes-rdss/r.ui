@@ -1,0 +1,130 @@
+# Tabs
+
+Organize content into multiple panels with animated tab navigation.
+
+## Installation
+
+```bash
+npx r-ui add tabs
+```
+
+## Usage
+
+```tsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Tabs defaultValue="account">
+      <TabsList>
+        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="account">
+        <Text>Account settings content</Text>
+      </TabsContent>
+      <TabsContent value="password">
+        <Text>Password settings content</Text>
+      </TabsContent>
+      <TabsContent value="settings">
+        <Text>General settings content</Text>
+      </TabsContent>
+    </Tabs>
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+    <TabsTrigger value="settings">Settings</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account content</TabsContent>
+  <TabsContent value="password">Password content</TabsContent>
+  <TabsContent value="settings">Settings content</TabsContent>
+</Tabs>`}>
+  <TabsBasicPreview />
+</ComponentPreview>
+
+## With Rich Content
+
+<ComponentPreview code={`<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="analytics">Analytics</TabsTrigger>
+    <TabsTrigger value="reports">Reports</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">
+    <Card>
+      <CardTitle>Dashboard Overview</CardTitle>
+      {/* Dashboard content */}
+    </Card>
+  </TabsContent>
+</Tabs>`}>
+  <TabsWithContentPreview />
+</ComponentPreview>
+
+## Pill Variant
+
+<ComponentPreview code={`<Tabs defaultValue="all" variant="pills">
+  <TabsList>
+    <TabsTrigger value="all">All</TabsTrigger>
+    <TabsTrigger value="active">Active</TabsTrigger>
+    <TabsTrigger value="archived">Archived</TabsTrigger>
+  </TabsList>
+</Tabs>`}>
+  <TabsPillVariantPreview />
+</ComponentPreview>
+
+## Controlled
+
+```tsx
+const [value, setValue] = useState('account')
+
+<Tabs value={value} onValueChange={setValue}>
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="settings">Settings</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account content</TabsContent>
+  <TabsContent value="settings">Settings content</TabsContent>
+</Tabs>
+```
+
+## Props
+
+### Tabs
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Controlled selected tab value |
+| `onValueChange` | `(value: string) => void` | - | Callback when tab changes |
+| `defaultValue` | `string` | `''` | Default selected tab (uncontrolled) |
+| `variant` | `'default' \| 'pills' \| 'underline'` | `'default'` | Visual variant |
+| `style` | `ViewStyle` | - | Additional container styles |
+
+### TabsList
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `ViewStyle` | - | Additional styles |
+
+### TabsTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Tab identifier (required) |
+| `disabled` | `boolean` | `false` | Disable this tab |
+| `style` | `ViewStyle` | - | Additional styles |
+| `textStyle` | `TextStyle` | - | Additional text styles |
+
+### TabsContent
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Tab this content belongs to (required) |
+| `style` | `ViewStyle` | - | Additional styles |

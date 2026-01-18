@@ -1,0 +1,64 @@
+# Button
+
+Trigger actions with a click. Available in multiple variants and sizes.
+
+## Installation
+
+```bash
+npx r-ui add button
+```
+
+## Usage
+
+```tsx
+import { Button } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <Button onPress={() => console.log('Pressed!')}>
+      Click me
+    </Button>
+  )
+}
+```
+
+## Variants
+
+<ComponentPreview code={`<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="destructive">Destructive</Button>`}>
+  <ButtonVariantsPreview />
+</ComponentPreview>
+
+## Sizes
+
+<ComponentPreview code={`<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>`}>
+  <ButtonSizesPreview />
+</ComponentPreview>
+
+## Loading State
+
+<ComponentPreview code={`<Button loading>Loading...</Button>`}>
+  <ButtonLoadingPreview />
+</ComponentPreview>
+
+## Disabled State
+
+<ComponentPreview code={`<Button disabled>Disabled</Button>`}>
+  <ButtonDisabledPreview />
+</ComponentPreview>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'primary' \| 'secondary' \| 'ghost' \| 'destructive'` | `'primary'` | Visual style variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Button size |
+| `loading` | `boolean` | `false` | Show loading spinner |
+| `disabled` | `boolean` | `false` | Disable the button |
+| `onPress` | `() => void` | - | Press handler |
+| `style` | `ViewStyle` | - | Additional container styles |
+| `textStyle` | `TextStyle` | - | Additional text styles |

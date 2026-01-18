@@ -1,0 +1,87 @@
+# Separator
+
+Visual divider line for separating content sections.
+
+## Installation
+
+```bash
+npx r-ui add separator
+```
+
+## Usage
+
+```tsx
+import { Separator } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <View>
+      <Text>Section 1</Text>
+      <Separator />
+      <Text>Section 2</Text>
+    </View>
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Separator />`}>
+  <SeparatorBasicPreview />
+</ComponentPreview>
+
+## Vertical
+
+<ComponentPreview code={`<Flex direction="row" align="center">
+  <Text>Left</Text>
+  <Separator orientation="vertical" />
+  <Text>Right</Text>
+</Flex>`}>
+  <SeparatorVerticalPreview />
+</ComponentPreview>
+
+## With Label
+
+<ComponentPreview code={`<Flex direction="row" align="center" gap={4}>
+  <Separator />
+  <Text>OR</Text>
+  <Separator />
+</Flex>`}>
+  <SeparatorWithLabelPreview />
+</ComponentPreview>
+
+## In Card
+
+<ComponentPreview code={`<Card>
+  <CardContent>Section 1</CardContent>
+  <Separator />
+  <CardContent>Section 2</CardContent>
+</Card>`}>
+  <SeparatorInCardPreview />
+</ComponentPreview>
+
+## Decorative
+
+The `decorative` prop affects accessibility. When `true` (default), the separator is hidden from screen readers.
+
+<ComponentPreview code={`<Separator decorative />
+<Separator decorative={false} />`}>
+  <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-1">
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>decorative=true (hidden from screen readers)</span>
+      <div className="h-px w-full" style={{ backgroundColor: 'var(--component-border)' }}></div>
+    </div>
+    <div className="flex flex-col gap-1">
+      <span className="text-xs" style={{ color: 'var(--component-text-muted)' }}>decorative=false (announced by screen readers)</span>
+      <div className="h-px w-full" style={{ backgroundColor: 'var(--component-border)' }}></div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Separator orientation |
+| `decorative` | `boolean` | `true` | Whether purely decorative (affects accessibility) |
+| `style` | `ViewStyle` | - | Additional styles |

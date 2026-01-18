@@ -1,0 +1,204 @@
+# ScrollArea
+
+A custom styled scrollable container with optional custom scrollbar indicators.
+
+## Installation
+
+```bash
+npx r-ui add scroll-area
+```
+
+## Usage
+
+```tsx
+import {
+  ScrollArea,
+  ScrollAreaViewport,
+  ScrollAreaScrollbar,
+  ScrollAreaThumb,
+} from '@r-ui/react-native'
+
+export default function MyComponent() {
+  return (
+    <ScrollArea style={{ height: 200, width: 300 }}>
+      <ScrollAreaViewport>
+        {items.map((item) => (
+          <View key={item.id}>
+            <Text>{item.name}</Text>
+          </View>
+        ))}
+      </ScrollAreaViewport>
+      <ScrollAreaScrollbar orientation="vertical">
+        <ScrollAreaThumb />
+      </ScrollAreaScrollbar>
+    </ScrollArea>
+  )
+}
+```
+
+## Basic Example
+
+<ComponentPreview code={`<ScrollArea style={{ height: 200 }}>
+  <ScrollAreaViewport>
+    <View style={{ padding: 16 }}>
+      {/* Content here */}
+    </View>
+  </ScrollAreaViewport>
+  <ScrollAreaScrollbar>
+    <ScrollAreaThumb />
+  </ScrollAreaScrollbar>
+</ScrollArea>`}>
+  <div className="w-48 h-72 bg-bg-surface rounded-lg overflow-hidden relative">
+    <div className="p-4 space-y-2">
+      <div className="text-sm text-text-primary">Item 1</div>
+      <div className="text-sm text-text-primary">Item 2</div>
+      <div className="text-sm text-text-primary">Item 3</div>
+      <div className="text-sm text-text-primary">Item 4</div>
+      <div className="text-sm text-text-primary">Item 5</div>
+    </div>
+    <div className="absolute right-1 top-1 bottom-1 w-1.5 bg-white/5 rounded-full">
+      <div className="w-full h-8 bg-white/20 rounded-full"></div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## Horizontal Scroll
+
+```tsx
+<ScrollArea horizontal style={{ height: 200, width: 300 }}>
+  <ScrollAreaViewport contentContainerStyle={{ flexDirection: 'row' }}>
+    {images.map((img) => (
+      <Image key={img.id} source={img.source} style={{ width: 150, height: 150 }} />
+    ))}
+  </ScrollAreaViewport>
+  <ScrollAreaScrollbar orientation="horizontal">
+    <ScrollAreaThumb orientation="horizontal" />
+  </ScrollAreaScrollbar>
+</ScrollArea>
+```
+
+<ComponentPreview code={`<ScrollArea horizontal>
+  <ScrollAreaViewport contentContainerStyle={{ flexDirection: 'row' }}>
+    {/* Horizontal content */}
+  </ScrollAreaViewport>
+  <ScrollAreaScrollbar orientation="horizontal">
+    <ScrollAreaThumb orientation="horizontal" />
+  </ScrollAreaScrollbar>
+</ScrollArea>`}>
+  <div className="w-64 h-36 bg-bg-surface rounded-lg overflow-hidden relative">
+    <div className="flex gap-2 p-4">
+      <div className="w-24 h-24 bg-white/10 rounded-lg shrink-0"></div>
+      <div className="w-24 h-24 bg-white/10 rounded-lg shrink-0"></div>
+      <div className="w-24 h-24 bg-white/10 rounded-lg shrink-0"></div>
+    </div>
+    <div className="absolute left-1 right-1 bottom-1 h-1.5 bg-white/5 rounded-full">
+      <div className="h-full w-12 bg-white/20 rounded-full"></div>
+    </div>
+  </div>
+</ComponentPreview>
+
+## With Force Visible Scrollbar
+
+```tsx
+<ScrollArea style={{ height: 200 }}>
+  <ScrollAreaViewport>
+    {/* Content */}
+  </ScrollAreaViewport>
+  <ScrollAreaScrollbar forceVisible>
+    <ScrollAreaThumb />
+  </ScrollAreaScrollbar>
+</ScrollArea>
+```
+
+## Simple Usage (Native Indicators)
+
+For simple cases, you can use ScrollArea with just the viewport and native scroll indicators:
+
+```tsx
+<ScrollArea showsIndicator style={{ height: 300 }}>
+  <ScrollAreaViewport>
+    {items.map((item) => (
+      <Text key={item.id}>{item.name}</Text>
+    ))}
+  </ScrollAreaViewport>
+</ScrollArea>
+```
+
+## Both Scrollbars
+
+When content scrolls both horizontally and vertically, use the corner component:
+
+```tsx
+<ScrollArea style={{ height: 300, width: 300 }}>
+  <ScrollAreaViewport>
+    <View style={{ width: 600, height: 600 }}>
+      {/* Large content */}
+    </View>
+  </ScrollAreaViewport>
+  <ScrollAreaScrollbar orientation="vertical">
+    <ScrollAreaThumb />
+  </ScrollAreaScrollbar>
+  <ScrollAreaScrollbar orientation="horizontal">
+    <ScrollAreaThumb orientation="horizontal" />
+  </ScrollAreaScrollbar>
+  <ScrollAreaCorner />
+</ScrollArea>
+```
+
+## Props
+
+### ScrollArea
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Content to render |
+| `horizontal` | `boolean` | `false` | Enable horizontal scrolling |
+| `showsIndicator` | `boolean` | `true` | Show native scroll indicators |
+| `bounces` | `boolean` | `true` | Enable bounce effect |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### ScrollAreaViewport
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Content to render |
+| `contentContainerStyle` | `ViewStyle` | - | Styles for the content container |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### ScrollAreaScrollbar
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | Scrollbar orientation |
+| `forceVisible` | `boolean` | `false` | Keep scrollbar always visible |
+| `children` | `ReactNode` | - | Scrollbar thumb |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### ScrollAreaThumb
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | Thumb orientation |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### ScrollAreaCorner
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `style` | `ViewStyle` | - | Additional styles |
+
+## Features
+
+- Custom styled scrollbar matching r.ui dark theme
+- Auto-hide scrollbar when not scrolling (fades out after 1 second)
+- Horizontal and vertical scrolling support
+- Smooth thumb animation based on scroll position
+- Thumb size proportional to content vs viewport ratio
+- Native scroll indicators available as fallback
+- Works with both touch (mobile) and mouse (web)
+
+## Accessibility
+
+- Uses native ScrollView for proper accessibility support
+- Maintains scroll position and momentum
+- Supports keyboard navigation on web

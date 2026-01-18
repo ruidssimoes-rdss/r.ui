@@ -1,0 +1,120 @@
+# Toast
+
+Temporary notification popup for brief messages.
+
+## Installation
+
+```bash
+npx r-ui add toast
+```
+
+## Setup
+
+Wrap your app with `ToastProvider` to enable toasts.
+
+```tsx
+import { ToastProvider } from '@r-ui/react-native'
+
+export default function App() {
+  return (
+    <ToastProvider>
+      <YourApp />
+    </ToastProvider>
+  )
+}
+```
+
+## Usage
+
+Use the `useToast` hook to trigger toasts from anywhere in your app.
+
+```tsx
+import { useToast } from '@r-ui/react-native'
+
+function MyComponent() {
+  const { toast } = useToast()
+
+  return (
+    <Button onPress={() => toast({ title: 'Hello!' })}>
+      Show Toast
+    </Button>
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`toast({ title: 'Message sent!' })`}>
+  <ToastBasicPreview />
+</ComponentPreview>
+
+## Variants
+
+<ComponentPreview code={`toast({ title: 'Default toast', variant: 'default' })
+toast({ title: 'Success!', variant: 'success' })
+toast({ title: 'Warning!', variant: 'warning' })
+toast({ title: 'Error!', variant: 'error' })`}>
+  <ToastVariantsPreview />
+</ComponentPreview>
+
+## Static Preview
+
+<ComponentPreview code={`// How toasts look when displayed
+<Toast title="Your changes were saved" variant="success" />`}>
+  <ToastStaticPreview />
+</ComponentPreview>
+
+## Custom Duration
+
+```tsx
+// Auto-dismiss after 2 seconds
+toast({ title: 'Quick message', duration: 2000 })
+
+// Never auto-dismiss
+toast({ title: 'Persistent', duration: 0 })
+```
+
+## Dismiss Programmatically
+
+```tsx
+const { toast, dismiss, dismissAll } = useToast()
+
+// Dismiss specific toast
+const id = toast({ title: 'Hello' })
+dismiss(id)
+
+// Dismiss all toasts
+dismissAll()
+```
+
+## API
+
+### ToastProvider
+
+Wrap your app with this provider to enable toasts.
+
+```tsx
+<ToastProvider>
+  {children}
+</ToastProvider>
+```
+
+### useToast
+
+Returns an object with the following methods:
+
+| Method | Type | Description |
+|--------|------|-------------|
+| `toast` | `(options: ToastOptions) => string` | Show a toast, returns toast ID |
+| `dismiss` | `(id: string) => void` | Dismiss a specific toast |
+| `dismissAll` | `() => void` | Dismiss all toasts |
+
+### ToastOptions
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | - | Toast title (required) |
+| `description` | `string` | - | Toast description |
+| `variant` | `'default' \| 'success' \| 'warning' \| 'error'` | `'default'` | Visual style variant |
+| `duration` | `number` | `4000` | Auto-dismiss duration in ms (0 = no auto-dismiss) |
+| `action` | `{ label: string, onPress: () => void }` | - | Action button |

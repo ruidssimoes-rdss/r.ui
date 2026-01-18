@@ -1,0 +1,99 @@
+# Input
+
+A styled text input component for forms and data entry.
+
+## Installation
+
+```bash
+npx r-ui add input
+```
+
+## Usage
+
+```tsx
+import { Input } from '@r-ui/react-native'
+
+export default function MyComponent() {
+  const [value, setValue] = useState('')
+
+  return (
+    <Input
+      label="Email"
+      placeholder="Enter your email"
+      value={value}
+      onChangeText={setValue}
+    />
+  )
+}
+```
+
+## Basic Usage
+
+<ComponentPreview code={`<Input placeholder="Enter text..." />`}>
+  <InputBasicPreview />
+</ComponentPreview>
+
+## With Label
+
+<ComponentPreview code={`<Input label="Email" placeholder="you@example.com" />`}>
+  <InputWithLabelPreview />
+</ComponentPreview>
+
+## Sizes
+
+<ComponentPreview code={`<Input size="sm" placeholder="Small" />
+<Input size="md" placeholder="Medium" />
+<Input size="lg" placeholder="Large" />`}>
+  <InputSizesPreview />
+</ComponentPreview>
+
+## Error State
+
+<ComponentPreview code={`<Input
+  label="Email"
+  error
+  helperText="Please enter a valid email address"
+  value="invalid-email"
+/>`}>
+  <InputErrorPreview />
+</ComponentPreview>
+
+## Disabled
+
+<ComponentPreview code={`<Input label="Username" disabled value="johndoe" />`}>
+  <InputDisabledPreview />
+</ComponentPreview>
+
+## With Helper Text
+
+<ComponentPreview code={`<Input
+  label="Password"
+  helperText="Must be at least 8 characters"
+  secureTextEntry
+/>`}>
+  <div className="w-full max-w-sm space-y-2">
+    <label className="text-sm font-medium" style={{ color: 'var(--component-text)' }}>Password</label>
+    <input
+      type="password"
+      placeholder="Enter password"
+      className="w-full px-4 py-3 rounded-lg"
+      style={{ backgroundColor: 'var(--input-bg)', border: '1px solid var(--input-border)', color: 'var(--input-text)' }}
+    />
+    <p className="text-xs" style={{ color: 'var(--component-text-muted)' }}>Must be at least 8 characters</p>
+  </div>
+</ComponentPreview>
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | Input label text |
+| `placeholder` | `string` | - | Placeholder text |
+| `value` | `string` | - | Current input value |
+| `onChangeText` | `(text: string) => void` | - | Change handler |
+| `disabled` | `boolean` | `false` | Disable the input |
+| `error` | `boolean` | `false` | Show error state |
+| `helperText` | `string` | - | Helper or error text |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Input size |
+| `style` | `ViewStyle` | - | Container styles |
+| `inputStyle` | `TextStyle` | - | Input text styles |
