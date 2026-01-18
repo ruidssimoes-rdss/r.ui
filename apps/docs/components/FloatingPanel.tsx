@@ -26,12 +26,14 @@ export function FloatingPanel({ children, className = '' }: FloatingPanelProps) 
         bg-[var(--floating-panel-bg)]
         rounded-2xl
         border border-[var(--floating-panel-border)]
-        backdrop-blur-xl
+        backdrop-blur-2xl
         transition-all duration-300
         ${className}
       `}
       style={{
         boxShadow: 'var(--floating-panel-shadow)',
+        WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+        backdropFilter: 'blur(40px) saturate(180%)',
       }}
     >
       {/* Top shine line for premium depth effect */}
@@ -47,6 +49,14 @@ export function FloatingPanel({ children, className = '' }: FloatingPanelProps) 
         className="absolute inset-0 rounded-2xl pointer-events-none"
         style={{
           background: 'var(--floating-panel-inner-glow)',
+        }}
+      />
+
+      {/* Subtle bottom edge highlight for 3D depth */}
+      <div
+        className="absolute bottom-0 left-[10%] right-[10%] h-px pointer-events-none rounded-full"
+        style={{
+          background: 'var(--floating-panel-bottom-edge)',
         }}
       />
 

@@ -47,8 +47,8 @@ function CheckIcon({ className }: { className?: string }) {
 /**
  * CodeBlock Component
  *
- * Editorial design - dark code blocks for consistency.
- * Better visual separation in light/oatmeal themes via border and shadow.
+ * Theme-aware code blocks using CSS variables.
+ * Adapts to dark/light/oatmeal themes.
  * Copy button visible on hover.
  */
 export function CodeBlock({ code, language = 'tsx' }: CodeBlockProps) {
@@ -62,15 +62,15 @@ export function CodeBlock({ code, language = 'tsx' }: CodeBlockProps) {
 
   return (
     <div className="relative group">
-      {/* Copy button */}
+      {/* Copy button - theme-aware */}
       <button
         onClick={handleCopy}
         className="absolute right-3 top-3 flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md
-                   bg-white/10 border border-white/10
-                   text-white/60 hover:text-white hover:bg-white/15
+                   bg-[var(--docs-code-btn-bg)] border border-[var(--docs-code-btn-border)]
+                   text-[var(--docs-code-btn-text)] hover:text-[var(--docs-code-btn-hover)] hover:bg-[var(--docs-code-btn-hover-bg)]
                    opacity-0 group-hover:opacity-100
                    transition-all duration-200
-                   focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                   focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-accent)]/30"
         aria-label={copied ? 'Copied' : 'Copy code'}
       >
         {copied ? (
@@ -86,14 +86,14 @@ export function CodeBlock({ code, language = 'tsx' }: CodeBlockProps) {
         )}
       </button>
 
-      {/* Code container - dark with better separation in light themes */}
+      {/* Code container - theme-aware */}
       <pre
-        className="bg-[var(--docs-code-bg)] border border-[var(--docs-border-strong)]
+        className="bg-[var(--docs-code-bg)] border border-[var(--docs-code-border)]
                    rounded-lg p-4 overflow-x-auto
-                   shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+                   shadow-[var(--docs-code-shadow)]
                    transition-all duration-200"
       >
-        <code className={`language-${language} text-sm font-mono leading-relaxed text-gray-100`}>
+        <code className={`language-${language} text-sm font-mono leading-relaxed text-[var(--docs-code-text)]`}>
           {code}
         </code>
       </pre>

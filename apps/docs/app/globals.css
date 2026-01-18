@@ -34,20 +34,27 @@
   --docs-code-bg: rgba(250, 247, 242, 0.95);
   --docs-code-text: #44403c;
   --docs-code-border: rgba(214, 211, 209, 0.6);
+  --docs-code-shadow: 0 2px 8px rgba(120, 113, 108, 0.08);
+  --docs-code-btn-bg: rgba(41, 37, 36, 0.08);
+  --docs-code-btn-border: rgba(41, 37, 36, 0.12);
+  --docs-code-btn-text: #78716c;
+  --docs-code-btn-hover: #292524;
+  --docs-code-btn-hover-bg: rgba(41, 37, 36, 0.15);
   --docs-sidebar-bg: transparent;
   --docs-sidebar-active: rgba(0,0,0,0.04);
 
   /* Floating Panel - Deep glassmorphism for main content card (Oatmeal) */
-  --floating-panel-bg: rgba(255, 255, 255, 0.85);
-  --floating-panel-border: rgba(214, 211, 209, 0.4);
+  --floating-panel-bg: rgba(255, 255, 255, 0.75);
+  --floating-panel-border: rgba(214, 211, 209, 0.5);
   --floating-panel-shadow:
-    0 4px 6px -1px rgba(120, 113, 108, 0.05),
-    0 10px 15px -3px rgba(120, 113, 108, 0.08),
-    0 20px 25px -5px rgba(120, 113, 108, 0.06),
-    0 25px 50px -12px rgba(120, 113, 108, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --floating-panel-shine: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-  --floating-panel-inner-glow: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 30%);
+    0 2px 4px -1px rgba(120, 113, 108, 0.06),
+    0 8px 16px -4px rgba(120, 113, 108, 0.10),
+    0 24px 32px -8px rgba(120, 113, 108, 0.12),
+    0 40px 64px -16px rgba(120, 113, 108, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --floating-panel-shine: linear-gradient(90deg, transparent 10%, rgba(255, 255, 255, 0.9) 50%, transparent 90%);
+  --floating-panel-inner-glow: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 40%);
+  --floating-panel-bottom-edge: linear-gradient(90deg, transparent 20%, rgba(120, 113, 108, 0.1) 50%, transparent 80%);
 
   /* Table of Contents - Theme-aware (Oatmeal) */
   --toc-bg: rgba(250, 247, 242, 0.6);
@@ -125,20 +132,27 @@
   --docs-code-bg: rgba(243, 244, 246, 0.95);
   --docs-code-text: #3f3f46;
   --docs-code-border: rgba(209, 213, 219, 0.6);
+  --docs-code-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --docs-code-btn-bg: rgba(0, 0, 0, 0.05);
+  --docs-code-btn-border: rgba(0, 0, 0, 0.08);
+  --docs-code-btn-text: #6b7280;
+  --docs-code-btn-hover: #111827;
+  --docs-code-btn-hover-bg: rgba(0, 0, 0, 0.1);
   --docs-sidebar-bg: transparent;
   --docs-sidebar-active: rgba(0,0,0,0.04);
 
   /* Floating Panel - Deep glassmorphism for main content card (Light) */
-  --floating-panel-bg: rgba(255, 255, 255, 0.9);
-  --floating-panel-border: rgba(209, 213, 219, 0.4);
+  --floating-panel-bg: rgba(255, 255, 255, 0.80);
+  --floating-panel-border: rgba(209, 213, 219, 0.5);
   --floating-panel-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.03),
-    0 10px 15px -3px rgba(0, 0, 0, 0.05),
-    0 20px 25px -5px rgba(0, 0, 0, 0.04),
-    0 25px 50px -12px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  --floating-panel-shine: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
-  --floating-panel-inner-glow: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 30%);
+    0 2px 4px -1px rgba(0, 0, 0, 0.04),
+    0 8px 16px -4px rgba(0, 0, 0, 0.08),
+    0 24px 32px -8px rgba(0, 0, 0, 0.10),
+    0 40px 64px -16px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+  --floating-panel-shine: linear-gradient(90deg, transparent 10%, rgba(255, 255, 255, 0.95) 50%, transparent 90%);
+  --floating-panel-inner-glow: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, transparent 40%);
+  --floating-panel-bottom-edge: linear-gradient(90deg, transparent 20%, rgba(0, 0, 0, 0.06) 50%, transparent 80%);
 
   /* Table of Contents - Theme-aware (Light) */
   --toc-bg: rgba(249, 250, 251, 0.7);
@@ -216,22 +230,29 @@
   --docs-code-bg: rgba(15, 15, 20, 0.9);
   --docs-code-text: #e4e4e7;
   --docs-code-border: rgba(255, 255, 255, 0.1);
+  --docs-code-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --docs-code-btn-bg: rgba(255, 255, 255, 0.08);
+  --docs-code-btn-border: rgba(255, 255, 255, 0.1);
+  --docs-code-btn-text: #9ca3af;
+  --docs-code-btn-hover: #f9fafb;
+  --docs-code-btn-hover-bg: rgba(255, 255, 255, 0.15);
   --docs-sidebar-bg: transparent;
   --docs-sidebar-active: rgba(255, 255, 255, 0.06);
 
   /* Floating Panel - Deep glassmorphism for main content card (Dark) */
-  --floating-panel-bg: rgba(20, 20, 25, 0.85);
-  --floating-panel-border: rgba(255, 255, 255, 0.08);
+  --floating-panel-bg: rgba(18, 18, 24, 0.80);
+  --floating-panel-border: rgba(255, 255, 255, 0.10);
   --floating-panel-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.3),
-    0 10px 15px -3px rgba(0, 0, 0, 0.35),
-    0 20px 25px -5px rgba(0, 0, 0, 0.3),
-    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    0 0 60px rgba(59, 130, 246, 0.05),
-    0 0 100px rgba(139, 92, 246, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --floating-panel-shine: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  --floating-panel-inner-glow: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 30%);
+    0 2px 4px -1px rgba(0, 0, 0, 0.35),
+    0 8px 16px -4px rgba(0, 0, 0, 0.40),
+    0 24px 32px -8px rgba(0, 0, 0, 0.45),
+    0 40px 64px -16px rgba(0, 0, 0, 0.55),
+    0 0 80px rgba(59, 130, 246, 0.08),
+    0 0 120px rgba(139, 92, 246, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  --floating-panel-shine: linear-gradient(90deg, transparent 10%, rgba(255, 255, 255, 0.12) 50%, transparent 90%);
+  --floating-panel-inner-glow: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+  --floating-panel-bottom-edge: linear-gradient(90deg, transparent 20%, rgba(255, 255, 255, 0.03) 50%, transparent 80%);
 
   /* Table of Contents - Theme-aware (Dark) */
   --toc-bg: rgba(20, 20, 25, 0.6);
@@ -311,20 +332,27 @@
   --docs-code-bg: rgba(250, 247, 242, 0.95);
   --docs-code-text: #44403c;
   --docs-code-border: rgba(214, 211, 209, 0.6);
+  --docs-code-shadow: 0 2px 8px rgba(120, 113, 108, 0.08);
+  --docs-code-btn-bg: rgba(41, 37, 36, 0.08);
+  --docs-code-btn-border: rgba(41, 37, 36, 0.12);
+  --docs-code-btn-text: #78716c;
+  --docs-code-btn-hover: #292524;
+  --docs-code-btn-hover-bg: rgba(41, 37, 36, 0.15);
   --docs-sidebar-bg: transparent;
   --docs-sidebar-active: rgba(0,0,0,0.04);
 
   /* Floating Panel - Deep glassmorphism for main content card (Oatmeal) */
-  --floating-panel-bg: rgba(255, 255, 255, 0.85);
-  --floating-panel-border: rgba(214, 211, 209, 0.4);
+  --floating-panel-bg: rgba(255, 255, 255, 0.75);
+  --floating-panel-border: rgba(214, 211, 209, 0.5);
   --floating-panel-shadow:
-    0 4px 6px -1px rgba(120, 113, 108, 0.05),
-    0 10px 15px -3px rgba(120, 113, 108, 0.08),
-    0 20px 25px -5px rgba(120, 113, 108, 0.06),
-    0 25px 50px -12px rgba(120, 113, 108, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --floating-panel-shine: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-  --floating-panel-inner-glow: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 30%);
+    0 2px 4px -1px rgba(120, 113, 108, 0.06),
+    0 8px 16px -4px rgba(120, 113, 108, 0.10),
+    0 24px 32px -8px rgba(120, 113, 108, 0.12),
+    0 40px 64px -16px rgba(120, 113, 108, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --floating-panel-shine: linear-gradient(90deg, transparent 10%, rgba(255, 255, 255, 0.9) 50%, transparent 90%);
+  --floating-panel-inner-glow: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 40%);
+  --floating-panel-bottom-edge: linear-gradient(90deg, transparent 20%, rgba(120, 113, 108, 0.1) 50%, transparent 80%);
 
   /* Table of Contents - Theme-aware (Oatmeal) */
   --toc-bg: rgba(250, 247, 242, 0.6);
@@ -453,6 +481,18 @@
   --glow-2: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.05) 40%, transparent 70%);
   --glow-3: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(79, 70, 229, 0.04) 40%, transparent 70%);
 
+  /* Void background - cinematic dark with ambient glows */
+  --void-base: #030305;
+  --void-glow-1: rgba(59, 130, 246, 0.12);
+  --void-glow-2: rgba(139, 92, 246, 0.10);
+  --void-glow-3: rgba(99, 102, 241, 0.08);
+  --void-glow-4: rgba(79, 70, 229, 0.06);
+
+  /* Docs ambient orbs - positioned glows for floating depth */
+  --docs-orb-1: radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+  --docs-orb-2: radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.12) 0%, transparent 50%);
+  --docs-orb-3: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 60%);
+
   /* Code block */
   --code-bg: rgba(15, 15, 20, 0.8);
   --code-border: rgba(255, 255, 255, 0.08);
@@ -528,6 +568,18 @@
   --glow-2: radial-gradient(circle, rgba(196, 181, 253, 0.25) 0%, rgba(221, 214, 254, 0.08) 40%, transparent 70%);
   --glow-3: radial-gradient(circle, rgba(165, 180, 252, 0.2) 0%, rgba(199, 210, 254, 0.06) 40%, transparent 70%);
 
+  /* Void background - soft pastel gradient */
+  --void-base: #f8f9fa;
+  --void-glow-1: rgba(147, 197, 253, 0.20);
+  --void-glow-2: rgba(196, 181, 253, 0.15);
+  --void-glow-3: rgba(165, 180, 252, 0.12);
+  --void-glow-4: rgba(199, 210, 254, 0.10);
+
+  /* Docs ambient orbs - soft pastels for light mode */
+  --docs-orb-1: radial-gradient(circle at 10% 20%, rgba(147, 197, 253, 0.25) 0%, transparent 50%);
+  --docs-orb-2: radial-gradient(circle at 90% 80%, rgba(251, 207, 232, 0.20) 0%, transparent 50%);
+  --docs-orb-3: radial-gradient(circle at 50% 50%, rgba(196, 181, 253, 0.08) 0%, transparent 60%);
+
   /* Code block */
   --code-bg: rgba(243, 244, 246, 0.9);
   --code-border: rgba(0, 0, 0, 0.06);
@@ -602,6 +654,18 @@
   --glow-1: radial-gradient(circle, rgba(201, 166, 107, 0.22) 0%, rgba(201, 166, 107, 0.08) 40%, transparent 70%);
   --glow-2: radial-gradient(circle, rgba(184, 120, 73, 0.18) 0%, rgba(212, 165, 116, 0.06) 40%, transparent 70%);
   --glow-3: radial-gradient(circle, rgba(139, 108, 176, 0.14) 0%, rgba(90, 123, 192, 0.04) 40%, transparent 70%);
+
+  /* Void background - warm cream with amber glows */
+  --void-base: #f5f0e8;
+  --void-glow-1: rgba(201, 166, 107, 0.18);
+  --void-glow-2: rgba(184, 120, 73, 0.14);
+  --void-glow-3: rgba(212, 165, 116, 0.10);
+  --void-glow-4: rgba(139, 108, 176, 0.08);
+
+  /* Docs ambient orbs - warm amber for oatmeal */
+  --docs-orb-1: radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.20) 0%, transparent 50%);
+  --docs-orb-2: radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.15) 0%, transparent 50%);
+  --docs-orb-3: radial-gradient(circle at 50% 50%, rgba(201, 166, 107, 0.08) 0%, transparent 60%);
 
   /* Code block - sepia tinted */
   --code-bg: rgba(235, 229, 217, 0.9);

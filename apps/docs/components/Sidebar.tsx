@@ -13,7 +13,10 @@ interface SidebarProps {
  * Sidebar Component
  *
  * coss.com-inspired clean navigation.
- * Transparent background, clean text links.
+ * Now part of the centered three-column layout (not fixed to viewport edge).
+ * On desktop: flows with content as one centered unit.
+ * On mobile: slides in as overlay.
+ *
  * Category headers: small, muted
  * Links: regular weight, subtle hover
  * Active item: font-medium only
@@ -32,15 +35,51 @@ export function Sidebar({ isMobileMenuOpen, onCloseMobileMenu }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar - transparent, minimal */}
+      {/* Desktop Sidebar - part of layout flow, not fixed */}
       <aside
-        className={`fixed top-14 bottom-0 left-0 z-40 w-56
-                   transition-transform duration-300 ease-in-out
-                   md:translate-x-0
-                   ${isMobileMenuOpen ? 'translate-x-0 bg-[var(--page-bg)]' : '-translate-x-full md:bg-transparent'}`}
+        className="hidden md:block w-56 flex-shrink-0"
       >
-        {/* Navigation */}
-        <nav className="sticky top-20 h-[calc(100vh-8rem)] overflow-y-auto px-4 py-6">
+        <nav className="sticky top-20 h-[calc(100vh-8rem)] overflow-y-auto py-6 pr-4">
+          {navigation.map((section) => (
+            <div key={section.title} className="mb-6">
+              {/* Section header */}
+              <h4 className="mb-2 text-sm font-medium text-[var(--docs-text)]">
+                {section.title}
+              </h4>
+
+              {/* Nav items - clean text links */}
+              <ul className="space-y-0.5">
+                {section.items.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={onCloseMobileMenu}
+                        className={`flex items-center gap-2 px-2 py-1.5 text-sm rounded-md transition-colors
+                          ${isActive
+                            ? 'bg-[var(--docs-sidebar-active)] text-[var(--docs-text)] font-medium'
+                            : 'text-[var(--docs-text-secondary)] hover:text-[var(--docs-text)] hover:bg-[var(--docs-sidebar-active)]'
+                          }`}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Mobile Sidebar - slides in as overlay */}
+      <aside
+        className={`fixed top-14 bottom-0 left-0 z-40 w-56 bg-[var(--page-bg)]
+                   transition-transform duration-300 ease-in-out md:hidden
+                   ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        <nav className="h-full overflow-y-auto px-4 py-6">
           {navigation.map((section) => (
             <div key={section.title} className="mb-6">
               {/* Section header */}
