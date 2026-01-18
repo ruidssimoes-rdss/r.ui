@@ -6,12 +6,12 @@ import { usePreviewOptional, type PreviewTheme } from './PreviewContext';
 import { getBreadcrumbs } from '@/lib/navigation';
 
 // ========================================
-// Icons - Larger size (20px) for better visibility
+// Icons - 18px for minimal toolbar
 // ========================================
 
 function MobileIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
       <line x1="12" y1="18" x2="12.01" y2="18" />
     </svg>
@@ -20,7 +20,7 @@ function MobileIcon({ className }: { className?: string }) {
 
 function TabletIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
       <line x1="12" y1="18" x2="12.01" y2="18" />
     </svg>
@@ -29,7 +29,7 @@ function TabletIcon({ className }: { className?: string }) {
 
 function DesktopIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
       <line x1="8" y1="21" x2="16" y2="21" />
       <line x1="12" y1="17" x2="12" y2="21" />
@@ -39,7 +39,7 @@ function DesktopIcon({ className }: { className?: string }) {
 
 function SunIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="5" />
       <line x1="12" y1="1" x2="12" y2="3" />
       <line x1="12" y1="21" x2="12" y2="23" />
@@ -55,7 +55,7 @@ function SunIcon({ className }: { className?: string }) {
 
 function MoonIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
     </svg>
   );
@@ -63,55 +63,62 @@ function MoonIcon({ className }: { className?: string }) {
 
 function OatmealIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M8 12a4 4 0 0 1 8 0" />
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
     </svg>
   );
 }
 
-function AutoIcon({ className }: { className?: string }) {
+function MonitorIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 6v6l4 2" />
-    </svg>
-  );
-}
-
-function ZoomOutIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      <line x1="8" y1="11" x2="14" y2="11" />
-    </svg>
-  );
-}
-
-function ZoomInIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      <line x1="11" y1="8" x2="11" y2="14" />
-      <line x1="8" y1="11" x2="14" y2="11" />
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+      <line x1="8" y1="21" x2="16" y2="21" />
+      <line x1="12" y1="17" x2="12" y2="21" />
     </svg>
   );
 }
 
 function CodeIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="16 18 22 12 16 6" />
       <polyline points="8 6 2 12 8 18" />
     </svg>
   );
 }
 
+function CopyIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </svg>
+  );
+}
+
+function DownloadIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" y1="15" x2="12" y2="3" />
+    </svg>
+  );
+}
+
+function ExternalLinkIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
+}
+
 // ========================================
-// Toolbar Button Component
-// Enhanced for better visibility and contrast
+// Minimal Toolbar Button Component
 // ========================================
 
 interface ToolbarButtonProps {
@@ -129,11 +136,11 @@ function ToolbarButton({ children, active, onClick, disabled, title }: ToolbarBu
       disabled={disabled}
       title={title}
       className={`
-        flex items-center justify-center w-9 h-9 rounded-lg
-        transition-all duration-200
+        flex items-center justify-center p-1.5 rounded
+        transition-colors duration-150
         ${active
-          ? 'bg-[var(--toolbar-active-bg)] text-[var(--toolbar-active-text)] shadow-sm'
-          : 'text-[var(--toolbar-text)] hover:text-[var(--toolbar-hover-text)] hover:bg-[var(--toolbar-hover-bg)]'
+          ? 'text-[var(--docs-text)]'
+          : 'text-[var(--docs-text-muted)] hover:text-[var(--docs-text)]'
         }
         ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}
       `}
@@ -144,7 +151,20 @@ function ToolbarButton({ children, active, onClick, disabled, title }: ToolbarBu
 }
 
 // ========================================
-// Inline Preview Toolbar (theme-aware with improved contrast)
+// Thin Vertical Divider
+// ========================================
+
+function ToolbarDivider() {
+  return (
+    <div
+      className="w-px h-4 mx-1"
+      style={{ backgroundColor: 'var(--docs-text-muted)', opacity: 0.3 }}
+    />
+  );
+}
+
+// ========================================
+// Minimal Inline Preview Toolbar
 // ========================================
 
 function InlinePreviewToolbar() {
@@ -155,114 +175,85 @@ function InlinePreviewToolbar() {
   const {
     viewMode,
     previewTheme,
-    zoom,
     showCode,
     setViewMode,
     setPreviewTheme,
-    zoomIn,
-    zoomOut,
-    resetZoom,
     toggleShowCode,
   } = preview;
 
   const themes: { key: PreviewTheme; icon: React.ReactNode; label: string }[] = [
-    { key: 'auto', icon: <AutoIcon className="w-5 h-5" />, label: 'Auto (match site)' },
-    { key: 'dark', icon: <MoonIcon className="w-5 h-5" />, label: 'Dark' },
-    { key: 'light', icon: <SunIcon className="w-5 h-5" />, label: 'Light' },
-    { key: 'oatmeal', icon: <OatmealIcon className="w-5 h-5" />, label: 'Oatmeal' },
+    { key: 'light', icon: <SunIcon />, label: 'Light' },
+    { key: 'auto', icon: <MonitorIcon />, label: 'Auto (match site)' },
+    { key: 'dark', icon: <MoonIcon />, label: 'Dark' },
+    { key: 'oatmeal', icon: <OatmealIcon />, label: 'Oatmeal' },
   ];
 
   return (
-    <div
-      className="flex items-center gap-3 flex-wrap p-2 rounded-xl backdrop-blur-sm transition-colors duration-200"
-      style={{
-        background: 'var(--toolbar-bg)',
-        border: '1px solid var(--toolbar-border)',
-      }}
-    >
-      {/* Viewport Toggles */}
-      <div className="flex items-center gap-1 p-1 rounded-lg bg-[var(--toolbar-group-bg)]">
+    <div className="flex items-center">
+      {/* Group 1: Viewport icons */}
+      <ToolbarButton
+        active={viewMode === 'mobile'}
+        onClick={() => setViewMode('mobile')}
+        title="Mobile view (375px)"
+      >
+        <MobileIcon />
+      </ToolbarButton>
+      <ToolbarButton
+        active={viewMode === 'tablet'}
+        onClick={() => setViewMode('tablet')}
+        title="Tablet view (768px)"
+      >
+        <TabletIcon />
+      </ToolbarButton>
+      <ToolbarButton
+        active={viewMode === 'desktop'}
+        onClick={() => setViewMode('desktop')}
+        title="Desktop view (full width)"
+      >
+        <DesktopIcon />
+      </ToolbarButton>
+
+      <ToolbarDivider />
+
+      {/* Group 2: Theme icons */}
+      {themes.map(({ key, icon, label }) => (
         <ToolbarButton
-          active={viewMode === 'mobile'}
-          onClick={() => setViewMode('mobile')}
-          title="Mobile view (375px) - Press 1"
+          key={key}
+          active={previewTheme === key}
+          onClick={() => setPreviewTheme(key)}
+          title={label}
         >
-          <MobileIcon className="w-5 h-5" />
+          {icon}
         </ToolbarButton>
-        <ToolbarButton
-          active={viewMode === 'tablet'}
-          onClick={() => setViewMode('tablet')}
-          title="Tablet view (768px) - Press 2"
-        >
-          <TabletIcon className="w-5 h-5" />
-        </ToolbarButton>
-        <ToolbarButton
-          active={viewMode === 'desktop'}
-          onClick={() => setViewMode('desktop')}
-          title="Desktop view (full width) - Press 3"
-        >
-          <DesktopIcon className="w-5 h-5" />
-        </ToolbarButton>
-      </div>
+      ))}
 
-      {/* Divider */}
-      <div className="w-px h-7 bg-[var(--toolbar-divider)]" />
+      <ToolbarDivider />
 
-      {/* Theme Selector */}
-      <div className="flex items-center gap-1 p-1 rounded-lg bg-[var(--toolbar-group-bg)]">
-        {themes.map(({ key, icon, label }) => (
-          <ToolbarButton
-            key={key}
-            active={previewTheme === key}
-            onClick={() => setPreviewTheme(key)}
-            title={`${label} - Press ${key === 'auto' ? 'A' : key[0].toUpperCase()}`}
-          >
-            {icon}
-          </ToolbarButton>
-        ))}
-      </div>
-
-      {/* Divider */}
-      <div className="w-px h-7 bg-[var(--toolbar-divider)]" />
-
-      {/* Zoom Controls */}
-      <div className="flex items-center gap-1">
-        <ToolbarButton
-          onClick={zoomOut}
-          disabled={zoom <= 50}
-          title="Zoom out - Press -"
-        >
-          <ZoomOutIcon className="w-5 h-5" />
-        </ToolbarButton>
-
-        <button
-          onClick={resetZoom}
-          className="px-2 py-1.5 text-sm font-mono rounded-lg transition-all duration-200 min-w-[52px] text-center
-                     text-[var(--toolbar-text)] hover:text-[var(--toolbar-hover-text)] hover:bg-[var(--toolbar-hover-bg)]"
-          title="Reset zoom - Press 0"
-        >
-          {zoom}%
-        </button>
-
-        <ToolbarButton
-          onClick={zoomIn}
-          disabled={zoom >= 200}
-          title="Zoom in - Press +"
-        >
-          <ZoomInIcon className="w-5 h-5" />
-        </ToolbarButton>
-      </div>
-
-      {/* Divider */}
-      <div className="w-px h-7 bg-[var(--toolbar-divider)]" />
-
-      {/* Code Toggle */}
+      {/* Group 3: Action icons */}
+      <ToolbarButton
+        onClick={() => {}}
+        title="Copy code"
+      >
+        <CopyIcon />
+      </ToolbarButton>
+      <ToolbarButton
+        onClick={() => {}}
+        title="Download component"
+      >
+        <DownloadIcon />
+      </ToolbarButton>
+      <ToolbarButton
+        onClick={() => {}}
+        title="Open in new tab"
+      >
+        <ExternalLinkIcon />
+      </ToolbarButton>
       <ToolbarButton
         active={showCode}
         onClick={toggleShowCode}
-        title="Toggle code view (Cmd+K)"
+        title="Toggle code view"
       >
-        <CodeIcon className="w-5 h-5" />
+        <CodeIcon />
       </ToolbarButton>
     </div>
   );
@@ -282,16 +273,16 @@ function PageBreadcrumbs() {
 
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex items-center gap-2 text-sm">
+      <ol className="flex items-center gap-1.5 text-sm">
         {breadcrumbs.map((crumb, index) => {
           const isLast = index === breadcrumbs.length - 1;
           return (
-            <li key={crumb.href} className="flex items-center gap-2">
+            <li key={crumb.href} className="flex items-center gap-1.5">
               {index > 0 && (
                 <span className="text-[var(--docs-text-muted)]" aria-hidden="true">/</span>
               )}
               {isLast ? (
-                <span className="text-[var(--docs-text)] font-medium">
+                <span className="text-[var(--docs-text)] font-semibold">
                   {crumb.name}
                 </span>
               ) : (
@@ -322,24 +313,22 @@ interface ComponentPageHeaderProps {
 /**
  * ComponentPageHeader Component
  *
- * coss.com-inspired clean header for component pages.
- * Shows breadcrumbs (left) + preview toolbar (right) on same row.
- * No h1 title - breadcrumbs serve as the page title.
- * Description appears below the header row.
- * Toolbar controls apply to all ComponentPreview instances on the page.
+ * Minimal header for component pages.
+ * ROW 1: Breadcrumbs (left) + minimal toolbar icons (right)
+ * ROW 2: Description text (muted)
  */
 export function ComponentPageHeader({ children, description }: ComponentPageHeaderProps) {
   return (
-    <div className="mb-8">
-      {/* Header row: Breadcrumbs LEFT, Toolbar RIGHT */}
-      <div className="flex items-start justify-between gap-4 flex-wrap">
+    <div className="mb-6">
+      {/* ROW 1: Breadcrumbs LEFT, Toolbar RIGHT */}
+      <div className="flex items-center justify-between gap-4">
         <PageBreadcrumbs />
         <InlinePreviewToolbar />
       </div>
 
-      {/* Description below header row */}
+      {/* ROW 2: Description */}
       {description && (
-        <p className="mt-4 text-[var(--docs-text-secondary)]">
+        <p className="mt-3 text-[var(--docs-text-muted)] text-sm">
           {description}
         </p>
       )}
