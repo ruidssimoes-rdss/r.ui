@@ -95,8 +95,8 @@ export function DocsLayout({ children }: DocsLayoutProps) {
           {/* Main content in floating panel with deep glassmorphism */}
           <main className="flex-1 min-w-0">
             <FloatingPanel className="relative overflow-hidden p-6 md:p-8 lg:p-10">
-              {/* Breadcrumbs - only for non-component pages (component pages have breadcrumbs in header) */}
-              {!isComponentPage && <Breadcrumbs />}
+              {/* Breadcrumbs - only for non-component, non-introduction pages */}
+              {!isComponentPage && pathname !== '/docs' && <Breadcrumbs />}
               {children}
             </FloatingPanel>
           </main>
