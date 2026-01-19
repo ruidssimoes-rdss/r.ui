@@ -69,43 +69,39 @@ function ResizableSplit({
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   return (
-    <div ref={containerRef} className="flex h-full relative">
-      {/* Left panel */}
+    <div ref={containerRef} className="flex h-full relative gap-4">
+      {/* Left panel - Preview */}
       <div
-        className="h-full overflow-hidden"
+        className="h-full overflow-hidden rounded-lg"
         style={{ width: `${ratio * 100}%` }}
       >
         {left}
       </div>
 
-      {/* Resize handle */}
+      {/* Resize handle - subtle */}
       <div
         className={`
-          w-1 h-full cursor-col-resize relative group
-          ${isDragging ? 'bg-blue-500' : 'bg-gray-200 hover:bg-gray-300'}
-          transition-colors
+          w-1 h-full cursor-col-resize relative group flex-shrink-0
+          ${isDragging ? 'bg-blue-400' : 'bg-transparent hover:bg-gray-200'}
+          transition-colors rounded-full
         `}
         onMouseDown={handleMouseDown}
       >
-        {/* Visual indicator */}
+        {/* Visual indicator on hover */}
         <div
           className={`
             absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-            w-4 h-8 rounded-full
-            flex items-center justify-center
-            ${isDragging ? 'bg-blue-500' : 'bg-gray-300 group-hover:bg-gray-400'}
-            transition-colors
+            w-1 h-8 rounded-full
+            ${isDragging ? 'bg-blue-400' : 'bg-gray-300 opacity-0 group-hover:opacity-100'}
+            transition-opacity
           `}
-        >
-          <div className="w-0.5 h-4 bg-gray-500 rounded-full mx-0.5" />
-          <div className="w-0.5 h-4 bg-gray-500 rounded-full mx-0.5" />
-        </div>
+        />
       </div>
 
-      {/* Right panel */}
+      {/* Right panel - Code */}
       <div
-        className="h-full overflow-hidden"
-        style={{ width: `${(1 - ratio) * 100}%` }}
+        className="h-full overflow-hidden rounded-lg"
+        style={{ width: `calc(${(1 - ratio) * 100}% - 1.25rem)` }}
       >
         {right}
       </div>
@@ -127,7 +123,7 @@ export function PlaygroundSplit({ previewContent }: PlaygroundSplitProps) {
   // Preview only
   if (viewMode === 'preview') {
     return (
-      <div className="h-full">
+      <div className="h-full rounded-lg overflow-hidden">
         <PlaygroundPreview>{previewContent}</PlaygroundPreview>
       </div>
     );
@@ -136,7 +132,7 @@ export function PlaygroundSplit({ previewContent }: PlaygroundSplitProps) {
   // Code only
   if (viewMode === 'code') {
     return (
-      <div className="h-full">
+      <div className="h-full rounded-lg overflow-hidden">
         <PlaygroundCode />
       </div>
     );

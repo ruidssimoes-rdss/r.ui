@@ -150,20 +150,20 @@ export function PlaygroundCode() {
 
   if (!code) {
     return (
-      <div className="h-full flex items-center justify-center bg-zinc-950">
-        <p className="text-zinc-500 text-sm">No code available</p>
+      <div className="h-full flex items-center justify-center bg-zinc-900 border border-zinc-800">
+        <p className="text-zinc-500 text-xs">No code available</p>
       </div>
     );
   }
 
   return (
-    <div className="relative h-full bg-zinc-950 overflow-auto group">
+    <div className="relative h-full bg-zinc-900 overflow-auto group border border-zinc-800">
       {/* Copy button */}
       <button
         onClick={handleCopy}
         className={`
-          absolute right-4 top-4 z-10
-          p-2 rounded-md
+          absolute right-3 top-3 z-10
+          p-1.5 rounded-md
           bg-zinc-800 hover:bg-zinc-700
           text-zinc-400 hover:text-zinc-200
           transition-all
@@ -179,14 +179,14 @@ export function PlaygroundCode() {
         )}
       </button>
 
-      {/* Code with line numbers */}
-      <div className="p-4 font-mono text-sm leading-6">
+      {/* Code with line numbers - smaller text */}
+      <div className="p-4 font-mono text-[13px] leading-5">
         <table className="border-collapse w-full">
           <tbody>
             {lines.map((lineTokens, lineIndex) => (
-              <tr key={lineIndex} className="hover:bg-zinc-900/50">
+              <tr key={lineIndex} className="hover:bg-zinc-800/50">
                 {/* Line number */}
-                <td className="text-right pr-4 select-none text-zinc-600 w-12 align-top">
+                <td className="text-right pr-4 select-none text-zinc-600 w-10 align-top">
                   {lineIndex + 1}
                 </td>
                 {/* Code */}

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { usePlayground } from './PlaygroundContext';
+import { usePlayground, DeviceMode, ViewMode } from './PlaygroundContext';
 import { navigation, type NavigationSection } from '../../lib/navigation';
 
 // ========================================
@@ -30,6 +30,113 @@ function ChevronRightIcon({ className }: { className?: string }) {
     <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="m9 18 6-6-6-6" />
     </svg>
+  );
+}
+
+// Toolbar Icons
+function MobileIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+      <path d="M12 18h.01" />
+    </svg>
+  );
+}
+
+function TabletIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
+      <line x1="12" x2="12.01" y1="18" y2="18" />
+    </svg>
+  );
+}
+
+function DesktopIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="20" height="14" x="2" y="3" rx="2" />
+      <line x1="8" x2="16" y1="21" y2="21" />
+      <line x1="12" x2="12" y1="17" y2="21" />
+    </svg>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2" />
+      <path d="M12 20v2" />
+      <path d="m4.93 4.93 1.41 1.41" />
+      <path d="m17.66 17.66 1.41 1.41" />
+      <path d="M2 12h2" />
+      <path d="M20 12h2" />
+      <path d="m6.34 17.66-1.41 1.41" />
+      <path d="m19.07 4.93-1.41 1.41" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+    </svg>
+  );
+}
+
+function EyeIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function CodeIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+    </svg>
+  );
+}
+
+function SplitIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <line x1="12" x2="12" y1="3" y2="21" />
+    </svg>
+  );
+}
+
+// Toolbar button component
+interface ToolbarButtonProps {
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
+}
+
+function ToolbarButton({ icon, label, active, onClick }: ToolbarButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`
+        p-1.5 rounded-md transition-colors
+        ${active
+          ? 'bg-gray-100 text-gray-900'
+          : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+        }
+      `}
+      title={label}
+      aria-label={label}
+    >
+      {icon}
+    </button>
   );
 }
 
@@ -181,6 +288,12 @@ export function PlaygroundNav() {
     goToNextVariant,
     variantIndex,
     totalVariants,
+    deviceMode,
+    setDeviceMode,
+    viewMode,
+    setViewMode,
+    previewTheme,
+    setPreviewTheme,
   } = usePlayground();
 
   if (!componentData) return null;
@@ -213,13 +326,54 @@ export function PlaygroundNav() {
 
   const currentCategoryId = currentCategory?.title.toLowerCase().replace(/\s+/g, '-') || '';
 
+  const deviceModes: { mode: DeviceMode; icon: React.ReactNode; label: string }[] = [
+    { mode: 'mobile', icon: <MobileIcon />, label: 'Mobile' },
+    { mode: 'tablet', icon: <TabletIcon />, label: 'Tablet' },
+    { mode: 'desktop', icon: <DesktopIcon />, label: 'Desktop' },
+  ];
+
+  const viewModes: { mode: ViewMode; icon: React.ReactNode; label: string }[] = [
+    { mode: 'preview', icon: <EyeIcon />, label: 'Preview' },
+    { mode: 'code', icon: <CodeIcon />, label: 'Code' },
+    { mode: 'split', icon: <SplitIcon />, label: 'Split' },
+  ];
+
   return (
-    <div className="flex items-center justify-between py-2 border-b border-gray-200">
-      {/* Left: Component name */}
+    <div className="flex items-center justify-between py-2">
+      {/* Left: Toolbar controls */}
       <div className="flex items-center gap-1">
-        <h1 className="text-lg font-semibold text-gray-900">
-          {componentData.name}
-        </h1>
+        {/* Device mode */}
+        {deviceModes.map(({ mode, icon, label }) => (
+          <ToolbarButton
+            key={mode}
+            icon={icon}
+            label={label}
+            active={deviceMode === mode}
+            onClick={() => setDeviceMode(mode)}
+          />
+        ))}
+
+        <div className="w-px h-4 bg-gray-200 mx-1" />
+
+        {/* Theme toggle */}
+        <ToolbarButton
+          icon={previewTheme === 'light' ? <SunIcon /> : <MoonIcon />}
+          label={`Theme: ${previewTheme}`}
+          onClick={() => setPreviewTheme(previewTheme === 'light' ? 'dark' : 'light')}
+        />
+
+        <div className="w-px h-4 bg-gray-200 mx-1" />
+
+        {/* View mode */}
+        {viewModes.map(({ mode, icon, label }) => (
+          <ToolbarButton
+            key={mode}
+            icon={icon}
+            label={label}
+            active={viewMode === mode}
+            onClick={() => setViewMode(mode)}
+          />
+        ))}
       </div>
 
       {/* Right: Navigation dropdowns */}

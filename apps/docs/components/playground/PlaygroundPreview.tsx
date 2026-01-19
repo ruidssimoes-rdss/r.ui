@@ -127,10 +127,10 @@ interface PlaygroundPreviewProps {
 export function PlaygroundPreview({ children }: PlaygroundPreviewProps) {
   const { deviceMode, previewTheme } = usePlayground();
 
-  // Background pattern - dot grid like OxbowUI
+  // Background pattern - subtle dot grid
   const patternStyle = {
-    backgroundImage: `radial-gradient(circle, ${previewTheme === 'dark' ? '#374151' : '#d1d5db'} 1px, transparent 1px)`,
-    backgroundSize: '20px 20px',
+    backgroundImage: `radial-gradient(circle, ${previewTheme === 'dark' ? '#374151' : '#e5e7eb'} 1px, transparent 1px)`,
+    backgroundSize: '16px 16px',
   };
 
   const themeClass = previewTheme === 'dark' ? 'bg-zinc-900 preview-dark' : 'bg-gray-50';
@@ -138,13 +138,13 @@ export function PlaygroundPreview({ children }: PlaygroundPreviewProps) {
   return (
     <div
       className={`
-        relative h-full overflow-auto
+        relative h-full overflow-hidden
         ${themeClass}
       `}
       style={patternStyle}
     >
-      {/* Preview container */}
-      <div className="flex items-center justify-center min-h-full p-8">
+      {/* Preview container - centered, no scroll */}
+      <div className="flex items-center justify-center h-full p-8">
         {deviceMode === 'desktop' ? (
           <div
             className="transition-all duration-300"
