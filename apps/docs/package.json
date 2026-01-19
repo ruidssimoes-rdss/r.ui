@@ -11,6 +11,9 @@
     "clean": "rm -rf .next"
   },
   "dependencies": {
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@babel/types": "^7.23.0",
     "@mdx-js/loader": "^3.0.0",
     "@mdx-js/react": "^3.0.0",
     "@next/mdx": "^14.0.4",
@@ -27,6 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
+    "@types/babel__traverse": "^7.20.0",
     "@types/mdx": "^2.0.10",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",

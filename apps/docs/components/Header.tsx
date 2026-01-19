@@ -127,6 +127,12 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
             >
               Components
             </Link>
+            <Link
+              href="/lint"
+              className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              Lint
+            </Link>
           </div>
 
           {/* Center: Logo */}
