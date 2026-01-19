@@ -20,27 +20,26 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="pt-32 pb-16 px-6 lg:px-48 max-w-4xl mx-auto">
-        {/* Eyebrow */}
-        <p className="text-sm text-gray-400 mb-6">
+      <section className="pt-32 pb-16 px-6 lg:px-48 text-center">
+        {/* Pill eyebrow */}
+        <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-sm mb-6">
           Built for solo founders and makers
-        </p>
+        </div>
 
-        {/* Headline */}
-        <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 mb-6">
+        {/* Centered headline */}
+        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-gray-900 mb-6">
           Beautiful components
           <br />
           for React Native
         </h1>
 
-        {/* Description - editorial prose */}
-        <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-2xl">
-          r/ui is a collection of 45 accessible, production-ready components
-          that work on iOS, Android, and Web. No runtime dependencies.
-          No lock-in. Just copy, paste, and ship.
+        {/* Centered description */}
+        <p className="text-lg text-gray-500 leading-relaxed mb-10 max-w-xl mx-auto">
+          A growing collection of accessible, production-ready components
+          that work on iOS, Android, and Web. Copy, paste, ship.
         </p>
 
-        {/* Single CTA */}
+        {/* Centered CTA */}
         <a
           href="/docs/installation"
           className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
@@ -53,12 +52,12 @@ export default function HomePage() {
       </section>
 
       {/* Divider */}
-      <div className="max-w-4xl mx-auto px-6 lg:px-48">
+      <div className="max-w-4xl mx-auto px-6">
         <div className="border-t border-gray-100" />
       </div>
 
       {/* Command Palette Preview */}
-      <section className="py-20 px-6 lg:px-48 max-w-4xl mx-auto">
+      <section className="py-20 px-6">
         {/* Static Command Palette */}
         <div className="bg-white border border-gray-200 rounded-xl shadow-2xl shadow-gray-200/50 overflow-hidden max-w-lg mx-auto">
           {/* Search Input */}
