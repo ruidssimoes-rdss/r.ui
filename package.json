@@ -6,6 +6,7 @@
     "dev": "pnpm --filter @r-ui/docs dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
+    "lint:design": "pnpm --filter @r-ui/lint build && pnpm --filter @r-ui/lint test",
     "clean": "pnpm -r clean",
     "storybook": "pnpm --filter @r-ui/storybook start"
   },
