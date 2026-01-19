@@ -42,6 +42,8 @@ export const navigation: NavigationSection[] = [
       { name: 'Accordion', href: '/docs/components/accordion', description: 'Expandable sections' },
       { name: 'Collapsible', href: '/docs/components/collapsible', description: 'Single expand/collapse' },
       { name: 'Carousel', href: '/docs/components/carousel', description: 'Horizontal scrolling carousel' },
+      { name: 'Calendar', href: '/docs/components/calendar', description: 'Date calendar display' },
+      { name: 'Chart', href: '/docs/components/chart', description: 'Data visualization charts' },
     ],
   },
   {
@@ -52,6 +54,7 @@ export const navigation: NavigationSection[] = [
       { name: 'Toast', href: '/docs/components/toast', description: 'Temporary notifications' },
       { name: 'Dialog', href: '/docs/components/dialog', description: 'Modal dialogs' },
       { name: 'Spinner', href: '/docs/components/spinner', description: 'Loading spinners' },
+      { name: 'Callout', href: '/docs/components/callout', description: 'Highlighted information blocks' },
     ],
   },
   {
@@ -82,6 +85,9 @@ export const navigation: NavigationSection[] = [
       { name: 'Slider', href: '/docs/components/slider', description: 'Range slider input' },
       { name: 'Switch', href: '/docs/components/switch', description: 'Toggle switches' },
       { name: 'Textarea', href: '/docs/components/textarea', description: 'Multi-line text input' },
+      { name: 'Form', href: '/docs/components/form', description: 'Form validation and layout' },
+      { name: 'FileUpload', href: '/docs/components/file-upload', description: 'File upload with drag and drop' },
+      { name: 'Editor', href: '/docs/components/editor', description: 'Rich text editor' },
     ],
   },
   {
@@ -93,6 +99,8 @@ export const navigation: NavigationSection[] = [
       { name: 'Link', href: '/docs/components/link', description: 'Styled navigation links' },
       { name: 'Menubar', href: '/docs/components/menubar', description: 'Horizontal menu bar' },
       { name: 'NavigationMenu', href: '/docs/components/navigation-menu', description: 'Site navigation dropdowns' },
+      { name: 'Sidebar', href: '/docs/components/sidebar', description: 'Collapsible side navigation' },
+      { name: 'Navbar', href: '/docs/components/navbar', description: 'Top navigation bar' },
     ],
   },
   {

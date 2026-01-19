@@ -1750,6 +1750,223 @@ export const carouselData: ComponentData = {
 };
 
 // ========================================
+// Form Component Data
+// ========================================
+
+export const formData: ComponentData = {
+  slug: 'form',
+  name: 'Form',
+  description: 'A form component with built-in validation, error handling, and accessible field management.',
+  category: 'Form',
+  categorySlug: 'form',
+  variants: [
+    { id: 'basic', label: 'Basic Form', code: `import { useState } from 'react'\nimport { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage, Input, Button } from '@r-ui/react-native'\n\nexport default function BasicForm() {\n  const [name, setName] = useState('')\n  const [errors, setErrors] = useState<Record<string, string>>({})\n\n  const handleSubmit = () => {\n    if (!name.trim()) {\n      setErrors({ name: 'Name is required' })\n      return\n    }\n    setErrors({})\n    console.log('Submitted:', name)\n  }\n\n  return (\n    <Form onSubmit={handleSubmit} errors={errors}>\n      <FormField name="name">\n        <FormItem>\n          <FormLabel>Name</FormLabel>\n          <FormControl>\n            <Input value={name} onChangeText={setName} placeholder="Enter your name" />\n          </FormControl>\n          <FormDescription>Your full legal name.</FormDescription>\n          <FormMessage />\n        </FormItem>\n      </FormField>\n      <Button onPress={handleSubmit}>Submit</Button>\n    </Form>\n  )\n}` },
+    { id: 'with-validation', label: 'With Validation', code: `import { useState } from 'react'\nimport { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, Input, Button } from '@r-ui/react-native'\n\nexport default function FormWithValidation() {\n  const [email, setEmail] = useState('')\n  const [password, setPassword] = useState('')\n  const [errors, setErrors] = useState<Record<string, string>>({})\n\n  const validate = () => {\n    const newErrors: Record<string, string> = {}\n    if (!email.includes('@')) newErrors.email = 'Please enter a valid email'\n    if (password.length < 8) newErrors.password = 'Password must be at least 8 characters'\n    setErrors(newErrors)\n    return Object.keys(newErrors).length === 0\n  }\n\n  return (\n    <Form onSubmit={() => validate() && console.log('Valid!')} errors={errors}>\n      <FormField name="email">\n        <FormItem>\n          <FormLabel required>Email</FormLabel>\n          <FormControl>\n            <Input value={email} onChangeText={setEmail} placeholder="email@example.com" />\n          </FormControl>\n          <FormMessage />\n        </FormItem>\n      </FormField>\n      <FormField name="password">\n        <FormItem>\n          <FormLabel required>Password</FormLabel>\n          <FormControl>\n            <Input value={password} onChangeText={setPassword} secureTextEntry />\n          </FormControl>\n          <FormMessage />\n        </FormItem>\n      </FormField>\n      <Button onPress={validate}>Sign Up</Button>\n    </Form>\n  )\n}` },
+  ],
+  installation: 'npx r-ui add form',
+  usage: `import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from '@r-ui/react-native'\n\nexport default function MyComponent() {\n  return (\n    <Form>\n      <FormField name="username">\n        <FormItem>\n          <FormLabel>Username</FormLabel>\n          <FormControl>\n            <Input placeholder="Enter username" />\n          </FormControl>\n          <FormDescription>Your public display name.</FormDescription>\n          <FormMessage />\n        </FormItem>\n      </FormField>\n    </Form>\n  )\n}`,
+  features: ['Form-level error state management', 'Automatic field registration', 'Required field indicators', 'Error message display', 'Description text support', 'Full accessibility support'],
+  props: [{ component: 'Form', props: [
+    { name: 'onSubmit', type: '() => void', default: '-', description: 'Form submission handler' },
+    { name: 'errors', type: 'Record<string, string>', default: '{}', description: 'Field error messages' },
+  ]}, { component: 'FormLabel', props: [
+    { name: 'required', type: 'boolean', default: 'false', description: 'Show required indicator' },
+  ]}],
+};
+
+// ========================================
+// FileUpload Component Data
+// ========================================
+
+export const fileUploadData: ComponentData = {
+  slug: 'file-upload',
+  name: 'FileUpload',
+  description: 'A file upload component with drag-and-drop support, file validation, and progress indication.',
+  category: 'Form',
+  categorySlug: 'form',
+  variants: [
+    { id: 'basic', label: 'Basic', code: `import { useState } from 'react'\nimport { FileUpload, FileUploadDropzone, FileUploadList } from '@r-ui/react-native'\n\nexport default function BasicFileUpload() {\n  const [files, setFiles] = useState([])\n\n  return (\n    <FileUpload value={files} onValueChange={setFiles}>\n      <FileUploadDropzone>\n        <p>Drag files here or click to browse</p>\n      </FileUploadDropzone>\n      <FileUploadList />\n    </FileUpload>\n  )\n}` },
+    { id: 'with-validation', label: 'With Validation', code: `import { useState } from 'react'\nimport { FileUpload, FileUploadDropzone, FileUploadList } from '@r-ui/react-native'\n\nexport default function FileUploadWithValidation() {\n  const [files, setFiles] = useState([])\n\n  return (\n    <FileUpload\n      value={files}\n      onValueChange={setFiles}\n      accept={['image/*', '.pdf']}\n      maxSize={5 * 1024 * 1024}\n      maxFiles={3}\n    >\n      <FileUploadDropzone>\n        <p>Upload images or PDFs (max 5MB, up to 3 files)</p>\n      </FileUploadDropzone>\n      <FileUploadList />\n    </FileUpload>\n  )\n}` },
+    { id: 'with-trigger', label: 'With Button Trigger', code: `import { useState } from 'react'\nimport { FileUpload, FileUploadTrigger, FileUploadList, Button } from '@r-ui/react-native'\n\nexport default function FileUploadWithTrigger() {\n  const [files, setFiles] = useState([])\n\n  return (\n    <FileUpload value={files} onValueChange={setFiles}>\n      <FileUploadTrigger asChild>\n        <Button variant="secondary">Choose Files</Button>\n      </FileUploadTrigger>\n      <FileUploadList />\n    </FileUpload>\n  )\n}` },
+  ],
+  installation: 'npx r-ui add file-upload',
+  usage: `import { FileUpload, FileUploadDropzone, FileUploadList } from '@r-ui/react-native'\n\nexport default function MyComponent() {\n  const [files, setFiles] = useState([])\n\n  return (\n    <FileUpload value={files} onValueChange={setFiles}>\n      <FileUploadDropzone>Drop files here</FileUploadDropzone>\n      <FileUploadList />\n    </FileUpload>\n  )\n}`,
+  features: ['Drag and drop file upload', 'Click to browse files', 'File type validation', 'File size validation', 'Multiple file limit', 'File list with remove button'],
+  props: [{ component: 'FileUpload', props: [
+    { name: 'value', type: 'UploadedFile[]', default: '[]', description: 'Selected files (controlled)' },
+    { name: 'onValueChange', type: '(files: UploadedFile[]) => void', default: '-', description: 'Called when files change' },
+    { name: 'accept', type: 'string[]', default: '-', description: 'Accepted file types' },
+    { name: 'maxSize', type: 'number', default: '-', description: 'Max file size in bytes' },
+    { name: 'maxFiles', type: 'number', default: '-', description: 'Max number of files' },
+    { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the uploader' },
+  ]}],
+};
+
+// ========================================
+// Calendar Component Data
+// ========================================
+
+export const calendarData: ComponentData = {
+  slug: 'calendar',
+  name: 'Calendar',
+  description: 'A standalone calendar component for date display and selection with single, range, and multiple modes.',
+  category: 'Data Display',
+  categorySlug: 'data-display',
+  variants: [
+    { id: 'basic', label: 'Single Selection', code: `import { useState } from 'react'\nimport { Calendar, CalendarHeader, CalendarGrid } from '@r-ui/react-native'\n\nexport default function BasicCalendar() {\n  const [date, setDate] = useState<Date | null>(null)\n\n  return (\n    <Calendar mode="single" value={date} onValueChange={setDate}>\n      <CalendarHeader />\n      <CalendarGrid />\n    </Calendar>\n  )\n}` },
+    { id: 'range', label: 'Range Selection', code: `import { useState } from 'react'\nimport { Calendar, CalendarHeader, CalendarGrid } from '@r-ui/react-native'\n\nexport default function RangeCalendar() {\n  const [range, setRange] = useState({ start: null, end: null })\n\n  return (\n    <Calendar mode="range" value={range} onValueChange={setRange}>\n      <CalendarHeader />\n      <CalendarGrid />\n    </Calendar>\n  )\n}` },
+    { id: 'multiple', label: 'Multiple Selection', code: `import { useState } from 'react'\nimport { Calendar, CalendarHeader, CalendarGrid } from '@r-ui/react-native'\n\nexport default function MultipleCalendar() {\n  const [dates, setDates] = useState<Date[]>([])\n\n  return (\n    <Calendar mode="multiple" value={dates} onValueChange={setDates}>\n      <CalendarHeader />\n      <CalendarGrid />\n    </Calendar>\n  )\n}` },
+  ],
+  installation: 'npx r-ui add calendar',
+  usage: `import { Calendar, CalendarHeader, CalendarGrid } from '@r-ui/react-native'\n\nexport default function MyComponent() {\n  const [date, setDate] = useState<Date | null>(null)\n\n  return (\n    <Calendar mode="single" value={date} onValueChange={setDate}>\n      <CalendarHeader />\n      <CalendarGrid />\n    </Calendar>\n  )\n}`,
+  features: ['Single date selection', 'Date range selection', 'Multiple date selection', 'Min/max date constraints', 'Today indicator', 'Keyboard navigation'],
+  props: [{ component: 'Calendar', props: [
+    { name: 'mode', type: '"single" | "range" | "multiple"', default: '"single"', description: 'Selection mode' },
+    { name: 'value', type: 'Date | DateRange | Date[]', default: '-', description: 'Selected value (controlled)' },
+    { name: 'onValueChange', type: '(value) => void', default: '-', description: 'Called when selection changes' },
+    { name: 'minDate', type: 'Date', default: '-', description: 'Minimum selectable date' },
+    { name: 'maxDate', type: 'Date', default: '-', description: 'Maximum selectable date' },
+  ]}],
+};
+
+// ========================================
+// Callout Component Data
+// ========================================
+
+export const calloutData: ComponentData = {
+  slug: 'callout',
+  name: 'Callout',
+  description: 'A highlighted information block for drawing attention to important content.',
+  category: 'Feedback',
+  categorySlug: 'feedback',
+  variants: [
+    { id: 'variants', label: 'Variants', code: `import { Callout, CalloutIcon, CalloutTitle, CalloutDescription } from '@r-ui/react-native'\n\nexport default function CalloutVariants() {\n  return (\n    <div className="space-y-4">\n      <Callout variant="info">\n        <CalloutIcon />\n        <CalloutTitle>Information</CalloutTitle>\n        <CalloutDescription>This is an informational callout.</CalloutDescription>\n      </Callout>\n\n      <Callout variant="warning">\n        <CalloutIcon />\n        <CalloutTitle>Warning</CalloutTitle>\n        <CalloutDescription>This action may have consequences.</CalloutDescription>\n      </Callout>\n\n      <Callout variant="error">\n        <CalloutIcon />\n        <CalloutTitle>Error</CalloutTitle>\n        <CalloutDescription>Something went wrong.</CalloutDescription>\n      </Callout>\n\n      <Callout variant="success">\n        <CalloutIcon />\n        <CalloutTitle>Success</CalloutTitle>\n        <CalloutDescription>Operation completed successfully.</CalloutDescription>\n      </Callout>\n    </div>\n  )\n}` },
+    { id: 'dismissible', label: 'Dismissible', code: `import { useState } from 'react'\nimport { Callout, CalloutIcon, CalloutTitle, CalloutDescription } from '@r-ui/react-native'\n\nexport default function DismissibleCallout() {\n  const [visible, setVisible] = useState(true)\n\n  if (!visible) return null\n\n  return (\n    <Callout variant="info" dismissible onDismiss={() => setVisible(false)}>\n      <CalloutIcon />\n      <CalloutTitle>Dismissible Callout</CalloutTitle>\n      <CalloutDescription>Click the X to dismiss.</CalloutDescription>\n    </Callout>\n  )\n}` },
+  ],
+  installation: 'npx r-ui add callout',
+  usage: `import { Callout, CalloutIcon, CalloutTitle, CalloutDescription } from '@r-ui/react-native'\n\nexport default function MyComponent() {\n  return (\n    <Callout variant="info">\n      <CalloutIcon />\n      <CalloutTitle>Note</CalloutTitle>\n      <CalloutDescription>Important information goes here.</CalloutDescription>\n    </Callout>\n  )\n}`,
+  features: ['Five variants: info, warning, error, success, tip', 'Automatic variant-specific icons', 'Dismissible with close button', 'Compound component API'],
+  props: [{ component: 'Callout', props: [
+    { name: 'variant', type: '"info" | "warning" | "error" | "success" | "tip"', default: '"info"', description: 'Visual style variant' },
+    { name: 'dismissible', type: 'boolean', default: 'false', description: 'Show close button' },
+    { name: 'onDismiss', type: '() => void', default: '-', description: 'Called when dismissed' },
+  ]}],
+};
+
+// ========================================
+// Sidebar Component Data
+// ========================================
+
+export const sidebarData: ComponentData = {
+  slug: 'sidebar',
+  name: 'Sidebar',
+  description: 'A collapsible side navigation component with support for nested items and mobile responsiveness.',
+  category: 'Navigation',
+  categorySlug: 'navigation',
+  variants: [
+    { id: 'basic', label: 'Basic', code: `import { Sidebar, SidebarContent, SidebarHeader, SidebarNav, SidebarNavItem } from '@r-ui/react-native'\n\nexport default function BasicSidebar() {\n  return (\n    <Sidebar>\n      <SidebarHeader>\n        <span className="font-semibold">My App</span>\n      </SidebarHeader>\n      <SidebarContent>\n        <SidebarNav>\n          <SidebarNavItem href="/dashboard" active>Dashboard</SidebarNavItem>\n          <SidebarNavItem href="/projects">Projects</SidebarNavItem>\n          <SidebarNavItem href="/settings">Settings</SidebarNavItem>\n        </SidebarNav>\n      </SidebarContent>\n    </Sidebar>\n  )\n}` },
+    { id: 'with-groups', label: 'With Groups', code: `import { Sidebar, SidebarContent, SidebarNav, SidebarNavGroup, SidebarNavItem, SidebarSeparator } from '@r-ui/react-native'\n\nexport default function SidebarWithGroups() {\n  return (\n    <Sidebar>\n      <SidebarContent>\n        <SidebarNav>\n          <SidebarNavGroup label="Main">\n            <SidebarNavItem href="/dashboard">Dashboard</SidebarNavItem>\n            <SidebarNavItem href="/analytics">Analytics</SidebarNavItem>\n          </SidebarNavGroup>\n          <SidebarSeparator />\n          <SidebarNavGroup label="Settings">\n            <SidebarNavItem href="/account">Account</SidebarNavItem>\n            <SidebarNavItem href="/preferences">Preferences</SidebarNavItem>\n          </SidebarNavGroup>\n        </SidebarNav>\n      </SidebarContent>\n    </Sidebar>\n  )\n}` },
+    { id: 'collapsible', label: 'Collapsible', code: `import { useState } from 'react'\nimport { Sidebar, SidebarTrigger, SidebarContent, SidebarNav, SidebarNavItem } from '@r-ui/react-native'\n\nexport default function CollapsibleSidebar() {\n  const [collapsed, setCollapsed] = useState(false)\n\n  return (\n    <div className="flex">\n      <Sidebar collapsed={collapsed} onCollapsedChange={setCollapsed}>\n        <SidebarContent>\n          <SidebarNav>\n            <SidebarNavItem href="/home">Home</SidebarNavItem>\n            <SidebarNavItem href="/users">Users</SidebarNavItem>\n          </SidebarNav>\n        </SidebarContent>\n      </Sidebar>\n      <div className="flex-1 p-4">\n        <SidebarTrigger />\n        <p>Main content</p>\n      </div>\n    </div>\n  )\n}` },
+  ],
+  installation: 'npx r-ui add sidebar',
+  usage: `import { Sidebar, SidebarContent, SidebarHeader, SidebarNav, SidebarNavItem } from '@r-ui/react-native'\n\nexport default function MyComponent() {\n  return (\n    <Sidebar>\n      <SidebarHeader>Logo</SidebarHeader>\n      <SidebarContent>\n        <SidebarNav>\n          <SidebarNavItem href="/">Home</SidebarNavItem>\n        </SidebarNav>\n      </SidebarContent>\n    </Sidebar>\n  )\n}`,
+  features: ['Collapsible to icon-only mode', 'Left or right positioning', 'Navigation groups with labels', 'Mobile drawer mode', 'Active item highlighting'],
+  props: [{ component: 'Sidebar', props: [
+    { name: 'side', type: '"left" | "right"', default: '"left"', description: 'Side of the screen' },
+    { name: 'collapsed', type: 'boolean', default: 'false', description: 'Collapsed state (controlled)' },
+    { name: 'onCollapsedChange', type: '(collapsed: boolean) => void', default: '-', description: 'Called when collapsed changes' },
+  ]}, { component: 'SidebarNavItem', props: [
+    { name: 'href', type: 'string', default: '-', description: 'Navigation target' },
+    { name: 'active', type: 'boolean', default: 'false', description: 'Mark as active' },
+  ]}],
+};
+
+// ========================================
+// Navbar Component Data
+// ========================================
+
+export const navbarData: ComponentData = {
+  slug: 'navbar',
+  name: 'Navbar',
+  description: 'A responsive top navigation bar with support for branding, navigation items, and mobile menu.',
+  category: 'Navigation',
+  categorySlug: 'navigation',
+  variants: [
+    { id: 'basic', label: 'Basic', code: `import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@r-ui/react-native'\n\nexport default function BasicNavbar() {\n  return (\n    <Navbar>\n      <NavbarBrand>\n        <span className="font-bold">ACME</span>\n      </NavbarBrand>\n      <NavbarContent justify="center">\n        <NavbarItem href="/features">Features</NavbarItem>\n        <NavbarItem href="/pricing">Pricing</NavbarItem>\n        <NavbarItem href="/about">About</NavbarItem>\n      </NavbarContent>\n      <NavbarContent justify="end">\n        <NavbarItem href="/login">Login</NavbarItem>\n      </NavbarContent>\n    </Navbar>\n  )\n}` },
+    { id: 'with-mobile-menu', label: 'With Mobile Menu', code: `import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from '@r-ui/react-native'\n\nexport default function NavbarWithMobileMenu() {\n  return (\n    <Navbar>\n      <NavbarBrand>ACME</NavbarBrand>\n      <NavbarContent className="hidden sm:flex" justify="center">\n        <NavbarItem href="/features">Features</NavbarItem>\n        <NavbarItem href="/pricing">Pricing</NavbarItem>\n      </NavbarContent>\n      <NavbarMenuToggle className="sm:hidden" />\n      <NavbarMenu>\n        <NavbarMenuItem href="/features">Features</NavbarMenuItem>\n        <NavbarMenuItem href="/pricing">Pricing</NavbarMenuItem>\n        <NavbarMenuItem href="/login">Login</NavbarMenuItem>\n      </NavbarMenu>\n    </Navbar>\n  )\n}` },
+    { id: 'bordered', label: 'Bordered', code: `import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@r-ui/react-native'\n\nexport default function BorderedNavbar() {\n  return (\n    <Navbar bordered>\n      <NavbarBrand>ACME</NavbarBrand>\n      <NavbarContent justify="end">\n        <NavbarItem href="/docs">Documentation</NavbarItem>\n        <NavbarItem href="/github">GitHub</NavbarItem>\n      </NavbarContent>\n    </Navbar>\n  )\n}` },
+  ],
+  installation: 'npx r-ui add navbar',
+  usage: `import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@r-ui/react-native'\n\nexport default function MyComponent() {\n  return (\n    <Navbar>\n      <NavbarBrand>Logo</NavbarBrand>\n      <NavbarContent>\n        <NavbarItem href="/">Home</NavbarItem>\n        <NavbarItem href="/about">About</NavbarItem>\n      </NavbarContent>\n    </Navbar>\n  )\n}`,
+  features: ['Responsive mobile menu', 'Sticky or fixed positioning', 'Blur background effect', 'Border option', 'Flexible content alignment'],
+  props: [{ component: 'Navbar', props: [
+    { name: 'position', type: '"static" | "sticky" | "fixed"', default: '"static"', description: 'Positioning behavior' },
+    { name: 'bordered', type: 'boolean', default: 'false', description: 'Show bottom border' },
+    { name: 'blur', type: 'boolean', default: 'false', description: 'Enable blur background' },
+  ]}, { component: 'NavbarContent', props: [
+    { name: 'justify', type: '"start" | "center" | "end"', default: '"start"', description: 'Content alignment' },
+  ]}],
+};
+
+// ========================================
+// Chart Component Data
+// ========================================
+
+export const chartData: ComponentData = {
+  slug: 'chart',
+  name: 'Chart',
+  description: 'A collection of data visualization components including bar, line, area, and pie charts.',
+  category: 'Data Display',
+  categorySlug: 'data-display',
+  variants: [
+    { id: 'bar', label: 'Bar Chart', code: `import { Chart, BarChart, ChartTooltip } from '@r-ui/react-native'\n\nconst data = [\n  { label: 'Jan', value: 40 },\n  { label: 'Feb', value: 30 },\n  { label: 'Mar', value: 45 },\n  { label: 'Apr', value: 50 },\n]\n\nexport default function BarChartExample() {\n  return (\n    <Chart data={data} height={300}>\n      <BarChart />\n      <ChartTooltip />\n    </Chart>\n  )\n}` },
+    { id: 'line', label: 'Line Chart', code: `import { Chart, LineChart, ChartAxis, ChartTooltip } from '@r-ui/react-native'\n\nconst data = [\n  { label: 'Jan', value: 40 },\n  { label: 'Feb', value: 30 },\n  { label: 'Mar', value: 45 },\n  { label: 'Apr', value: 50 },\n]\n\nexport default function LineChartExample() {\n  return (\n    <Chart data={data} height={300}>\n      <ChartAxis type="y" />\n      <LineChart showDots />\n      <ChartTooltip />\n    </Chart>\n  )\n}` },
+    { id: 'pie', label: 'Pie Chart', code: `import { Chart, PieChart, ChartLegend } from '@r-ui/react-native'\n\nconst data = [\n  { label: 'Desktop', value: 60 },\n  { label: 'Mobile', value: 30 },\n  { label: 'Tablet', value: 10 },\n]\n\nexport default function PieChartExample() {\n  return (\n    <Chart data={data} height={300}>\n      <PieChart />\n      <ChartLegend position="bottom" />\n    </Chart>\n  )\n}` },
+    { id: 'donut', label: 'Donut Chart', code: `import { Chart, PieChart, ChartLegend } from '@r-ui/react-native'\n\nconst data = [\n  { label: 'Completed', value: 75 },\n  { label: 'In Progress', value: 20 },\n  { label: 'Pending', value: 5 },\n]\n\nexport default function DonutChartExample() {\n  return (\n    <Chart data={data} height={300}>\n      <PieChart innerRadius={60} />\n      <ChartLegend position="right" />\n    </Chart>\n  )\n}` },
+  ],
+  installation: 'npx r-ui add chart',
+  usage: `import { Chart, BarChart, LineChart, PieChart, ChartLegend, ChartTooltip } from '@r-ui/react-native'\n\nconst data = [{ label: 'A', value: 10 }, { label: 'B', value: 20 }]\n\nexport default function MyComponent() {\n  return (\n    <Chart data={data} height={300}>\n      <BarChart />\n      <ChartLegend />\n    </Chart>\n  )\n}`,
+  features: ['Bar charts (vertical/horizontal)', 'Line charts with dots', 'Area charts with gradient', 'Pie and donut charts', 'Tooltips on hover/touch', 'Legend with positions', 'Y-axis with auto-scaling'],
+  props: [{ component: 'Chart', props: [
+    { name: 'data', type: 'ChartDataPoint[]', default: '[]', description: 'Chart data array' },
+    { name: 'height', type: 'number', default: '200', description: 'Chart height in pixels' },
+    { name: 'colors', type: 'string[]', default: 'defaultChartColors', description: 'Custom color palette' },
+  ]}, { component: 'PieChart', props: [
+    { name: 'innerRadius', type: 'number', default: '0', description: 'Inner radius for donut' },
+  ]}, { component: 'ChartLegend', props: [
+    { name: 'position', type: '"top" | "bottom" | "left" | "right"', default: '"bottom"', description: 'Legend position' },
+  ]}],
+};
+
+// ========================================
+// Editor Component Data
+// ========================================
+
+export const editorData: ComponentData = {
+  slug: 'editor',
+  name: 'Editor',
+  description: 'A rich text editor with formatting toolbar, undo/redo, and markdown support.',
+  category: 'Form',
+  categorySlug: 'form',
+  variants: [
+    { id: 'basic', label: 'Basic', code: `import { useState } from 'react'\nimport { Editor, EditorToolbar, EditorContent, BoldButton, ItalicButton, UnderlineButton } from '@r-ui/react-native'\n\nexport default function BasicEditor() {\n  const [value, setValue] = useState('')\n\n  return (\n    <Editor value={value} onValueChange={setValue}>\n      <EditorToolbar>\n        <BoldButton />\n        <ItalicButton />\n        <UnderlineButton />\n      </EditorToolbar>\n      <EditorContent placeholder="Start writing..." />\n    </Editor>\n  )\n}` },
+    { id: 'full-toolbar', label: 'Full Toolbar', code: `import { useState } from 'react'\nimport {\n  Editor, EditorToolbar, EditorToolbarSeparator, EditorContent,\n  BoldButton, ItalicButton, UnderlineButton, StrikethroughButton,\n  HeadingButton, ListButton, QuoteButton, CodeButton, UndoButton, RedoButton\n} from '@r-ui/react-native'\n\nexport default function FullToolbarEditor() {\n  const [value, setValue] = useState('')\n\n  return (\n    <Editor value={value} onValueChange={setValue}>\n      <EditorToolbar>\n        <UndoButton />\n        <RedoButton />\n        <EditorToolbarSeparator />\n        <BoldButton />\n        <ItalicButton />\n        <UnderlineButton />\n        <StrikethroughButton />\n        <EditorToolbarSeparator />\n        <HeadingButton level={1} />\n        <HeadingButton level={2} />\n        <EditorToolbarSeparator />\n        <ListButton type="bullet" />\n        <ListButton type="numbered" />\n        <QuoteButton />\n        <CodeButton />\n      </EditorToolbar>\n      <EditorContent minHeight={200} />\n    </Editor>\n  )\n}` },
+    { id: 'with-character-count', label: 'With Character Count', code: `import { useState } from 'react'\nimport { Editor, EditorToolbar, EditorContent, BoldButton, ItalicButton, getCharacterCount, getWordCount } from '@r-ui/react-native'\n\nexport default function EditorWithCount() {\n  const [value, setValue] = useState('')\n\n  return (\n    <div>\n      <Editor value={value} onValueChange={setValue}>\n        <EditorToolbar>\n          <BoldButton />\n          <ItalicButton />\n        </EditorToolbar>\n        <EditorContent />\n      </Editor>\n      <div className="text-sm text-gray-500 mt-2">\n        {getCharacterCount(value)} characters · {getWordCount(value)} words\n      </div>\n    </div>\n  )\n}` },
+  ],
+  installation: 'npx r-ui add editor',
+  usage: `import { Editor, EditorToolbar, EditorContent, BoldButton, ItalicButton, UndoButton, RedoButton } from '@r-ui/react-native'\n\nexport default function MyComponent() {\n  const [value, setValue] = useState('')\n\n  return (\n    <Editor value={value} onValueChange={setValue}>\n      <EditorToolbar>\n        <UndoButton />\n        <RedoButton />\n        <BoldButton />\n        <ItalicButton />\n      </EditorToolbar>\n      <EditorContent />\n    </Editor>\n  )\n}`,
+  features: ['Bold, italic, underline, strikethrough', 'Headings (H1, H2, H3)', 'Bullet and numbered lists', 'Block quotes', 'Code formatting', 'Undo/redo with history', 'Character and word count utilities'],
+  props: [{ component: 'Editor', props: [
+    { name: 'value', type: 'string', default: "''", description: 'Editor content (controlled)' },
+    { name: 'onValueChange', type: '(value: string) => void', default: '-', description: 'Called when content changes' },
+    { name: 'disabled', type: 'boolean', default: 'false', description: 'Make editor read-only' },
+  ]}, { component: 'EditorContent', props: [
+    { name: 'placeholder', type: 'string', default: '-', description: 'Placeholder text' },
+    { name: 'minHeight', type: 'number', default: '100', description: 'Minimum height' },
+  ]}],
+};
+
+// ========================================
 // Registry Map
 // ========================================
 
@@ -1797,6 +2014,14 @@ export const componentRegistry: Record<string, ComponentData> = {
   'scroll-area': scrollAreaData,
   'breadcrumb': breadcrumbData,
   'pagination': paginationData,
+  'form': formData,
+  'file-upload': fileUploadData,
+  'calendar': calendarData,
+  'callout': calloutData,
+  'sidebar': sidebarData,
+  'navbar': navbarData,
+  'chart': chartData,
+  'editor': editorData,
   'link': linkData,
   'menubar': menubarData,
   'navigation-menu': navigationMenuData,

@@ -609,6 +609,136 @@ function SpacerPreview() {
   );
 }
 
+function FormPreview() {
+  return (
+    <div className="flex items-center justify-center h-full px-3">
+      <div className="w-full space-y-1.5">
+        <div className="text-[8px] text-[#374151] font-medium">Name</div>
+        <div className="h-5 w-full border border-[#E5E7EB] rounded bg-white" />
+        <div className="text-[7px] text-[#6B7280]">Enter your name</div>
+      </div>
+    </div>
+  );
+}
+
+function FileUploadPreview() {
+  return (
+    <div className="flex items-center justify-center h-full px-3">
+      <div className="w-full h-12 border-2 border-dashed border-[#E5E7EB] rounded flex flex-col items-center justify-center">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+        </svg>
+        <span className="text-[7px] text-[#9CA3AF] mt-0.5">Drop files</span>
+      </div>
+    </div>
+  );
+}
+
+function CalendarPreview() {
+  return (
+    <div className="flex items-center justify-center h-full px-2">
+      <div className="border border-[#E5E7EB] rounded p-1.5 bg-white">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[7px] text-[#374151] font-medium">Jan 2025</span>
+        </div>
+        <div className="grid grid-cols-7 gap-0.5 text-[6px]">
+          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
+            <div key={i} className="w-3 h-3 flex items-center justify-center text-[#9CA3AF]">{d}</div>
+          ))}
+          {[1, 2, 3, 4, 5, 6, 7].map((d) => (
+            <div
+              key={d}
+              className={`w-3 h-3 flex items-center justify-center rounded ${d === 5 ? 'bg-[#3B82F6] text-white' : 'text-[#374151]'}`}
+            >
+              {d}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CalloutPreview() {
+  return (
+    <div className="flex items-center justify-center h-full px-3">
+      <div className="w-full flex gap-1.5 px-2 py-1.5 bg-[#DBEAFE] border border-[#93C5FD] rounded">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+        <div>
+          <div className="text-[8px] text-[#1D4ED8] font-medium">Note</div>
+          <div className="text-[7px] text-[#3B82F6]">Info here</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SidebarPreview() {
+  return (
+    <div className="flex items-center justify-center h-full">
+      <div className="w-14 bg-white border border-[#E5E7EB] rounded overflow-hidden">
+        <div className="px-1.5 py-1 border-b border-[#E5E7EB]">
+          <div className="w-6 h-1.5 bg-[#E5E7EB] rounded" />
+        </div>
+        <div className="p-1 space-y-0.5">
+          <div className="h-3 px-1 bg-[#3B82F6]/10 rounded text-[6px] text-[#3B82F6] flex items-center">Home</div>
+          <div className="h-3 px-1 text-[6px] text-[#6B7280]">Users</div>
+          <div className="h-3 px-1 text-[6px] text-[#6B7280]">Settings</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NavbarPreview() {
+  return (
+    <div className="flex items-center justify-center h-full px-2">
+      <div className="w-full h-6 bg-white border border-[#E5E7EB] rounded flex items-center justify-between px-2">
+        <div className="text-[8px] font-bold text-[#111827]">Logo</div>
+        <div className="flex gap-2 text-[7px] text-[#6B7280]">
+          <span>Home</span>
+          <span>About</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChartPreview() {
+  return (
+    <div className="flex items-center justify-center h-full px-3">
+      <div className="flex items-end gap-1 h-10">
+        <div className="w-3 h-6 bg-[#3B82F6] rounded-t" />
+        <div className="w-3 h-4 bg-[#3B82F6] rounded-t" />
+        <div className="w-3 h-8 bg-[#3B82F6] rounded-t" />
+        <div className="w-3 h-5 bg-[#3B82F6] rounded-t" />
+        <div className="w-3 h-7 bg-[#3B82F6] rounded-t" />
+      </div>
+    </div>
+  );
+}
+
+function EditorPreview() {
+  return (
+    <div className="flex items-center justify-center h-full px-2">
+      <div className="w-full border border-[#E5E7EB] rounded bg-white overflow-hidden">
+        <div className="flex gap-0.5 p-1 border-b border-[#E5E7EB]">
+          <div className="w-4 h-4 rounded bg-[#F3F4F6] flex items-center justify-center text-[8px] font-bold text-[#374151]">B</div>
+          <div className="w-4 h-4 rounded bg-[#F3F4F6] flex items-center justify-center text-[8px] italic text-[#374151]">I</div>
+          <div className="w-4 h-4 rounded bg-[#F3F4F6] flex items-center justify-center text-[8px] underline text-[#374151]">U</div>
+        </div>
+        <div className="p-1.5 text-[7px] text-[#9CA3AF]">
+          Start writing...
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DefaultPreview({ name }: { name: string }) {
   return (
     <div className="flex items-center justify-center h-full">
@@ -671,6 +801,14 @@ const previewMap: Record<string, React.ComponentType<{ name?: string }>> = {
   'scroll-area': ScrollAreaPreview,
   separator: SeparatorPreview,
   spacer: SpacerPreview,
+  form: FormPreview,
+  'file-upload': FileUploadPreview,
+  calendar: CalendarPreview,
+  callout: CalloutPreview,
+  sidebar: SidebarPreview,
+  navbar: NavbarPreview,
+  chart: ChartPreview,
+  editor: EditorPreview,
 };
 
 // ========================================
