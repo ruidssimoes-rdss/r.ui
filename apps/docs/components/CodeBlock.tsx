@@ -76,10 +76,10 @@ export function CodeBlock({ code, language = 'tsx' }: CodeBlockProps) {
         )}
       </button>
 
-      {/* Code - plain text with left border */}
-      <div className="border-l-2 border-gray-200 pl-4 py-2">
+      {/* Code - bordered container, no background */}
+      <div className="border border-gray-200 rounded-lg p-6">
         <pre className="overflow-x-auto">
-          <code className={`language-${language} text-sm font-mono text-gray-700 leading-relaxed`}>
+          <code className={`language-${language} text-sm font-mono text-gray-800 leading-relaxed`}>
             {code}
           </code>
         </pre>

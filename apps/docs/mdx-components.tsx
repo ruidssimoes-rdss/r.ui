@@ -183,11 +183,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </code>
     ),
-    // Code blocks - plain text with left border only
+    // Code blocks - bordered container, no background
     pre: ({ children }) => (
-      <pre className="border-l-2 border-gray-200 pl-4 py-2 mb-4 overflow-x-auto">
-        {children}
-      </pre>
+      <div className="border border-gray-200 rounded-lg p-6 mb-4 overflow-x-auto">
+        <pre className="text-sm font-mono text-gray-800 leading-relaxed">
+          {children}
+        </pre>
+      </div>
     ),
     // Tables - clean borders, no grey backgrounds
     table: ({ children }) => (

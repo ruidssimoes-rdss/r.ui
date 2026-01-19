@@ -38,10 +38,10 @@ export function ComponentPreview({ children, code }: ComponentPreviewProps) {
           {/* Preview content - centered horizontally and vertically */}
           <div className="flex items-center justify-center min-h-[200px] p-8">
             <div
-              className="transition-all duration-300 flex items-center justify-center"
+              className="transition-all duration-300 flex items-center justify-center mx-auto"
               style={{
                 width: viewportWidths[viewMode],
-                maxWidth: '100%',
+                maxWidth: viewMode === 'desktop' ? '100%' : viewportWidths[viewMode],
                 transform: `scale(${zoom / 100})`,
                 transformOrigin: 'center center',
               }}
