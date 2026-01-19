@@ -3,11 +3,10 @@
 import { useState } from 'react';
 
 /**
- * Homepage - Paso-inspired minimal white canvas
+ * Homepage - Editorial + Command Palette Hero
  *
- * - Confident typography
- * - Floating component previews
- * - Generous whitespace
+ * Mature, editorial style. The hero is a static Command (⌘K) palette
+ * preview — the most impressive component that signals serious quality.
  */
 export default function HomePage() {
   const [copied, setCopied] = useState(false);
@@ -21,22 +20,24 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6 lg:px-48 text-center">
+      <section className="pt-32 pb-16 px-6 lg:px-48 max-w-4xl mx-auto">
         {/* Eyebrow */}
         <p className="text-sm text-gray-400 mb-6">
           Built for solo founders and makers
         </p>
 
-        {/* Main headline - large, confident */}
-        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-gray-900 mb-6">
+        {/* Headline */}
+        <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 mb-6">
           Beautiful components
           <br />
           for React Native
         </h1>
 
-        {/* Subheadline */}
-        <p className="text-lg text-gray-500 max-w-xl mx-auto mb-10">
-          Copy, paste, ship. 45 accessible components that work on iOS, Android, and Web.
+        {/* Description - editorial prose */}
+        <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-2xl">
+          r/ui is a collection of 45 accessible, production-ready components
+          that work on iOS, Android, and Web. No runtime dependencies.
+          No lock-in. Just copy, paste, and ship.
         </p>
 
         {/* Single CTA */}
@@ -51,89 +52,132 @@ export default function HomePage() {
         </a>
       </section>
 
-      {/* Floating Components - the "paso constellation" effect */}
-      <section className="relative py-20 px-6 lg:px-48 overflow-hidden">
-        <div className="relative max-w-5xl mx-auto h-[600px] md:h-[500px]">
+      {/* Divider */}
+      <div className="max-w-4xl mx-auto px-6 lg:px-48">
+        <div className="border-t border-gray-100" />
+      </div>
 
-          {/* Button preview - top left */}
-          <div className="absolute top-0 left-0 md:left-4 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-8 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-            <p className="text-xs text-gray-400 mb-4">Button</p>
-            <div className="flex gap-3">
-              <button className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm">Primary</button>
-              <button className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Secondary</button>
+      {/* Command Palette Preview */}
+      <section className="py-20 px-6 lg:px-48 max-w-4xl mx-auto">
+        {/* Static Command Palette */}
+        <div className="bg-white border border-gray-200 rounded-xl shadow-2xl shadow-gray-200/50 overflow-hidden max-w-lg mx-auto">
+          {/* Search Input */}
+          <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span className="text-gray-400 text-sm">Search components...</span>
+            <div className="ml-auto flex items-center gap-1">
+              <kbd className="px-1.5 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">esc</kbd>
             </div>
           </div>
 
-          {/* Card preview - center right */}
-          <div className="absolute top-32 md:top-20 right-0 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 w-72 transform rotate-2 hover:rotate-0 transition-transform duration-300">
-            <p className="text-xs text-gray-400 mb-4">Card</p>
-            <div className="border border-gray-100 rounded-xl p-4">
-              <h3 className="font-medium text-gray-900">Card Title</h3>
-              <p className="text-sm text-gray-500 mt-1">This is a description of the card component.</p>
+          {/* Results */}
+          <div className="py-2">
+            {/* Group: Suggestions */}
+            <div className="px-3 py-1.5">
+              <p className="text-xs text-gray-400 font-medium">Suggestions</p>
             </div>
-          </div>
 
-          {/* Dialog preview - bottom center */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 w-80 transform rotate-1 hover:rotate-0 transition-transform duration-300">
-            <p className="text-xs text-gray-400 mb-4">Dialog</p>
-            <div className="border border-gray-100 rounded-xl p-4 text-center">
-              <h3 className="font-medium text-gray-900">Confirm action?</h3>
-              <p className="text-sm text-gray-500 mt-1 mb-4">This cannot be undone.</p>
-              <div className="flex gap-2 justify-center">
-                <button className="px-3 py-1.5 text-sm text-gray-500">Cancel</button>
-                <button className="px-3 py-1.5 bg-gray-900 text-white rounded-lg text-sm">Confirm</button>
+            {/* Items */}
+            <div className="px-2">
+              <div className="flex items-center gap-3 px-2 py-2 rounded-lg bg-gray-50">
+                <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-900">Command</p>
+                  <p className="text-xs text-gray-500">⌘K palette for power users</p>
+                </div>
+                <kbd className="px-1.5 py-0.5 text-xs bg-gray-100 text-gray-400 rounded">↵</kbd>
+              </div>
+
+              <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50">
+                <div className="w-8 h-8 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-900">Sheet</p>
+                  <p className="text-xs text-gray-500">Bottom sheet with snap points</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50">
+                <div className="w-8 h-8 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-900">Carousel</p>
+                  <p className="text-xs text-gray-500">Swipeable image gallery</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Group: Actions */}
+            <div className="px-3 py-1.5 mt-2">
+              <p className="text-xs text-gray-400 font-medium">Actions</p>
+            </div>
+
+            <div className="px-2">
+              <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50">
+                <div className="w-8 h-8 bg-white border border-gray-200 rounded-lg flex items-center justify-center">
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-900">Add component</p>
+                </div>
+                <kbd className="px-1.5 py-0.5 text-xs bg-gray-100 text-gray-400 rounded">⌘N</kbd>
               </div>
             </div>
           </div>
-
-          {/* Toast preview - top right offset */}
-          <div className="absolute top-56 md:top-40 right-4 md:right-20 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-4 transform -rotate-2 hover:rotate-0 transition-transform duration-300">
-            <p className="text-xs text-gray-400 mb-3">Toast</p>
-            <div className="flex items-center gap-3 bg-gray-50 rounded-lg px-4 py-3">
-              <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <span className="text-sm text-gray-700">Changes saved</span>
-            </div>
-          </div>
-
         </div>
+
+        {/* Hint */}
+        <p className="text-center text-sm text-gray-400 mt-6">
+          Press <kbd className="px-1.5 py-0.5 text-xs bg-gray-100 text-gray-500 rounded mx-1">⌘K</kbd> anywhere to try it
+        </p>
       </section>
 
-      {/* Stats - subtle, not shouting */}
-      <section className="py-20 px-6 lg:px-48 border-t border-gray-100">
-        <div className="max-w-3xl mx-auto flex justify-center gap-16 text-center">
+      {/* Stats */}
+      <section className="py-16 px-6 lg:px-48 border-t border-gray-100">
+        <div className="max-w-4xl mx-auto flex justify-center gap-16 text-center">
           <div>
-            <p className="text-3xl font-semibold text-gray-900">45+</p>
+            <p className="text-2xl font-semibold text-gray-900">45+</p>
             <p className="text-sm text-gray-400 mt-1">Components</p>
           </div>
           <div>
-            <p className="text-3xl font-semibold text-gray-900">360+</p>
-            <p className="text-sm text-gray-400 mt-1">Story variations</p>
+            <p className="text-2xl font-semibold text-gray-900">360+</p>
+            <p className="text-sm text-gray-400 mt-1">Stories</p>
           </div>
           <div>
-            <p className="text-3xl font-semibold text-gray-900">100%</p>
+            <p className="text-2xl font-semibold text-gray-900">100%</p>
             <p className="text-sm text-gray-400 mt-1">Accessible</p>
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="py-32 px-6 lg:px-48 text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
+      <section className="py-24 px-6 lg:px-48 text-center">
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
           Ready to build?
         </h2>
         <p className="text-gray-500 mb-8">
           Start with a single command.
         </p>
-        <div className="inline-flex items-center gap-3 bg-gray-50 rounded-full px-6 py-3 font-mono text-sm">
+        <div className="inline-flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-lg px-5 py-3 font-mono text-sm">
           <span className="text-gray-400">$</span>
-          <span>npx r-ui init</span>
+          <span className="text-gray-900">npx r-ui init</span>
           <button
             onClick={handleCopy}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 ml-2 transition-colors"
             aria-label={copied ? 'Copied' : 'Copy command'}
           >
             {copied ? (
@@ -151,7 +195,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="py-8 px-6 lg:px-48 border-t border-gray-100">
-        <div className="flex justify-between items-center text-sm text-gray-400">
+        <div className="max-w-4xl mx-auto flex justify-between items-center text-sm text-gray-400">
           <span>r/ui</span>
           <div className="flex gap-6">
             <a
