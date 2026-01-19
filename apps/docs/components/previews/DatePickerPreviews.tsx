@@ -27,7 +27,7 @@ function getFirstDayOfMonth(year: number, month: number): number {
   return new Date(year, month, 1).getDay();
 }
 
-function isSameDay(a: Date | null, b: Date | null): boolean {
+function isSameDay(a: Date | null | undefined, b: Date | null | undefined): boolean {
   if (!a || !b) return false;
   return (
     a.getFullYear() === b.getFullYear() &&
