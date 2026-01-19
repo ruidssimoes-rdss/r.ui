@@ -163,16 +163,16 @@ export default function IntroductionPage() {
             <div className="px-3 py-1.5 border-b border-[var(--docs-code-border)] text-xs text-[var(--docs-text-muted)]">
               Terminal
             </div>
-            <pre className="p-3 overflow-x-auto">
-              <code className="text-xs text-[var(--docs-text)]">npx r-ui add button</code>
-            </pre>
+            <div className="p-3 overflow-x-auto">
+              <span className="text-xs font-mono text-[var(--docs-text)]">npx r-ui add button</span>
+            </div>
           </div>
           <div className="rounded-md border border-[var(--docs-code-border)] bg-[var(--docs-code-bg)] overflow-hidden">
             <div className="px-3 py-1.5 border-b border-[var(--docs-code-border)] text-xs text-[var(--docs-text-muted)]">
               App.tsx
             </div>
-            <pre className="p-3 overflow-x-auto">
-              <code className="text-xs text-[var(--docs-text)]">{`import { Button } from '@/components/ui/button'
+            <div className="p-3 overflow-x-auto">
+              <pre className="text-xs font-mono text-[var(--docs-text)] whitespace-pre">{`import { Button } from '@/components/ui/button'
 
 export default function App() {
   return (
@@ -180,8 +180,8 @@ export default function App() {
       Get Started
     </Button>
   )
-}`}</code>
-            </pre>
+}`}</pre>
+            </div>
           </div>
         </div>
       </section>
