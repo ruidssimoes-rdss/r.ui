@@ -124,6 +124,18 @@ export const navigation: NavigationSection[] = [
       { name: 'Masonry', href: '/docs/components/masonry', description: 'Pinterest-style staggered grid' },
     ],
   },
+  {
+    title: 'Marketing',
+    items: [
+      { name: 'Hero', href: '/docs/components/hero', description: 'Landing page hero sections' },
+      { name: 'FeatureGrid', href: '/docs/components/feature-grid', description: 'Feature showcase grid' },
+      { name: 'PricingTable', href: '/docs/components/pricing-table', description: 'Pricing plan comparison' },
+      { name: 'Testimonial', href: '/docs/components/testimonial', description: 'Customer testimonials' },
+      { name: 'CTA', href: '/docs/components/cta', description: 'Call-to-action sections' },
+      { name: 'Footer', href: '/docs/components/footer', description: 'Website footer component' },
+      { name: 'Announcement', href: '/docs/components/announcement', description: 'Top announcement banner' },
+    ],
+  },
 ];
 
 // Flatten navigation for search

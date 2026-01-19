@@ -3,7 +3,7 @@ import { navigation } from '../../lib/navigation';
 
 export const metadata = {
   title: 'Documentation - r/ui',
-  description: 'Build beautiful React Native apps with 61 production-ready components',
+  description: 'Build beautiful React Native apps with 68 production-ready components',
 };
 
 // ========================================

@@ -874,6 +874,86 @@ function DataTablePreview() {
   );
 }
 
+function HeroPreview() {
+  return (
+    <div className="w-14 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded flex flex-col items-center justify-center p-1">
+      <div className="w-8 h-1 bg-white/80 rounded mb-1" />
+      <div className="w-6 h-0.5 bg-white/50 rounded mb-1" />
+      <div className="w-4 h-1.5 bg-white rounded-sm" />
+    </div>
+  );
+}
+
+function FeatureGridPreview() {
+  return (
+    <div className="w-14 h-10 grid grid-cols-3 gap-0.5 p-1">
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="bg-gray-100 rounded-sm flex items-center justify-center">
+          <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PricingTablePreview() {
+  return (
+    <div className="w-14 h-10 flex items-end justify-center gap-1 p-1">
+      <div className="w-3 h-5 bg-gray-200 rounded-t" />
+      <div className="w-3 h-7 bg-blue-500 rounded-t" />
+      <div className="w-3 h-6 bg-gray-200 rounded-t" />
+    </div>
+  );
+}
+
+function TestimonialPreview() {
+  return (
+    <div className="w-14 h-10 bg-gray-50 rounded p-1.5 flex flex-col">
+      <div className="text-gray-300 text-[8px] leading-none">"</div>
+      <div className="flex-1" />
+      <div className="flex items-center gap-1">
+        <div className="w-2 h-2 bg-gray-300 rounded-full" />
+        <div className="w-4 h-1 bg-gray-200 rounded" />
+      </div>
+    </div>
+  );
+}
+
+function CTAPreview() {
+  return (
+    <div className="w-14 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded flex items-center justify-center gap-1 p-1">
+      <div className="w-5 h-1 bg-white/80 rounded" />
+      <div className="w-3 h-2 bg-white rounded-sm" />
+    </div>
+  );
+}
+
+function FooterPreview() {
+  return (
+    <div className="w-14 h-10 bg-gray-900 rounded p-1 flex flex-col justify-end">
+      <div className="flex justify-between items-center">
+        <div className="w-3 h-1 bg-gray-600 rounded" />
+        <div className="flex gap-0.5">
+          <div className="w-1 h-1 bg-gray-600 rounded-full" />
+          <div className="w-1 h-1 bg-gray-600 rounded-full" />
+          <div className="w-1 h-1 bg-gray-600 rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AnnouncementPreview() {
+  return (
+    <div className="w-14 h-10 flex flex-col">
+      <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-t flex items-center justify-center">
+        <div className="w-6 h-0.5 bg-white/80 rounded" />
+      </div>
+      <div className="flex-1 bg-gray-100 rounded-b" />
+    </div>
+  );
+}
+
 function DefaultPreview({ name }: { name: string }) {
   return (
     <div className="flex items-center justify-center h-full">
@@ -953,6 +1033,13 @@ const previewMap: Record<string, React.ComponentType<{ name?: string }>> = {
   'dock': DockPreview,
   'masonry': MasonryPreview,
   'data-table': DataTablePreview,
+  'hero': HeroPreview,
+  'feature-grid': FeatureGridPreview,
+  'pricing-table': PricingTablePreview,
+  'testimonial': TestimonialPreview,
+  'cta': CTAPreview,
+  'footer': FooterPreview,
+  'announcement': AnnouncementPreview,
 };
 
 // ========================================

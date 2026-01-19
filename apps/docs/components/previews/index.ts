@@ -335,3 +335,73 @@ export {
   DataTableEmptyPreview,
   DataTableFullPreview,
 } from './DataTablePreviews';
+
+// Hero previews
+export {
+  HeroCenteredPreview,
+  HeroSplitPreview,
+  HeroBackgroundImagePreview,
+  HeroGradientTextPreview,
+  HeroMinimalPreview,
+  HeroWithBadgePreview,
+} from './HeroPreviews';
+
+// FeatureGrid previews
+export {
+  FeatureGridBasicPreview,
+  FeatureGridTwoColumnsPreview,
+  FeatureGridWithLinksPreview,
+  FeatureGridGlassPreview,
+  FeatureGridCenteredPreview,
+  FeatureGridHorizontalPreview,
+} from './FeatureGridPreviews';
+
+// PricingTable previews
+export {
+  PricingTableBasicPreview,
+  PricingTableWithTogglePreview,
+  PricingTablePopularPreview,
+  PricingTableWithBadgesPreview,
+  PricingTableComparisonPreview,
+  PricingTableSinglePreview,
+} from './PricingTablePreviews';
+
+// Testimonial previews
+export {
+  TestimonialBasicPreview,
+  TestimonialLargePreview,
+  TestimonialWithAvatarPreview,
+  TestimonialWithRatingPreview,
+  TestimonialCarouselPreview,
+  TestimonialGridPreview,
+} from './TestimonialPreviews';
+
+// CTA previews
+export {
+  CTABannerPreview,
+  CTACardPreview,
+  CTAInlinePreview,
+  CTAWithImagePreview,
+  CTAGradientPreview,
+  CTAMinimalPreview,
+} from './CTAPreviews';
+
+// Footer previews
+export {
+  FooterSimplePreview,
+  FooterColumnsPreview,
+  FooterWithNewsletterPreview,
+  FooterCenteredPreview,
+  FooterMinimalPreview,
+  FooterWithBrandPreview,
+} from './FooterPreviews';
+
+// Announcement previews
+export {
+  AnnouncementBasicPreview,
+  AnnouncementWithLinkPreview,
+  AnnouncementDismissiblePreview,
+  AnnouncementGradientPreview,
+  AnnouncementWarningPreview,
+  AnnouncementCountdownPreview,
+} from './AnnouncementPreviews';

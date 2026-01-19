@@ -3970,6 +3970,1516 @@ export default function MyComponent() {
 };
 
 // ========================================
+// Hero Component Data
+// ========================================
+
+export const heroData: ComponentData = {
+  slug: 'hero',
+  name: 'Hero',
+  description: 'A prominent landing page section with headline, supporting text, and call-to-action buttons.',
+  category: 'Marketing',
+  categorySlug: 'marketing',
+  variants: [
+    {
+      id: 'centered',
+      label: 'Centered',
+      code: `import {
+  Hero,
+  HeroContent,
+  HeroTitle,
+  HeroSubtitle,
+  HeroActions,
+  HeroBadge,
+} from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function CenteredHero() {
+  return (
+    <Hero variant="centered" align="center">
+      <HeroContent>
+        <HeroBadge>New Release</HeroBadge>
+        <HeroTitle>Build beautiful apps faster</HeroTitle>
+        <HeroSubtitle>
+          A comprehensive UI library for React Native that works across all platforms.
+        </HeroSubtitle>
+        <HeroActions>
+          <Button>Get Started</Button>
+          <Button variant="outline">Learn More</Button>
+        </HeroActions>
+      </HeroContent>
+    </Hero>
+  )
+}`,
+    },
+    {
+      id: 'split',
+      label: 'Split Layout',
+      code: `import {
+  Hero,
+  HeroContent,
+  HeroTitle,
+  HeroSubtitle,
+  HeroActions,
+  HeroImage,
+} from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function SplitHero() {
+  return (
+    <Hero variant="split" align="left">
+      <HeroContent>
+        <HeroTitle>Design with confidence</HeroTitle>
+        <HeroSubtitle>
+          Production-ready components that adapt to your brand.
+        </HeroSubtitle>
+        <HeroActions>
+          <Button>Start Building</Button>
+        </HeroActions>
+      </HeroContent>
+      <HeroImage source={{ uri: '/hero-image.png' }} alt="Hero image" />
+    </Hero>
+  )
+}`,
+    },
+    {
+      id: 'background-image',
+      label: 'With Background Image',
+      code: `import {
+  Hero,
+  HeroContent,
+  HeroTitle,
+  HeroSubtitle,
+  HeroActions,
+} from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function BackgroundHero() {
+  return (
+    <Hero
+      variant="image-background"
+      backgroundImage={{ uri: '/background.jpg' }}
+    >
+      <HeroContent>
+        <HeroTitle>Ship faster, ship better</HeroTitle>
+        <HeroSubtitle>
+          Join thousands of developers building with r/ui.
+        </HeroSubtitle>
+        <HeroActions>
+          <Button>Get Started Free</Button>
+        </HeroActions>
+      </HeroContent>
+    </Hero>
+  )
+}`,
+    },
+    {
+      id: 'gradient-text',
+      label: 'Gradient Text',
+      code: `import {
+  Hero,
+  HeroContent,
+  HeroTitle,
+  HeroSubtitle,
+  HeroActions,
+} from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function GradientTextHero() {
+  return (
+    <Hero variant="centered">
+      <HeroContent>
+        <HeroTitle gradient gradientColors={['#3b82f6', '#a855f7', '#ec4899']}>
+          The future of UI development
+        </HeroTitle>
+        <HeroSubtitle>
+          Beautiful, accessible, and performant components.
+        </HeroSubtitle>
+        <HeroActions>
+          <Button>Explore Components</Button>
+        </HeroActions>
+      </HeroContent>
+    </Hero>
+  )
+}`,
+    },
+    {
+      id: 'minimal',
+      label: 'Minimal',
+      code: `import {
+  Hero,
+  HeroContent,
+  HeroTitle,
+  HeroActions,
+} from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function MinimalHero() {
+  return (
+    <Hero variant="centered">
+      <HeroContent>
+        <HeroTitle>Simple, powerful, beautiful.</HeroTitle>
+        <HeroActions>
+          <Button>Learn More</Button>
+        </HeroActions>
+      </HeroContent>
+    </Hero>
+  )
+}`,
+    },
+    {
+      id: 'with-badge',
+      label: 'With Badge',
+      code: `import {
+  Hero,
+  HeroContent,
+  HeroTitle,
+  HeroSubtitle,
+  HeroActions,
+  HeroBadge,
+} from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function BadgeHero() {
+  return (
+    <Hero variant="centered">
+      <HeroContent>
+        <HeroBadge variant="success">Version 2.0 is here</HeroBadge>
+        <HeroTitle>Introducing the next generation</HeroTitle>
+        <HeroSubtitle>
+          Completely rewritten with performance and accessibility in mind.
+        </HeroSubtitle>
+        <HeroActions>
+          <Button>Upgrade Now</Button>
+          <Button variant="outline">Read Changelog</Button>
+        </HeroActions>
+      </HeroContent>
+    </Hero>
+  )
+}`,
+    },
+  ],
+  installation: 'npx r-ui add hero',
+  usage: `import {
+  Hero,
+  HeroContent,
+  HeroTitle,
+  HeroSubtitle,
+  HeroActions,
+} from '@r-ui/react-native'
+
+export default function MyHero() {
+  return (
+    <Hero variant="centered">
+      <HeroContent>
+        <HeroTitle>Welcome to our app</HeroTitle>
+        <HeroSubtitle>Get started in seconds</HeroSubtitle>
+        <HeroActions>
+          <Button>Get Started</Button>
+        </HeroActions>
+      </HeroContent>
+    </Hero>
+  )
+}`,
+  features: [
+    'Centered and split layout variants',
+    'Background gradient and image support',
+    'Gradient text effect for headlines',
+    'Eyebrow badge for announcements',
+    'Responsive design for all screen sizes',
+    'Works on iOS, Android, and Web',
+  ],
+  props: [
+    {
+      component: 'Hero',
+      props: [
+        { name: 'variant', type: "'centered' | 'split' | 'image-background'", default: "'centered'", description: 'Layout variant' },
+        { name: 'align', type: "'left' | 'center' | 'right'", default: "'center'", description: 'Content alignment' },
+        { name: 'backgroundImage', type: 'ImageSourcePropType', default: '-', description: 'Background image for image-background variant' },
+        { name: 'gradientColors', type: 'string[]', default: '-', description: 'Gradient background colors' },
+      ],
+    },
+    {
+      component: 'HeroTitle',
+      props: [
+        { name: 'gradient', type: 'boolean', default: 'false', description: 'Enable gradient text effect' },
+        { name: 'gradientColors', type: 'string[]', default: "['#3b82f6', '#a855f7']", description: 'Gradient text colors' },
+      ],
+    },
+    {
+      component: 'HeroBadge',
+      props: [
+        { name: 'variant', type: "'default' | 'success' | 'warning' | 'info'", default: "'default'", description: 'Badge style variant' },
+      ],
+    },
+  ],
+};
+
+// ========================================
+// FeatureGrid Component Data
+// ========================================
+
+export const featureGridData: ComponentData = {
+  slug: 'feature-grid',
+  name: 'FeatureGrid',
+  description: 'A grid layout for displaying features with icons, titles, and descriptions.',
+  category: 'Marketing',
+  categorySlug: 'marketing',
+  variants: [
+    {
+      id: 'basic',
+      label: 'Basic Grid',
+      code: `import { FeatureGrid, FeatureCard, FeatureIcon } from '@r-ui/react-native'
+import { Zap, Shield, Settings } from 'lucide-react-native'
+
+export default function BasicFeatureGrid() {
+  return (
+    <FeatureGrid columns={3} gap="md">
+      <FeatureCard
+        icon={<FeatureIcon color="#3b82f6"><Zap size={24} /></FeatureIcon>}
+        title="Fast"
+        description="Optimized for performance on all platforms."
+      />
+      <FeatureCard
+        icon={<FeatureIcon color="#22c55e"><Shield size={24} /></FeatureIcon>}
+        title="Secure"
+        description="Built with security best practices."
+      />
+      <FeatureCard
+        icon={<FeatureIcon color="#a855f7"><Settings size={24} /></FeatureIcon>}
+        title="Flexible"
+        description="Customize every aspect of the design."
+      />
+    </FeatureGrid>
+  )
+}`,
+    },
+    {
+      id: 'two-columns',
+      label: 'Two Columns',
+      code: `import { FeatureGrid, FeatureCard, FeatureIcon } from '@r-ui/react-native'
+
+export default function TwoColumnGrid() {
+  return (
+    <FeatureGrid columns={2} gap="lg">
+      <FeatureCard
+        title="Cross-Platform"
+        description="Write once, run everywhere. Components work on iOS, Android, and Web."
+      />
+      <FeatureCard
+        title="Themeable"
+        description="Dark mode, light mode, or create your own theme."
+      />
+    </FeatureGrid>
+  )
+}`,
+    },
+    {
+      id: 'with-links',
+      label: 'With Links',
+      code: `import { FeatureGrid, FeatureCard, FeatureIcon } from '@r-ui/react-native'
+
+export default function LinkedFeatureGrid() {
+  return (
+    <FeatureGrid columns={3} gap="md">
+      <FeatureCard
+        title="Documentation"
+        description="Learn how to use our components"
+        href="/docs"
+        onPress={() => console.log('Navigate to docs')}
+      />
+      <FeatureCard
+        title="Examples"
+        description="See real-world implementations"
+        href="/examples"
+        onPress={() => console.log('Navigate to examples')}
+      />
+      <FeatureCard
+        title="API Reference"
+        description="Detailed prop documentation"
+        href="/api"
+        onPress={() => console.log('Navigate to API')}
+      />
+    </FeatureGrid>
+  )
+}`,
+    },
+    {
+      id: 'glass',
+      label: 'Glassmorphic',
+      code: `import { FeatureGrid, FeatureCard } from '@r-ui/react-native'
+
+export default function GlassFeatureGrid() {
+  return (
+    <FeatureGrid columns={3} gap="md">
+      <FeatureCard variant="glass" title="Innovative" description="Cutting-edge technology" />
+      <FeatureCard variant="glass" title="Real-time" description="Instant updates" />
+      <FeatureCard variant="glass" title="Analytics" description="Track everything" />
+    </FeatureGrid>
+  )
+}`,
+    },
+    {
+      id: 'centered',
+      label: 'Centered Icons',
+      code: `import { FeatureGrid, FeatureCard } from '@r-ui/react-native'
+import { Text } from 'react-native'
+
+export default function CenteredFeatureGrid() {
+  return (
+    <FeatureGrid columns={3} gap="md">
+      <FeatureCard
+        icon={<Text style={{ fontSize: 32 }}>🚀</Text>}
+        title="Performance"
+        description="Blazing fast rendering"
+        iconPosition="top"
+      />
+      <FeatureCard
+        icon={<Text style={{ fontSize: 32 }}>🎨</Text>}
+        title="Design"
+        description="Beautiful by default"
+        iconPosition="top"
+      />
+      <FeatureCard
+        icon={<Text style={{ fontSize: 32 }}>📱</Text>}
+        title="Responsive"
+        description="Works everywhere"
+        iconPosition="top"
+      />
+    </FeatureGrid>
+  )
+}`,
+    },
+    {
+      id: 'horizontal',
+      label: 'Horizontal Cards',
+      code: `import { FeatureGrid, FeatureCard, FeatureIcon } from '@r-ui/react-native'
+import { Settings, Check } from 'lucide-react-native'
+
+export default function HorizontalFeatureGrid() {
+  return (
+    <FeatureGrid columns={1} gap="md">
+      <FeatureCard
+        iconPosition="left"
+        icon={<FeatureIcon color="#3b82f6"><Settings size={24} /></FeatureIcon>}
+        title="Customizable"
+        description="Every component can be customized to match your brand."
+      />
+      <FeatureCard
+        iconPosition="left"
+        icon={<FeatureIcon color="#22c55e"><Check size={24} /></FeatureIcon>}
+        title="Accessible"
+        description="Built with accessibility in mind. Screen reader support included."
+      />
+    </FeatureGrid>
+  )
+}`,
+    },
+  ],
+  installation: 'npx r-ui add feature-grid',
+  usage: `import { FeatureGrid, FeatureCard, FeatureIcon } from '@r-ui/react-native'
+
+export default function MyFeatures() {
+  return (
+    <FeatureGrid columns={3} gap="md">
+      <FeatureCard
+        icon={<FeatureIcon color="#3b82f6">Icon</FeatureIcon>}
+        title="Feature Title"
+        description="Feature description text"
+      />
+    </FeatureGrid>
+  )
+}`,
+  features: [
+    'Responsive grid layout (1-4 columns)',
+    'Icon support with customizable colors',
+    'Multiple card variants (default, glass, bordered)',
+    'Horizontal and vertical card layouts',
+    'Hover effects and link support',
+    'Works on iOS, Android, and Web',
+  ],
+  props: [
+    {
+      component: 'FeatureGrid',
+      props: [
+        { name: 'columns', type: '1 | 2 | 3 | 4', default: '3', description: 'Number of columns' },
+        { name: 'gap', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Gap between items' },
+      ],
+    },
+    {
+      component: 'FeatureCard',
+      props: [
+        { name: 'icon', type: 'ReactNode', default: '-', description: 'Icon element' },
+        { name: 'title', type: 'string', default: '-', description: 'Card title' },
+        { name: 'description', type: 'string', default: '-', description: 'Card description' },
+        { name: 'href', type: 'string', default: '-', description: 'Optional link URL' },
+        { name: 'onPress', type: '() => void', default: '-', description: 'Press handler' },
+        { name: 'variant', type: "'default' | 'glass' | 'bordered'", default: "'default'", description: 'Card style variant' },
+        { name: 'iconPosition', type: "'top' | 'left'", default: "'top'", description: 'Icon position' },
+      ],
+    },
+  ],
+};
+
+// ========================================
+// PricingTable Component Data
+// ========================================
+
+export const pricingTableData: ComponentData = {
+  slug: 'pricing-table',
+  name: 'PricingTable',
+  description: 'A pricing comparison table with plans, features, and billing toggle.',
+  category: 'Marketing',
+  categorySlug: 'marketing',
+  variants: [
+    {
+      id: 'basic',
+      label: 'Basic Plans',
+      code: `import {
+  PricingTable,
+  PricingCard,
+  PricingFeatures,
+  PricingFeature,
+  PricingAction,
+} from '@r-ui/react-native'
+
+export default function BasicPricing() {
+  return (
+    <PricingTable>
+      <PricingCard
+        name="Starter"
+        description="For individuals"
+        price={{ monthly: 9, yearly: 90 }}
+      >
+        <PricingFeatures>
+          <PricingFeature>10 projects</PricingFeature>
+          <PricingFeature>5GB storage</PricingFeature>
+          <PricingFeature included={false}>API access</PricingFeature>
+        </PricingFeatures>
+        <PricingAction>Get Started</PricingAction>
+      </PricingCard>
+    </PricingTable>
+  )
+}`,
+    },
+    {
+      id: 'with-toggle',
+      label: 'With Toggle',
+      code: `import { useState } from 'react'
+import {
+  PricingTable,
+  PricingToggle,
+  PricingCard,
+  PricingFeatures,
+  PricingFeature,
+  PricingAction,
+} from '@r-ui/react-native'
+
+export default function TogglePricing() {
+  const [billing, setBilling] = useState('monthly')
+
+  return (
+    <PricingTable billingPeriod={billing} onBillingChange={setBilling}>
+      <PricingToggle />
+      <PricingCard name="Pro" price={{ monthly: 29, yearly: 290 }} popular>
+        <PricingFeatures>
+          <PricingFeature>Unlimited projects</PricingFeature>
+          <PricingFeature>100GB storage</PricingFeature>
+        </PricingFeatures>
+        <PricingAction primary>Get Started</PricingAction>
+      </PricingCard>
+    </PricingTable>
+  )
+}`,
+    },
+    {
+      id: 'popular',
+      label: 'Popular Highlighted',
+      code: `import { PricingTable, PricingCard, PricingAction } from '@r-ui/react-native'
+
+export default function PopularPricing() {
+  return (
+    <PricingTable>
+      <PricingCard name="Basic" price={{ monthly: 0, yearly: 0 }}>
+        <PricingAction>Start Free</PricingAction>
+      </PricingCard>
+      <PricingCard name="Pro" price={{ monthly: 29, yearly: 290 }} popular>
+        <PricingAction primary>Get Started</PricingAction>
+      </PricingCard>
+      <PricingCard name="Team" price={{ monthly: 79, yearly: 790 }}>
+        <PricingAction>Contact Sales</PricingAction>
+      </PricingCard>
+    </PricingTable>
+  )
+}`,
+    },
+    {
+      id: 'with-badges',
+      label: 'With Badges',
+      code: `import { PricingTable, PricingCard, PricingAction } from '@r-ui/react-native'
+
+export default function BadgePricing() {
+  return (
+    <PricingTable>
+      <PricingCard name="Hobby" price={{ monthly: 0, yearly: 0 }} badge="Free">
+        <PricingAction>Get Started</PricingAction>
+      </PricingCard>
+      <PricingCard name="Growth" price={{ monthly: 49, yearly: 490 }} popular>
+        <PricingAction primary>Get Started</PricingAction>
+      </PricingCard>
+      <PricingCard name="Scale" price={{ monthly: 149, yearly: 1490 }} badge="Best Value">
+        <PricingAction>Get Started</PricingAction>
+      </PricingCard>
+    </PricingTable>
+  )
+}`,
+    },
+    {
+      id: 'comparison',
+      label: 'Feature Comparison',
+      code: `import {
+  PricingTable,
+  PricingCard,
+  PricingFeatures,
+  PricingFeature,
+  PricingAction,
+} from '@r-ui/react-native'
+
+export default function ComparisonPricing() {
+  return (
+    <PricingTable>
+      <PricingCard name="Free" price={{ monthly: 0, yearly: 0 }}>
+        <PricingFeatures>
+          <PricingFeature>3 projects</PricingFeature>
+          <PricingFeature>1GB storage</PricingFeature>
+          <PricingFeature included={false}>API access</PricingFeature>
+          <PricingFeature included={false}>Priority support</PricingFeature>
+        </PricingFeatures>
+        <PricingAction>Start Free</PricingAction>
+      </PricingCard>
+      <PricingCard name="Pro" price={{ monthly: 29, yearly: 290 }} popular>
+        <PricingFeatures>
+          <PricingFeature>Unlimited projects</PricingFeature>
+          <PricingFeature>100GB storage</PricingFeature>
+          <PricingFeature>API access</PricingFeature>
+          <PricingFeature included={false}>Priority support</PricingFeature>
+        </PricingFeatures>
+        <PricingAction primary>Get Started</PricingAction>
+      </PricingCard>
+    </PricingTable>
+  )
+}`,
+    },
+    {
+      id: 'single',
+      label: 'Single Card',
+      code: `import {
+  PricingTable,
+  PricingCard,
+  PricingFeatures,
+  PricingFeature,
+  PricingAction,
+} from '@r-ui/react-native'
+
+export default function SinglePricing() {
+  return (
+    <PricingTable>
+      <PricingCard
+        name="Professional"
+        description="Everything you need to build and scale"
+        price={{ monthly: 49, yearly: 490 }}
+      >
+        <PricingFeatures>
+          <PricingFeature>Unlimited projects</PricingFeature>
+          <PricingFeature>100GB storage</PricingFeature>
+          <PricingFeature>Priority support</PricingFeature>
+          <PricingFeature>Advanced analytics</PricingFeature>
+        </PricingFeatures>
+        <PricingAction primary>Start 14-day trial</PricingAction>
+      </PricingCard>
+    </PricingTable>
+  )
+}`,
+    },
+  ],
+  installation: 'npx r-ui add pricing-table',
+  usage: `import {
+  PricingTable,
+  PricingCard,
+  PricingFeatures,
+  PricingFeature,
+  PricingAction,
+} from '@r-ui/react-native'
+
+export default function MyPricing() {
+  return (
+    <PricingTable>
+      <PricingCard name="Pro" price={{ monthly: 29, yearly: 290 }}>
+        <PricingFeatures>
+          <PricingFeature>Unlimited projects</PricingFeature>
+        </PricingFeatures>
+        <PricingAction primary>Get Started</PricingAction>
+      </PricingCard>
+    </PricingTable>
+  )
+}`,
+  features: [
+    'Monthly/yearly billing toggle with price switching',
+    'Popular/recommended plan highlighting',
+    'Feature comparison with check/x icons',
+    'Custom badges (Most Popular, Best Value)',
+    'Disabled/coming soon plans',
+    'Works on iOS, Android, and Web',
+  ],
+  props: [
+    {
+      component: 'PricingTable',
+      props: [
+        { name: 'billingPeriod', type: "'monthly' | 'yearly'", default: "'monthly'", description: 'Current billing period' },
+        { name: 'onBillingChange', type: '(period) => void', default: '-', description: 'Called when billing period changes' },
+      ],
+    },
+    {
+      component: 'PricingCard',
+      props: [
+        { name: 'name', type: 'string', default: '-', description: 'Plan name' },
+        { name: 'description', type: 'string', default: '-', description: 'Plan description' },
+        { name: 'price', type: '{ monthly: number; yearly: number }', default: '-', description: 'Price object' },
+        { name: 'popular', type: 'boolean', default: 'false', description: 'Highlight as popular' },
+        { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable the plan' },
+        { name: 'badge', type: 'string', default: '-', description: 'Custom badge text' },
+      ],
+    },
+    {
+      component: 'PricingFeature',
+      props: [
+        { name: 'included', type: 'boolean', default: 'true', description: 'Whether feature is included' },
+      ],
+    },
+  ],
+};
+
+// ========================================
+// Testimonial Component Data
+// ========================================
+
+export const testimonialData: ComponentData = {
+  slug: 'testimonial',
+  name: 'Testimonial',
+  description: 'Customer testimonials and quotes with author information.',
+  category: 'Marketing',
+  categorySlug: 'marketing',
+  variants: [
+    {
+      id: 'basic',
+      label: 'Basic Card',
+      code: `import {
+  Testimonial,
+  TestimonialContent,
+  TestimonialAuthor,
+} from '@r-ui/react-native'
+
+export default function BasicTestimonial() {
+  return (
+    <Testimonial variant="card">
+      <TestimonialContent>
+        "This UI library has transformed how we build products."
+      </TestimonialContent>
+      <TestimonialAuthor
+        name="Sarah Chen"
+        role="Lead Developer"
+        company="TechCorp"
+      />
+    </Testimonial>
+  )
+}`,
+    },
+    {
+      id: 'large',
+      label: 'Large Quote',
+      code: `import {
+  Testimonial,
+  TestimonialContent,
+  TestimonialAuthor,
+  TestimonialAvatar,
+} from '@r-ui/react-native'
+
+export default function LargeTestimonial() {
+  return (
+    <Testimonial variant="large">
+      <TestimonialContent showQuotes>
+        "The attention to detail in every component is remarkable."
+      </TestimonialContent>
+      <TestimonialAvatar
+        source="https://example.com/avatar.jpg"
+        size="lg"
+        fallback="AJ"
+      />
+      <TestimonialAuthor name="Alex Johnson" role="CEO at StartupXYZ" />
+    </Testimonial>
+  )
+}`,
+    },
+    {
+      id: 'with-avatar',
+      label: 'With Avatar',
+      code: `import {
+  Testimonial,
+  TestimonialContent,
+  TestimonialAuthor,
+} from '@r-ui/react-native'
+
+export default function AvatarTestimonial() {
+  return (
+    <Testimonial variant="card">
+      <TestimonialContent>
+        "I've tried many UI libraries, but this one stands out."
+      </TestimonialContent>
+      <TestimonialAuthor
+        name="Michael Park"
+        role="Senior Engineer"
+        company="DevStudio"
+        avatar="https://example.com/avatar.jpg"
+      />
+    </Testimonial>
+  )
+}`,
+    },
+    {
+      id: 'with-rating',
+      label: 'With Rating',
+      code: `import {
+  Testimonial,
+  TestimonialContent,
+  TestimonialAuthor,
+  TestimonialRating,
+} from '@r-ui/react-native'
+
+export default function RatingTestimonial() {
+  return (
+    <Testimonial variant="card">
+      <TestimonialRating value={5} />
+      <TestimonialContent showQuotes={false}>
+        "Absolutely amazing! The best UI library I've ever used."
+      </TestimonialContent>
+      <TestimonialAuthor name="Emily Davis" role="Product Designer" />
+    </Testimonial>
+  )
+}`,
+    },
+    {
+      id: 'carousel',
+      label: 'Carousel',
+      code: `import {
+  TestimonialCarousel,
+  Testimonial,
+  TestimonialContent,
+  TestimonialAuthor,
+} from '@r-ui/react-native'
+
+export default function TestimonialSlider() {
+  return (
+    <TestimonialCarousel autoPlay={4000} showDots>
+      <Testimonial>
+        <TestimonialContent>"Game-changing for our workflow."</TestimonialContent>
+        <TestimonialAuthor name="James Wilson" role="CTO" />
+      </Testimonial>
+      <Testimonial>
+        <TestimonialContent>"Reduced our dev time by 50%."</TestimonialContent>
+        <TestimonialAuthor name="Lisa Thompson" role="Tech Lead" />
+      </Testimonial>
+    </TestimonialCarousel>
+  )
+}`,
+    },
+    {
+      id: 'grid',
+      label: 'Grid Layout',
+      code: `import { View } from 'react-native'
+import {
+  Testimonial,
+  TestimonialContent,
+  TestimonialAuthor,
+} from '@r-ui/react-native'
+
+export default function TestimonialGrid() {
+  const testimonials = [
+    { quote: "Incredibly well-designed.", author: "Tom Harris", role: "Designer" },
+    { quote: "Perfect for cross-platform.", author: "Anna Lee", role: "Mobile Dev" },
+  ]
+
+  return (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
+      {testimonials.map((t, i) => (
+        <Testimonial key={i} variant="card">
+          <TestimonialContent showQuotes={false}>{t.quote}</TestimonialContent>
+          <TestimonialAuthor name={t.author} role={t.role} />
+        </Testimonial>
+      ))}
+    </View>
+  )
+}`,
+    },
+  ],
+  installation: 'npx r-ui add testimonial',
+  usage: `import {
+  Testimonial,
+  TestimonialContent,
+  TestimonialAuthor,
+} from '@r-ui/react-native'
+
+export default function MyTestimonial() {
+  return (
+    <Testimonial variant="card">
+      <TestimonialContent>"Great product!"</TestimonialContent>
+      <TestimonialAuthor name="John Doe" role="Customer" />
+    </Testimonial>
+  )
+}`,
+  features: [
+    'Card, inline, and large quote variants',
+    'Avatar support with fallback initials',
+    'Star rating display',
+    'Carousel for multiple testimonials',
+    'Decorative quote marks',
+    'Works on iOS, Android, and Web',
+  ],
+  props: [
+    {
+      component: 'Testimonial',
+      props: [
+        { name: 'variant', type: "'card' | 'inline' | 'large'", default: "'card'", description: 'Layout variant' },
+      ],
+    },
+    {
+      component: 'TestimonialContent',
+      props: [
+        { name: 'showQuotes', type: 'boolean', default: 'true', description: 'Show decorative quote marks' },
+      ],
+    },
+    {
+      component: 'TestimonialAuthor',
+      props: [
+        { name: 'name', type: 'string', default: '-', description: 'Author name' },
+        { name: 'role', type: 'string', default: '-', description: 'Author role/title' },
+        { name: 'company', type: 'string', default: '-', description: 'Company name' },
+        { name: 'avatar', type: 'string', default: '-', description: 'Avatar image URL' },
+      ],
+    },
+    {
+      component: 'TestimonialCarousel',
+      props: [
+        { name: 'autoPlay', type: 'number', default: '-', description: 'Auto-play interval in ms' },
+        { name: 'showDots', type: 'boolean', default: 'true', description: 'Show navigation dots' },
+      ],
+    },
+  ],
+};
+
+// ========================================
+// CTA Component Data
+// ========================================
+
+export const ctaData: ComponentData = {
+  slug: 'cta',
+  name: 'CTA',
+  description: 'Call-to-action sections for prompting user engagement.',
+  category: 'Marketing',
+  categorySlug: 'marketing',
+  variants: [
+    {
+      id: 'banner',
+      label: 'Banner',
+      code: `import { CTA, CTAContent, CTATitle, CTADescription, CTAActions } from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function CTABanner() {
+  return (
+    <CTA variant="banner" background="gradient" gradientColors={['#3b82f6', '#8b5cf6']}>
+      <CTAContent>
+        <CTATitle>Ready to get started?</CTATitle>
+        <CTADescription>
+          Join thousands of developers building with r/ui.
+        </CTADescription>
+        <CTAActions>
+          <Button>Start Free Trial</Button>
+          <Button variant="outline">View Pricing</Button>
+        </CTAActions>
+      </CTAContent>
+    </CTA>
+  )
+}`,
+    },
+    {
+      id: 'card',
+      label: 'Card',
+      code: `import { CTA, CTAContent, CTATitle, CTADescription, CTAActions } from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function CTACard() {
+  return (
+    <CTA variant="card" background="solid">
+      <CTAContent>
+        <CTATitle>Upgrade to Pro</CTATitle>
+        <CTADescription>
+          Get access to all premium components and priority support.
+        </CTADescription>
+        <CTAActions>
+          <Button>Upgrade Now</Button>
+          <Button variant="outline">Learn More</Button>
+        </CTAActions>
+      </CTAContent>
+    </CTA>
+  )
+}`,
+    },
+    {
+      id: 'inline',
+      label: 'Inline',
+      code: `import { CTA, CTAContent, CTATitle, CTADescription, CTAActions } from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function CTAInline() {
+  return (
+    <CTA variant="inline">
+      <CTAContent>
+        <CTATitle>New components available!</CTATitle>
+        <CTADescription>Check out our latest additions.</CTADescription>
+      </CTAContent>
+      <CTAActions>
+        <Button size="sm">Explore</Button>
+      </CTAActions>
+    </CTA>
+  )
+}`,
+    },
+    {
+      id: 'with-image',
+      label: 'With Image',
+      code: `import { CTA, CTAContent, CTATitle, CTADescription, CTAActions } from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function CTAImage() {
+  return (
+    <CTA
+      variant="banner"
+      background="image"
+      backgroundImage={{ uri: '/cta-bg.jpg' }}
+    >
+      <CTAContent>
+        <CTATitle>Transform your workflow</CTATitle>
+        <CTADescription>Build faster with our component library.</CTADescription>
+        <CTAActions>
+          <Button>Get Started</Button>
+        </CTAActions>
+      </CTAContent>
+    </CTA>
+  )
+}`,
+    },
+    {
+      id: 'gradient',
+      label: 'Gradient',
+      code: `import { CTA, CTAContent, CTATitle, CTADescription, CTAActions } from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function CTAGradient() {
+  return (
+    <CTA
+      variant="banner"
+      background="gradient"
+      gradientColors={['#ec4899', '#f97316']}
+    >
+      <CTAContent>
+        <CTATitle>Limited time offer</CTATitle>
+        <CTADescription>Get 50% off your first year.</CTADescription>
+        <CTAActions>
+          <Button>Claim Your Discount</Button>
+        </CTAActions>
+      </CTAContent>
+    </CTA>
+  )
+}`,
+    },
+    {
+      id: 'minimal',
+      label: 'Minimal',
+      code: `import { CTA, CTAContent, CTATitle, CTAActions } from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function CTAMinimal() {
+  return (
+    <CTA variant="banner" background="solid" align="center">
+      <CTAContent>
+        <CTATitle>Start building today</CTATitle>
+        <CTAActions>
+          <Button>Get Started</Button>
+        </CTAActions>
+      </CTAContent>
+    </CTA>
+  )
+}`,
+    },
+  ],
+  installation: 'npx r-ui add cta',
+  usage: `import { CTA, CTAContent, CTATitle, CTADescription, CTAActions } from '@r-ui/react-native'
+import { Button } from '@r-ui/react-native'
+
+export default function MyCTA() {
+  return (
+    <CTA variant="banner" background="gradient">
+      <CTAContent>
+        <CTATitle>Call to Action</CTATitle>
+        <CTADescription>Description text here.</CTADescription>
+        <CTAActions>
+          <Button>Action</Button>
+        </CTAActions>
+      </CTAContent>
+    </CTA>
+  )
+}`,
+  features: [
+    'Banner, card, and inline variants',
+    'Gradient, solid, and image backgrounds',
+    'Left and center alignment options',
+    'Multiple action buttons support',
+    'Responsive design',
+    'Works on iOS, Android, and Web',
+  ],
+  props: [
+    {
+      component: 'CTA',
+      props: [
+        { name: 'variant', type: "'banner' | 'card' | 'inline'", default: "'banner'", description: 'Layout variant' },
+        { name: 'background', type: "'gradient' | 'solid' | 'image'", default: "'gradient'", description: 'Background type' },
+        { name: 'align', type: "'left' | 'center'", default: "'center'", description: 'Content alignment' },
+        { name: 'backgroundImage', type: 'ImageSourcePropType', default: '-', description: 'Background image source' },
+        { name: 'gradientColors', type: 'string[]', default: "['#3b82f6', '#a855f7']", description: 'Gradient colors' },
+        { name: 'backgroundColor', type: 'string', default: '-', description: 'Solid background color' },
+      ],
+    },
+  ],
+};
+
+// ========================================
+// Footer Component Data
+// ========================================
+
+export const footerData: ComponentData = {
+  slug: 'footer',
+  name: 'Footer',
+  description: 'Website footer with links, social icons, and newsletter signup.',
+  category: 'Marketing',
+  categorySlug: 'marketing',
+  variants: [
+    {
+      id: 'simple',
+      label: 'Simple',
+      code: `import {
+  Footer,
+  FooterContent,
+  FooterBrand,
+  FooterLinks,
+  FooterLink,
+  FooterCopyright,
+} from '@r-ui/react-native'
+
+export default function SimpleFooter() {
+  return (
+    <Footer variant="simple">
+      <FooterContent>
+        <FooterBrand name="r/ui" tagline="Beautiful UI components" />
+        <FooterLinks>
+          <FooterLink>Docs</FooterLink>
+          <FooterLink>Components</FooterLink>
+          <FooterLink>GitHub</FooterLink>
+        </FooterLinks>
+      </FooterContent>
+      <FooterCopyright companyName="r/ui" />
+    </Footer>
+  )
+}`,
+    },
+    {
+      id: 'columns',
+      label: 'Columns',
+      code: `import {
+  Footer,
+  FooterContent,
+  FooterBrand,
+  FooterLinks,
+  FooterLinkGroup,
+  FooterLink,
+  FooterCopyright,
+} from '@r-ui/react-native'
+
+export default function ColumnsFooter() {
+  return (
+    <Footer variant="columns">
+      <FooterContent>
+        <FooterBrand name="r/ui" tagline="Modern UI library" />
+        <FooterLinks>
+          <FooterLinkGroup title="Product">
+            <FooterLink>Features</FooterLink>
+            <FooterLink>Pricing</FooterLink>
+          </FooterLinkGroup>
+          <FooterLinkGroup title="Resources">
+            <FooterLink>Documentation</FooterLink>
+            <FooterLink>API Reference</FooterLink>
+          </FooterLinkGroup>
+        </FooterLinks>
+      </FooterContent>
+      <FooterCopyright companyName="r/ui" />
+    </Footer>
+  )
+}`,
+    },
+    {
+      id: 'with-newsletter',
+      label: 'With Newsletter',
+      code: `import {
+  Footer,
+  FooterContent,
+  FooterBrand,
+  FooterNewsletter,
+  FooterCopyright,
+} from '@r-ui/react-native'
+
+export default function NewsletterFooter() {
+  return (
+    <Footer variant="simple">
+      <FooterContent>
+        <FooterBrand name="r/ui" />
+        <FooterNewsletter
+          title="Subscribe to our newsletter"
+          description="Get updates on new components."
+          onSubmit={(email) => console.log('Subscribed:', email)}
+        />
+      </FooterContent>
+      <FooterCopyright companyName="r/ui" />
+    </Footer>
+  )
+}`,
+    },
+    {
+      id: 'centered',
+      label: 'Centered',
+      code: `import {
+  Footer,
+  FooterContent,
+  FooterBrand,
+  FooterLinks,
+  FooterLink,
+  FooterSocial,
+  FooterCopyright,
+} from '@r-ui/react-native'
+import { Twitter, Github } from 'lucide-react-native'
+
+export default function CenteredFooter() {
+  return (
+    <Footer variant="centered">
+      <FooterContent>
+        <FooterBrand name="r/ui" />
+        <FooterLinks>
+          <FooterLink>Home</FooterLink>
+          <FooterLink>Docs</FooterLink>
+          <FooterLink>GitHub</FooterLink>
+        </FooterLinks>
+        <FooterSocial
+          links={[
+            { icon: <Twitter size={20} />, onPress: () => {} },
+            { icon: <Github size={20} />, onPress: () => {} },
+          ]}
+        />
+      </FooterContent>
+      <FooterCopyright companyName="r/ui" />
+    </Footer>
+  )
+}`,
+    },
+    {
+      id: 'minimal',
+      label: 'Minimal',
+      code: `import { Footer, FooterContent, FooterCopyright, FooterSocial } from '@r-ui/react-native'
+import { Twitter, Github, Linkedin } from 'lucide-react-native'
+
+export default function MinimalFooter() {
+  return (
+    <Footer variant="simple">
+      <FooterContent>
+        <FooterCopyright companyName="r/ui" />
+        <FooterSocial
+          links={[
+            { icon: <Twitter size={20} />, onPress: () => {} },
+            { icon: <Github size={20} />, onPress: () => {} },
+          ]}
+        />
+      </FooterContent>
+    </Footer>
+  )
+}`,
+    },
+    {
+      id: 'with-brand',
+      label: 'With Brand',
+      code: `import {
+  Footer,
+  FooterContent,
+  FooterBrand,
+  FooterLinks,
+  FooterLinkGroup,
+  FooterLink,
+  FooterCopyright,
+} from '@r-ui/react-native'
+import { View, Text } from 'react-native'
+
+export default function BrandFooter() {
+  return (
+    <Footer variant="columns">
+      <FooterContent>
+        <FooterBrand
+          logo={<View style={{ width: 40, height: 40, backgroundColor: '#3b82f6', borderRadius: 8 }} />}
+          name="r/ui"
+          tagline="A comprehensive React Native UI library built with accessibility and performance in mind."
+        />
+        <FooterLinks>
+          <FooterLinkGroup title="Links">
+            <FooterLink>Documentation</FooterLink>
+            <FooterLink>Components</FooterLink>
+          </FooterLinkGroup>
+        </FooterLinks>
+      </FooterContent>
+      <FooterCopyright>© 2024 r/ui. Released under the MIT License.</FooterCopyright>
+    </Footer>
+  )
+}`,
+    },
+  ],
+  installation: 'npx r-ui add footer',
+  usage: `import {
+  Footer,
+  FooterContent,
+  FooterBrand,
+  FooterLinks,
+  FooterLink,
+  FooterCopyright,
+} from '@r-ui/react-native'
+
+export default function MyFooter() {
+  return (
+    <Footer variant="simple">
+      <FooterContent>
+        <FooterBrand name="My App" />
+        <FooterLinks>
+          <FooterLink>About</FooterLink>
+          <FooterLink>Contact</FooterLink>
+        </FooterLinks>
+      </FooterContent>
+      <FooterCopyright companyName="My Company" />
+    </Footer>
+  )
+}`,
+  features: [
+    'Simple, columns, and centered layouts',
+    'Multi-column link groups',
+    'Social media icon support',
+    'Newsletter signup form',
+    'Auto-updating copyright year',
+    'Dark and light theme support',
+    'Works on iOS, Android, and Web',
+  ],
+  props: [
+    {
+      component: 'Footer',
+      props: [
+        { name: 'variant', type: "'simple' | 'columns' | 'centered'", default: "'simple'", description: 'Layout variant' },
+      ],
+    },
+    {
+      component: 'FooterBrand',
+      props: [
+        { name: 'logo', type: 'ReactNode', default: '-', description: 'Logo element' },
+        { name: 'name', type: 'string', default: '-', description: 'Brand name' },
+        { name: 'tagline', type: 'string', default: '-', description: 'Tagline text' },
+      ],
+    },
+    {
+      component: 'FooterLinkGroup',
+      props: [
+        { name: 'title', type: 'string', default: '-', description: 'Group title' },
+      ],
+    },
+    {
+      component: 'FooterNewsletter',
+      props: [
+        { name: 'title', type: 'string', default: "'Subscribe to our newsletter'", description: 'Title text' },
+        { name: 'description', type: 'string', default: '-', description: 'Description text' },
+        { name: 'placeholder', type: 'string', default: "'Enter your email'", description: 'Input placeholder' },
+        { name: 'buttonText', type: 'string', default: "'Subscribe'", description: 'Button text' },
+        { name: 'onSubmit', type: '(email: string) => void', default: '-', description: 'Submit handler' },
+      ],
+    },
+    {
+      component: 'FooterCopyright',
+      props: [
+        { name: 'companyName', type: 'string', default: '-', description: 'Company name for auto-generated text' },
+      ],
+    },
+  ],
+};
+
+// ========================================
+// Announcement Component Data
+// ========================================
+
+export const announcementData: ComponentData = {
+  slug: 'announcement',
+  name: 'Announcement',
+  description: 'Top banner for announcements, promotions, and alerts.',
+  category: 'Marketing',
+  categorySlug: 'marketing',
+  variants: [
+    {
+      id: 'basic',
+      label: 'Basic',
+      code: `import { Announcement, AnnouncementContent } from '@r-ui/react-native'
+
+export default function BasicAnnouncement() {
+  return (
+    <Announcement variant="info">
+      <AnnouncementContent>New: Dark mode is now available!</AnnouncementContent>
+    </Announcement>
+  )
+}`,
+    },
+    {
+      id: 'with-link',
+      label: 'With Link',
+      code: `import { Announcement, AnnouncementContent, AnnouncementAction } from '@r-ui/react-native'
+
+export default function LinkAnnouncement() {
+  return (
+    <Announcement variant="info">
+      <AnnouncementContent>We just launched version 2.0 with 20+ new components.</AnnouncementContent>
+      <AnnouncementAction onPress={() => console.log('Navigate')}>
+        Learn more
+      </AnnouncementAction>
+    </Announcement>
+  )
+}`,
+    },
+    {
+      id: 'dismissible',
+      label: 'Dismissible',
+      code: `import { Announcement, AnnouncementContent, AnnouncementClose } from '@r-ui/react-native'
+
+export default function DismissibleAnnouncement() {
+  return (
+    <Announcement variant="info" dismissible onDismiss={() => console.log('Dismissed')}>
+      <AnnouncementContent>This announcement can be dismissed.</AnnouncementContent>
+      <AnnouncementClose />
+    </Announcement>
+  )
+}`,
+    },
+    {
+      id: 'gradient',
+      label: 'Gradient',
+      code: `import { Announcement, AnnouncementContent, AnnouncementAction } from '@r-ui/react-native'
+import { Text } from 'react-native'
+
+export default function GradientAnnouncement() {
+  return (
+    <Announcement variant="promo">
+      <Text>🎉</Text>
+      <AnnouncementContent>Black Friday Sale: 50% off all plans!</AnnouncementContent>
+      <AnnouncementAction onPress={() => {}}>Claim offer</AnnouncementAction>
+    </Announcement>
+  )
+}`,
+    },
+    {
+      id: 'warning',
+      label: 'Warning',
+      code: `import { Announcement, AnnouncementContent } from '@r-ui/react-native'
+
+export default function WarningAnnouncement() {
+  return (
+    <Announcement variant="warning">
+      <AnnouncementContent>
+        Scheduled maintenance on Jan 15th, 2-4 AM UTC
+      </AnnouncementContent>
+    </Announcement>
+  )
+}`,
+    },
+    {
+      id: 'countdown',
+      label: 'Countdown',
+      code: `import { Announcement, AnnouncementContent, AnnouncementCountdown, AnnouncementAction } from '@r-ui/react-native'
+
+export default function CountdownAnnouncement() {
+  const saleEnd = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours from now
+
+  return (
+    <Announcement variant="promo">
+      <AnnouncementContent>Flash Sale ends in</AnnouncementContent>
+      <AnnouncementCountdown targetDate={saleEnd} onEnd={() => console.log('Sale ended')} />
+      <AnnouncementAction onPress={() => {}}>Shop now</AnnouncementAction>
+    </Announcement>
+  )
+}`,
+    },
+  ],
+  installation: 'npx r-ui add announcement',
+  usage: `import { Announcement, AnnouncementContent } from '@r-ui/react-native'
+
+export default function MyAnnouncement() {
+  return (
+    <Announcement variant="info">
+      <AnnouncementContent>Your message here</AnnouncementContent>
+    </Announcement>
+  )
+}`,
+  features: [
+    'Info, warning, success, and promo variants',
+    'Dismissible with close button',
+    'Gradient and solid backgrounds',
+    'Action link support',
+    'Countdown timer variant',
+    'Persist dismiss state (localStorage)',
+    'Sticky positioning support',
+    'Works on iOS, Android, and Web',
+  ],
+  props: [
+    {
+      component: 'Announcement',
+      props: [
+        { name: 'variant', type: "'info' | 'warning' | 'success' | 'promo'", default: "'info'", description: 'Visual variant' },
+        { name: 'dismissible', type: 'boolean', default: 'false', description: 'Allow dismissing' },
+        { name: 'sticky', type: 'boolean', default: 'false', description: 'Stick to top' },
+        { name: 'onDismiss', type: '() => void', default: '-', description: 'Called when dismissed' },
+        { name: 'storageKey', type: 'string', default: '-', description: 'Key for persisting dismiss state' },
+      ],
+    },
+    {
+      component: 'AnnouncementAction',
+      props: [
+        { name: 'href', type: 'string', default: '-', description: 'Link URL' },
+        { name: 'onPress', type: '() => void', default: '-', description: 'Press handler' },
+      ],
+    },
+    {
+      component: 'AnnouncementCountdown',
+      props: [
+        { name: 'targetDate', type: 'Date', default: '-', description: 'Target end date' },
+        { name: 'prefix', type: 'string', default: "'Ends in'", description: 'Prefix text' },
+        { name: 'onEnd', type: '() => void', default: '-', description: 'Called when countdown ends' },
+      ],
+    },
+  ],
+};
+
+// ========================================
 
 export const componentRegistry: Record<string, ComponentData> = {
   'date-picker': datePickerData,
@@ -4041,6 +5551,13 @@ export const componentRegistry: Record<string, ComponentData> = {
   'dock': dockData,
   'masonry': masonryData,
   'data-table': dataTableData,
+  'hero': heroData,
+  'feature-grid': featureGridData,
+  'pricing-table': pricingTableData,
+  'testimonial': testimonialData,
+  'cta': ctaData,
+  'footer': footerData,
+  'announcement': announcementData,
 };
 
 // ========================================

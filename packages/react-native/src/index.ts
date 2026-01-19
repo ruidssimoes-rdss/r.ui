@@ -947,6 +947,155 @@ export type {
   SortState,
 } from './components/DataTable';
 
+export {
+  Hero,
+  HeroContent,
+  HeroTitle,
+  HeroSubtitle,
+  HeroActions,
+  HeroImage,
+  HeroBadge,
+  useHero,
+} from './components/Hero';
+export type {
+  HeroProps,
+  HeroContentProps,
+  HeroTitleProps,
+  HeroSubtitleProps,
+  HeroActionsProps,
+  HeroImageProps,
+  HeroBadgeProps,
+  HeroVariant,
+  HeroAlign,
+} from './components/Hero';
+
+export {
+  FeatureGrid,
+  FeatureCard,
+  FeatureIcon,
+  FeatureTitle,
+  FeatureDescription,
+  useFeatureGrid,
+} from './components/FeatureGrid';
+export type {
+  FeatureGridProps,
+  FeatureCardProps,
+  FeatureIconProps,
+  FeatureTitleProps,
+  FeatureDescriptionProps,
+  FeatureCardVariant,
+  FeatureGridColumns,
+  FeatureGridGap,
+} from './components/FeatureGrid';
+
+export {
+  PricingTable,
+  PricingToggle,
+  PricingCard,
+  PricingHeader,
+  PricingPrice,
+  PricingFeatures,
+  PricingFeature,
+  PricingAction,
+  usePricingTable,
+} from './components/PricingTable';
+export type {
+  PricingTableProps,
+  PricingCardProps,
+  PricingHeaderProps,
+  PricingPriceProps,
+  PricingFeaturesProps,
+  PricingFeatureProps,
+  PricingActionProps,
+  PricingToggleProps,
+  PricingTableContextValue,
+  BillingPeriod,
+} from './components/PricingTable';
+
+export {
+  Testimonial,
+  TestimonialContent,
+  TestimonialAuthor,
+  TestimonialAvatar,
+  TestimonialName,
+  TestimonialRole,
+  TestimonialRating,
+  TestimonialCarousel,
+  useTestimonial,
+} from './components/Testimonial';
+export type {
+  TestimonialProps,
+  TestimonialContentProps,
+  TestimonialAuthorProps,
+  TestimonialAvatarProps,
+  TestimonialNameProps,
+  TestimonialRoleProps,
+  TestimonialRatingProps,
+  TestimonialCarouselProps,
+  TestimonialVariant,
+} from './components/Testimonial';
+
+export {
+  CTA,
+  CTAContent,
+  CTATitle,
+  CTADescription,
+  CTAActions,
+  useCTA,
+} from './components/CTA';
+export type {
+  CTAProps,
+  CTAContentProps,
+  CTATitleProps,
+  CTADescriptionProps,
+  CTAActionsProps,
+  CTAVariant,
+  CTABackground,
+  CTAAlign,
+} from './components/CTA';
+
+export {
+  Footer,
+  FooterContent,
+  FooterBrand,
+  FooterLinks,
+  FooterLinkGroup,
+  FooterLink,
+  FooterSocial,
+  FooterCopyright,
+  FooterNewsletter,
+  useFooter,
+} from './components/Footer';
+export type {
+  FooterProps,
+  FooterContentProps,
+  FooterBrandProps,
+  FooterLinksProps,
+  FooterLinkGroupProps,
+  FooterLinkProps,
+  FooterSocialProps,
+  FooterCopyrightProps,
+  FooterNewsletterProps,
+  FooterVariant,
+} from './components/Footer';
+
+export {
+  Announcement,
+  AnnouncementContent,
+  AnnouncementAction,
+  AnnouncementClose,
+  AnnouncementCountdown,
+  useAnnouncement,
+} from './components/Announcement';
+export type {
+  AnnouncementProps,
+  AnnouncementContentProps,
+  AnnouncementActionProps,
+  AnnouncementCloseProps,
+  AnnouncementCountdownProps,
+  AnnouncementVariant,
+} from './components/Announcement';
+
 // Tokens
 export * from './tokens';
 
