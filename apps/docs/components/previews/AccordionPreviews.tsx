@@ -135,7 +135,7 @@ export function AccordionWithContentPreview() {
           title: 'Getting Started',
           content: (
             <div className="space-y-2">
-              <p>To get started with r.ui, install the package:</p>
+              <p>To get started with r/ui, install the package:</p>
               <code className="block p-2 rounded bg-[var(--component-bg-elevated)] text-xs">
                 npm install @r-ui/react-native
               </code>
@@ -159,7 +159,7 @@ export function AccordionWithContentPreview() {
           title: 'Theming',
           content: (
             <p>
-              r.ui supports dark, light, and oatmeal themes out of the box.
+              r/ui supports dark, light, and oatmeal themes out of the box.
               Colors automatically adjust based on your theme preference.
             </p>
           ),

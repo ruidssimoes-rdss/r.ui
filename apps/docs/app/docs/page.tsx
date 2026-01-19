@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Introduction - r.ui',
-  description: 'Welcome to r.ui - beautiful, accessible components for React Native',
+  title: 'Introduction - r/ui',
+  description: 'Welcome to r/ui - beautiful, accessible components for React Native',
 };
 
 // Feature icons - simple, minimal SVGs
@@ -111,17 +111,17 @@ export default function IntroductionPage() {
         Introduction
       </h1>
       <p className="text-sm text-[var(--docs-text-secondary)] mb-8">
-        Welcome to r.ui — beautifully designed, accessible components for React Native.
+        Welcome to r/ui — beautifully designed, accessible components for React Native.
       </p>
 
-      {/* What is r.ui */}
+      {/* What is r/ui */}
       <section className="mb-8">
         <h2 className="text-sm font-semibold text-[var(--docs-text)] mb-2">
-          What is r.ui?
+          What is r/ui?
         </h2>
         <p className="text-sm text-[var(--docs-text-secondary)] leading-relaxed">
-          r.ui is a component library that provides building blocks for React Native applications.
-          Like shadcn/ui for the web, r.ui components are designed to be copied into your project —
+          r/ui is a component library that provides building blocks for React Native applications.
+          Like shadcn/ui for the web, r/ui components are designed to be copied into your project —
           you own the code, with no hidden dependencies.
         </p>
       </section>
@@ -201,7 +201,7 @@ export default function App() {
                 Installation
               </span>
               <span className="text-xs text-[var(--docs-text-muted)] ml-1.5">
-                — Set up r.ui in your project
+                — Set up r/ui in your project
               </span>
             </div>
             <span className="text-xs text-[var(--docs-text-muted)] group-hover:text-[var(--docs-link)] transition-colors">

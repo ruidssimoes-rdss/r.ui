@@ -14,8 +14,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'r.ui - Universal React Native Components',
-  description: 'A universal React Native component library with beautiful defaults.',
+  title: 'r/ui - Universal React Native Components',
+  description: 'r/ui is a universal React Native component library with beautiful defaults.',
 };
 
 export default function RootLayout({

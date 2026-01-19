@@ -13,8 +13,8 @@ export const navigation: NavigationSection[] = [
   {
     title: 'Getting Started',
     items: [
-      { name: 'Introduction', href: '/docs', description: 'Get started with r.ui' },
-      { name: 'Installation', href: '/docs/installation', description: 'Install r.ui in your project' },
+      { name: 'Introduction', href: '/docs', description: 'Get started with r/ui' },
+      { name: 'Installation', href: '/docs/installation', description: 'Install r/ui in your project' },
     ],
   },
   {

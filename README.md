@@ -1,6 +1,6 @@
-# r.ui
+# r/ui
 
-A universal React Native component library with beautiful defaults. Dark mode first. Glassmorphism built in.
+A universal React Native component library with beautiful defaults.
 
 ## Structure
 

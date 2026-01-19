@@ -1,5 +1,5 @@
 /**
- * r.ui Typography Tokens
+ * r/ui Typography Tokens
  */
 
 // Font families

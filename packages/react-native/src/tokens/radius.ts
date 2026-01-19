@@ -1,5 +1,5 @@
 /**
- * r.ui Border Radius Tokens
+ * r/ui Border Radius Tokens
  */
 
 export const radius = {

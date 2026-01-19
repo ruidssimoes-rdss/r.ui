@@ -1,5 +1,5 @@
 /**
- * r.ui Shadow Tokens
+ * r/ui Shadow Tokens
  * Elevation system for React Native
  *
  * Note: React Native shadows work differently on iOS vs Android

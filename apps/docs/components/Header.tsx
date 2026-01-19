@@ -135,7 +135,7 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
             className="absolute left-1/2 -translate-x-1/2 md:relative md:left-auto md:translate-x-0
                        text-xl font-bold text-gray-900 tracking-tight"
           >
-            r.ui
+            r/ui
           </Link>
 
           {/* Right: Actions */}

@@ -1,7 +1,7 @@
-# r.ui Animation Philosophy
+# r/ui Animation Philosophy
 
-r.ui includes subtle animations by default to create a premium, polished feel.
-This is an intentional design choice that differentiates r.ui from minimal component libraries.
+r/ui includes subtle animations by default to create a premium, polished feel.
+This is an intentional design choice that differentiates r/ui from minimal component libraries.
 
 ## Our Principles
 
@@ -25,7 +25,7 @@ This is an intentional design choice that differentiates r.ui from minimal compo
 
 ## Spring Configurations
 
-r.ui uses React Native's `Animated.spring()` for natural-feeling animations:
+r/ui uses React Native's `Animated.spring()` for natural-feeling animations:
 
 | Use Case | Tension | Friction | Notes |
 |----------|---------|----------|-------|

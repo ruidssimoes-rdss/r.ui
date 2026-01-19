@@ -1,6 +1,6 @@
-# @r-ui/react-native
+# r/ui React Native
 
-A premium React Native component library with dark-first design, built for iOS, Android, and Web.
+A premium React Native component library built for iOS, Android, and Web.
 
 ## Features
 
@@ -30,7 +30,7 @@ function MyComponent() {
   return (
     <Card>
       <CardContent>
-        <Text>Welcome to r.ui</Text>
+        <Text>Welcome to r/ui</Text>
         <Button onPress={() => console.log('pressed')}>
           Get Started
         </Button>
@@ -62,7 +62,7 @@ function MyComponent() {
 
 ## Accessibility
 
-r.ui is built with accessibility as a priority:
+r/ui is built with accessibility as a priority:
 
 - All interactive elements meet WCAG 2.1 touch target requirements (44×44px minimum)
 - Icon-only buttons include descriptive labels for screen readers

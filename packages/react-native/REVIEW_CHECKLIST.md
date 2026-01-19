@@ -1,4 +1,4 @@
-# r.ui Component Review Checklist
+# r/ui Component Review Checklist
 
 Use this checklist when building new components or auditing existing ones.
 Score: Count passing items. Target: 90%+ for production-ready components.

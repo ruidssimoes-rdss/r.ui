@@ -21,7 +21,7 @@ const createIconSvg = (size) => `
     fill="white"
     text-anchor="middle"
     dominant-baseline="middle"
-  >r.ui</text>
+  >r/ui</text>
 </svg>
 `;
 
@@ -37,7 +37,7 @@ const createSplashSvg = () => `
     fill="white"
     text-anchor="middle"
     dominant-baseline="middle"
-  >r.ui</text>
+  >r/ui</text>
 </svg>
 `;
 

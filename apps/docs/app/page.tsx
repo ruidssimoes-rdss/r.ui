@@ -56,7 +56,7 @@ export default function HomePage() {
             animate-editorial-delay-2
           "
         >
-          r.ui is a collection of beautifully designed, accessible components
+          r/ui is a collection of beautifully designed, accessible components
           for React Native — built for developers creating mobile apps at any
           scale.
         </p>
@@ -177,7 +177,7 @@ export default function HomePage() {
         >
           What you get
           <br />
-          with r.ui
+          with r/ui
         </h2>
 
         <p className="text-base md:text-lg text-[var(--home-text-secondary)] mb-12 max-w-2xl">

@@ -18,7 +18,7 @@ export function SeparatorBasicPreview() {
   return (
     <div className="space-y-4">
       <div>
-        <h4 className="text-sm font-medium text-[var(--component-text)]">r.ui Components</h4>
+        <h4 className="text-sm font-medium text-[var(--component-text)]">r/ui Components</h4>
         <p className="text-sm text-[var(--component-text-muted)]">
           A universal React Native component library.
         </p>

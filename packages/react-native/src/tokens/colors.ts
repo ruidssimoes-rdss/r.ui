@@ -1,5 +1,5 @@
 /**
- * r.ui Color Tokens
+ * r/ui Color Tokens
  * Dark mode first color system
  */
 
