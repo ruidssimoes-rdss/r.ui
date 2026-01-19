@@ -76,12 +76,7 @@ interface SearchModalProps {
 /**
  * SearchModal Component
  *
- * Premium Raycast-inspired command palette with heavy glassmorphism:
- * - Heavily blurred backdrop for immersive focus
- * - Glass-panel-strong search container with depth
- * - Glass-hover effects on results
- * - Glow effect on selected/active item
- * - Smooth animations and transitions
+ * Minimal command palette - clean white, no glass effects.
  */
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
@@ -90,7 +85,6 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const resultsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Get all items and filter based on query
   const allItems = getAllNavigationItems();
   const filteredResults: SearchResult[] = query.trim()
     ? allItems.filter(
@@ -101,7 +95,6 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
       )
     : allItems;
 
-  // Group results by category
   const groupedResults = filteredResults.reduce((acc, item) => {
     if (!acc[item.category]) {
       acc[item.category] = [];
@@ -110,15 +103,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     return acc;
   }, {} as Record<string, SearchResult[]>);
 
-  // Flatten for index navigation
   const flatResults = Object.values(groupedResults).flat();
 
-  // Reset selection when query changes
   useEffect(() => {
     setSelectedIndex(0);
   }, [query]);
 
-  // Focus input when modal opens
   useEffect(() => {
     if (isOpen) {
       setQuery('');
@@ -127,7 +117,6 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
   }, [isOpen]);
 
-  // Handle escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -152,7 +141,6 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose, flatResults, selectedIndex, router]);
 
-  // Scroll selected item into view
   useEffect(() => {
     if (resultsRef.current && flatResults.length > 0) {
       const selectedElement = resultsRef.current.querySelector(`[data-index="${selectedIndex}"]`);
@@ -174,55 +162,30 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   return (
     <div className="fixed inset-0 z-[100]" role="dialog" aria-modal="true" aria-label="Search documentation">
-      {/* Backdrop - Heavy blur for Raycast-like immersive feel */}
+      {/* Backdrop */}
       <div
-        className="absolute inset-0
-                   bg-[var(--bg-base)]/70 backdrop-blur-xl saturate-150
-                   animate-in fade-in duration-200"
+        className="absolute inset-0 bg-black/20"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Container */}
       <div className="relative flex items-start justify-center pt-[12vh] px-4">
-        {/* Search Panel - glass-panel-strong styling */}
-        <div
-          className="w-full max-w-xl overflow-hidden rounded-2xl
-                     /* Premium glass panel strong */
-                     bg-[var(--glass-bg-strong)] backdrop-blur-2xl saturate-[200%]
-                     border border-[var(--glass-border)]
-                     /* Deep shadow for floating effect */
-                     shadow-[var(--glass-shadow-lg)]
-                     /* Animation */
-                     animate-in fade-in zoom-in-95 slide-in-from-top-2 duration-200"
-        >
-          {/* Top shine effect */}
-          <div
-            className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r
-                       from-transparent via-[var(--glass-shine-strong)] to-transparent opacity-60"
-            aria-hidden="true"
-          />
-
+        {/* Search Panel */}
+        <div className="w-full max-w-xl overflow-hidden rounded-lg bg-white border border-gray-200 shadow-lg">
           {/* Search input area */}
-          <div className="flex items-center gap-3 px-5 border-b border-[var(--glass-border)]">
-            <SearchIcon className="w-5 h-5 text-[var(--text-muted)] flex-shrink-0" />
+          <div className="flex items-center gap-3 px-4 border-b border-gray-200">
+            <SearchIcon className="w-5 h-5 text-gray-400 flex-shrink-0" />
             <input
               ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search documentation..."
-              className="flex-1 h-16 bg-transparent text-[var(--text-primary)]
-                         placeholder:text-[var(--text-muted)] text-base
-                         focus:outline-none"
+              className="flex-1 h-14 bg-transparent text-gray-900 placeholder:text-gray-400 text-base focus:outline-none"
               aria-label="Search"
             />
-            <kbd
-              className="hidden sm:inline-flex px-2 py-1 rounded-lg
-                         bg-[var(--glass-bg)] border border-[var(--glass-border)]
-                         text-[10px] font-medium text-[var(--text-muted)]
-                         shadow-[inset_0_-1px_0_rgba(0,0,0,0.1)]"
-            >
+            <kbd className="hidden sm:inline-flex px-2 py-1 rounded bg-gray-100 text-[10px] font-medium text-gray-500">
               ESC
             </kbd>
           </div>
@@ -231,12 +194,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
           <div ref={resultsRef} className="max-h-[55vh] overflow-y-auto p-2">
             {flatResults.length === 0 ? (
               <div className="py-12 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-xl
-                               bg-[var(--glass-bg)] border border-[var(--glass-border)]
-                               flex items-center justify-center">
-                  <SearchIcon className="w-6 h-6 text-[var(--text-muted)]" />
-                </div>
-                <p className="text-sm text-[var(--text-muted)]">
+                <SearchIcon className="w-8 h-8 mx-auto mb-3 text-gray-300" />
+                <p className="text-sm text-gray-500">
                   No results found for &quot;{query}&quot;
                 </p>
               </div>
@@ -244,7 +203,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
               Object.entries(groupedResults).map(([category, items]) => (
                 <div key={category} className="mb-3 last:mb-0">
                   {/* Category header */}
-                  <div className="px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  <div className="px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
                     {category}
                   </div>
 
@@ -259,43 +218,25 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             data-index={currentIndex}
                             onClick={() => handleSelect(item.href)}
                             onMouseEnter={() => setSelectedIndex(currentIndex)}
-                            className={`group w-full flex items-center gap-3 px-3 py-3 rounded-xl
-                                       text-left transition-all duration-150
-                                       /* Selected state: glass glow effect */
-                                       ${isSelected
-                                         ? `bg-[var(--accent-blue)] text-white
-                                            shadow-[var(--glow-blue)]
-                                            border border-[var(--accent-blue)]/50`
-                                         : `text-[var(--text-primary)]
-                                            bg-transparent hover:bg-[var(--glass-bg-hover)]
-                                            border border-transparent hover:border-[var(--glass-border)]`
-                                       }`}
+                            className={`group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors
+                              ${isSelected
+                                ? 'bg-red-500 text-white'
+                                : 'text-gray-700 hover:bg-gray-50'
+                              }`}
                           >
                             {/* File icon */}
                             <div
-                              className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0
-                                         transition-colors duration-150
-                                         ${isSelected
-                                           ? 'bg-white/20'
-                                           : 'bg-[var(--glass-bg)] border border-[var(--glass-border)]'
-                                         }`}
+                              className={`w-7 h-7 rounded flex items-center justify-center flex-shrink-0
+                                ${isSelected ? 'bg-white/20' : 'bg-gray-100'}`}
                             >
-                              <FileIcon
-                                className={`w-4 h-4 ${
-                                  isSelected ? 'text-white/90' : 'text-[var(--text-muted)]'
-                                }`}
-                              />
+                              <FileIcon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-gray-400'}`} />
                             </div>
 
                             {/* Content */}
                             <div className="flex-1 min-w-0">
                               <div className="text-sm font-medium truncate">{item.name}</div>
                               {item.description && (
-                                <div
-                                  className={`text-xs truncate mt-0.5 ${
-                                    isSelected ? 'text-white/70' : 'text-[var(--text-muted)]'
-                                  }`}
-                                >
+                                <div className={`text-xs truncate mt-0.5 ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
                                   {item.description}
                                 </div>
                               )}
@@ -304,9 +245,9 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             {/* Return icon for selected */}
                             {isSelected && (
                               <div className="flex items-center gap-1.5 flex-shrink-0">
-                                <span className="text-[10px] text-white/60 font-medium">Jump to</span>
-                                <div className="w-6 h-6 rounded-md bg-white/20 flex items-center justify-center">
-                                  <ReturnIcon className="w-3.5 h-3.5 text-white/90" />
+                                <span className="text-[10px] text-white/70 font-medium">Jump to</span>
+                                <div className="w-5 h-5 rounded bg-white/20 flex items-center justify-center">
+                                  <ReturnIcon className="w-3 h-3 text-white" />
                                 </div>
                               </div>
                             )}
@@ -320,25 +261,21 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             )}
           </div>
 
-          {/* Footer - glass panel with keyboard hints */}
-          <div
-            className="flex items-center gap-5 px-5 py-3
-                       border-t border-[var(--glass-border)]
-                       bg-[var(--glass-bg-subtle)]"
-          >
-            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+          {/* Footer */}
+          <div className="flex items-center gap-5 px-4 py-2.5 border-t border-gray-100 bg-gray-50">
+            <div className="flex items-center gap-2 text-xs text-gray-400">
               <div className="flex items-center gap-1">
-                <kbd className="px-1.5 py-0.5 rounded-md bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[10px] font-medium">↑</kbd>
-                <kbd className="px-1.5 py-0.5 rounded-md bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[10px] font-medium">↓</kbd>
+                <kbd className="px-1.5 py-0.5 rounded bg-white border border-gray-200 text-[10px] font-medium">↑</kbd>
+                <kbd className="px-1.5 py-0.5 rounded bg-white border border-gray-200 text-[10px] font-medium">↓</kbd>
               </div>
               <span>navigate</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-              <kbd className="px-2 py-0.5 rounded-md bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[10px] font-medium">↵</kbd>
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <kbd className="px-2 py-0.5 rounded bg-white border border-gray-200 text-[10px] font-medium">↵</kbd>
               <span>select</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-              <kbd className="px-2 py-0.5 rounded-md bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[10px] font-medium">esc</kbd>
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <kbd className="px-2 py-0.5 rounded bg-white border border-gray-200 text-[10px] font-medium">esc</kbd>
               <span>close</span>
             </div>
           </div>

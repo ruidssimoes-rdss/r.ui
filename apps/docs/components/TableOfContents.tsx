@@ -12,8 +12,8 @@ interface TOCItem {
 /**
  * TableOfContents Component
  *
- * Editorial design - clean, professional, readable.
- * Uses MutationObserver to detect when MDX content loads.
+ * Minimal TOC - clean text, no glass effects.
+ * Active item indicated by red text and left border.
  */
 export function TableOfContents() {
   const [headings, setHeadings] = useState<TOCItem[]>([]);
@@ -21,7 +21,6 @@ export function TableOfContents() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const pathname = usePathname();
 
-  // Generate a slug from text
   const generateSlug = useCallback((text: string): string => {
     return text
       .toLowerCase()
@@ -29,7 +28,6 @@ export function TableOfContents() {
       .replace(/(^-|-$)/g, '');
   }, []);
 
-  // Extract headings from the page
   const extractHeadings = useCallback(() => {
     const mainElement = document.querySelector('main');
     if (!mainElement) return;
@@ -41,7 +39,6 @@ export function TableOfContents() {
       const text = el.textContent?.trim() || '';
       if (!text) return;
 
-      // Generate an ID if one doesn't exist
       if (!el.id) {
         el.id = generateSlug(text);
       }
@@ -58,16 +55,12 @@ export function TableOfContents() {
     setHeadings(items);
   }, [generateSlug]);
 
-  // Extract headings on mount and when pathname changes
   useEffect(() => {
-    // Reset headings when pathname changes
     setHeadings([]);
     setActiveId('');
 
-    // Initial extraction with delay for MDX hydration
     const initialTimer = setTimeout(extractHeadings, 100);
 
-    // Set up MutationObserver to detect when content changes
     const mainElement = document.querySelector('main');
     if (mainElement) {
       const mutationObserver = new MutationObserver(() => {
@@ -79,7 +72,6 @@ export function TableOfContents() {
         subtree: true,
       });
 
-      // Additional extraction after longer delay for slow-loading MDX
       const secondTimer = setTimeout(extractHeadings, 500);
 
       return () => {
@@ -92,18 +84,15 @@ export function TableOfContents() {
     return () => clearTimeout(initialTimer);
   }, [pathname, extractHeadings]);
 
-  // Set up intersection observer for active heading
   useEffect(() => {
     if (headings.length === 0) return;
 
     observerRef.current?.disconnect();
 
     const callback = (entries: IntersectionObserverEntry[]) => {
-      // Find the first visible heading
       const visibleEntries = entries.filter((entry) => entry.isIntersecting);
 
       if (visibleEntries.length > 0) {
-        // Sort by position and take the one closest to top
         const sortedEntries = visibleEntries.sort((a, b) => {
           const aTop = a.boundingClientRect.top;
           const bTop = b.boundingClientRect.top;
@@ -129,7 +118,6 @@ export function TableOfContents() {
     return () => observerRef.current?.disconnect();
   }, [headings]);
 
-  // Don't render if no headings
   if (headings.length === 0) {
     return null;
   }
@@ -138,7 +126,7 @@ export function TableOfContents() {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const yOffset = -100; // Account for fixed header
+      const yOffset = -100;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
       setActiveId(id);
@@ -147,23 +135,16 @@ export function TableOfContents() {
 
   return (
     <nav
-      className="hidden xl:block w-56 flex-shrink-0 sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto"
+      className="hidden xl:block w-48 flex-shrink-0 sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto"
       aria-label="Table of contents"
     >
-      {/* Theme-aware container with subtle glass effect */}
-      <div
-        className="py-4 px-3 mr-4 rounded-xl backdrop-blur-sm transition-colors duration-200"
-        style={{
-          background: 'var(--toc-bg)',
-          border: '1px solid var(--toc-border)',
-        }}
-      >
+      <div className="py-4">
         {/* Header */}
-        <h4 className="px-2 mb-3 editorial-section-header">
+        <h4 className="px-2 mb-3 text-xs font-medium text-gray-400 uppercase tracking-wide">
           On this page
         </h4>
 
-        {/* Navigation items - clean typography, subtle hover */}
+        {/* Navigation items */}
         <ul className="space-y-0.5">
           {headings.map((heading) => {
             const isActive = heading.id === activeId;
@@ -172,18 +153,17 @@ export function TableOfContents() {
                 <a
                   href={`#${heading.id}`}
                   onClick={(e) => handleClick(e, heading.id)}
-                  className={`block py-1.5 px-2 text-sm rounded-md transition-colors duration-150 relative
-                             ${heading.level === 3 ? 'pl-4' : ''}
+                  className={`block py-1 text-sm transition-colors relative
+                             ${heading.level === 3 ? 'pl-4' : 'pl-2'}
                              ${isActive
-                               ? 'text-[var(--docs-text)] font-medium'
-                               : 'text-[var(--docs-text-muted)] hover:text-[var(--docs-text-secondary)]'
+                               ? 'text-red-500 font-medium'
+                               : 'text-gray-500 hover:text-gray-900'
                              }`}
                 >
-                  {/* Active indicator bar */}
+                  {/* Active indicator */}
                   {isActive && (
                     <span
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-full
-                                 bg-[var(--docs-accent)]"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-red-500"
                       aria-hidden="true"
                     />
                   )}

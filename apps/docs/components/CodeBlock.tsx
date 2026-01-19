@@ -11,8 +11,8 @@ function CopyIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
-      width="14"
-      height="14"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -30,8 +30,8 @@ function CheckIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
-      width="14"
-      height="14"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -47,9 +47,9 @@ function CheckIcon({ className }: { className?: string }) {
 /**
  * CodeBlock Component
  *
- * Theme-aware code blocks using CSS variables.
- * Adapts to dark/light/oatmeal themes.
- * Copy button visible on hover.
+ * Minimal code display - plain text with left border/indent.
+ * No background colors, no containers.
+ * Copy button top-right, gray icon with hover state.
  */
 export function CodeBlock({ code, language = 'tsx' }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
@@ -62,41 +62,28 @@ export function CodeBlock({ code, language = 'tsx' }: CodeBlockProps) {
 
   return (
     <div className="relative group">
-      {/* Copy button - theme-aware */}
+      {/* Copy button - top-right */}
       <button
         onClick={handleCopy}
-        className="absolute right-3 top-3 flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-md
-                   bg-[var(--docs-code-btn-bg)] border border-[var(--docs-code-btn-border)]
-                   text-[var(--docs-code-btn-text)] hover:text-[var(--docs-code-btn-hover)] hover:bg-[var(--docs-code-btn-hover-bg)]
-                   opacity-0 group-hover:opacity-100
-                   transition-all duration-200
-                   focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-accent)]/30"
+        className="absolute right-2 top-2 p-1.5 text-gray-400 hover:text-gray-600
+                   opacity-0 group-hover:opacity-100 transition-opacity"
         aria-label={copied ? 'Copied' : 'Copy code'}
       >
         {copied ? (
-          <>
-            <CheckIcon className="w-3.5 h-3.5 text-green-400" />
-            <span className="text-green-400 font-medium">Copied!</span>
-          </>
+          <CheckIcon className="text-green-500" />
         ) : (
-          <>
-            <CopyIcon className="w-3.5 h-3.5" />
-            <span>Copy</span>
-          </>
+          <CopyIcon />
         )}
       </button>
 
-      {/* Code container - theme-aware */}
-      <pre
-        className="bg-[var(--docs-code-bg)] border border-[var(--docs-code-border)]
-                   rounded-lg p-4 overflow-x-auto
-                   shadow-[var(--docs-code-shadow)]
-                   transition-all duration-200"
-      >
-        <code className={`language-${language} text-sm font-mono leading-relaxed text-[var(--docs-code-text)]`}>
-          {code}
-        </code>
-      </pre>
+      {/* Code - plain text with left border */}
+      <div className="border-l-2 border-gray-200 pl-4 py-2">
+        <pre className="overflow-x-auto">
+          <code className={`language-${language} text-sm font-mono text-gray-700 leading-relaxed`}>
+            {code}
+          </code>
+        </pre>
+      </div>
     </div>
   );
 }

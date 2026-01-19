@@ -12,104 +12,80 @@ interface SidebarProps {
 /**
  * Sidebar Component
  *
- * coss.com-inspired clean navigation.
- * Now part of the centered three-column layout (not fixed to viewport edge).
- * On desktop: flows with content as one centered unit.
- * On mobile: slides in as overlay.
- *
- * Category headers: small, muted
- * Links: regular weight, subtle hover
- * Active item: font-medium only
+ * Minimal sidebar with flat list, no indentation.
+ * Selected item uses accent color text only (no background).
+ * All components sorted alphabetically within sections.
  */
 export function Sidebar({ isMobileMenuOpen, onCloseMobileMenu }: SidebarProps) {
   const pathname = usePathname();
+
+  // Sort items alphabetically within each section
+  const sortedNavigation = navigation.map(section => ({
+    ...section,
+    items: [...section.items].sort((a, b) => a.name.localeCompare(b.name))
+  }));
+
+  const NavContent = () => (
+    <>
+      {sortedNavigation.map((section) => (
+        <div key={section.title} className="mb-6">
+          {/* Section header - small, muted */}
+          <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase tracking-wide">
+            {section.title}
+          </h4>
+
+          {/* Nav items - flat list, no indentation */}
+          <ul className="space-y-0.5">
+            {section.items.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={onCloseMobileMenu}
+                    className={`block py-1 text-sm transition-colors
+                      ${isActive
+                        ? 'text-red-500 font-medium'
+                        : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </>
+  );
 
   return (
     <>
       {/* Mobile overlay */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 z-30 md:hidden bg-black/40"
+          className="fixed inset-0 z-30 md:hidden bg-black/20"
           onClick={onCloseMobileMenu}
           aria-hidden="true"
         />
       )}
 
-      {/* Desktop Sidebar - part of layout flow, not fixed */}
-      <aside
-        className="hidden md:block w-56 flex-shrink-0"
-      >
-        <nav className="sticky top-20 h-[calc(100vh-8rem)] overflow-y-auto py-6 pr-4">
-          {navigation.map((section) => (
-            <div key={section.title} className="mb-6">
-              {/* Section header */}
-              <h4 className="mb-2 text-sm font-medium text-[var(--docs-text)]">
-                {section.title}
-              </h4>
-
-              {/* Nav items - clean text links */}
-              <ul className="space-y-0.5">
-                {section.items.map((item) => {
-                  const isActive = pathname === item.href;
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={onCloseMobileMenu}
-                        className={`flex items-center gap-2 px-2 py-1.5 text-sm rounded-md transition-colors
-                          ${isActive
-                            ? 'bg-[var(--docs-sidebar-active)] text-[var(--docs-text)] font-medium'
-                            : 'text-[var(--docs-text-secondary)] hover:text-[var(--docs-text)] hover:bg-[var(--docs-sidebar-active)]'
-                          }`}
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:block w-48 flex-shrink-0">
+        <nav className="sticky top-20 h-[calc(100vh-8rem)] overflow-y-auto py-4 pr-4">
+          <NavContent />
         </nav>
       </aside>
 
-      {/* Mobile Sidebar - slides in as overlay */}
+      {/* Mobile Sidebar */}
       <aside
-        className={`fixed top-14 bottom-0 left-0 z-40 w-56 bg-[var(--page-bg)]
+        className={`fixed top-14 bottom-0 left-0 z-40 w-56 bg-white border-r border-gray-200
                    transition-transform duration-300 ease-in-out md:hidden
                    ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <nav className="h-full overflow-y-auto px-4 py-6">
-          {navigation.map((section) => (
-            <div key={section.title} className="mb-6">
-              {/* Section header */}
-              <h4 className="mb-2 text-sm font-medium text-[var(--docs-text)]">
-                {section.title}
-              </h4>
-
-              {/* Nav items - clean text links */}
-              <ul className="space-y-0.5">
-                {section.items.map((item) => {
-                  const isActive = pathname === item.href;
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={onCloseMobileMenu}
-                        className={`flex items-center gap-2 px-2 py-1.5 text-sm rounded-md transition-colors
-                          ${isActive
-                            ? 'bg-[var(--docs-sidebar-active)] text-[var(--docs-text)] font-medium'
-                            : 'text-[var(--docs-text-secondary)] hover:text-[var(--docs-text)] hover:bg-[var(--docs-sidebar-active)]'
-                          }`}
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
+          <NavContent />
         </nav>
       </aside>
     </>

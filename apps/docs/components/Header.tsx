@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { ThemeToggle } from './ThemeToggle';
 import { SearchModal } from './SearchModal';
 
 function SearchIcon({ className }: { className?: string }) {
@@ -78,19 +77,16 @@ function CloseIcon({ className }: { className?: string }) {
 /**
  * Header Component
  *
- * coss.com-inspired - centered logo with balanced navigation.
- * Mobile: hamburger left, logo center, actions right
- * Desktop: Logo centered with nav links on sides
+ * Minimal header - clean white with subtle bottom border.
+ * No theme toggle.
  */
 export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuToggle?: () => void; isMobileMenuOpen?: boolean }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMac, setIsMac] = useState(true);
 
   useEffect(() => {
-    // Detect Mac vs Windows/Linux
     setIsMac(navigator.platform.toLowerCase().includes('mac'));
 
-    // Handle keyboard shortcut
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
@@ -104,20 +100,13 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
 
   return (
     <>
-      {/* Header - clean with subtle border, no gap */}
-      <header
-        className="sticky top-0 z-50 h-14 border-b border-[var(--docs-border)]
-                   bg-[var(--page-bg)]/95 backdrop-blur-md transition-colors duration-200"
-      >
-        <div className="mx-auto flex h-full max-w-screen-2xl items-center px-4 md:px-6">
+      <header className="sticky top-0 z-50 h-14 border-b border-gray-200 bg-white">
+        <div className="mx-auto flex h-full max-w-[1200px] items-center px-4 md:px-6 lg:px-8">
           {/* Mobile: Left section */}
           <div className="flex items-center md:hidden">
             <button
               onClick={onMobileMenuToggle}
-              className="p-2 rounded-md
-                         text-[var(--docs-text-secondary)] hover:text-[var(--docs-text)]
-                         hover:bg-[var(--docs-sidebar-active)]
-                         transition-colors"
+              className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
@@ -128,17 +117,13 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
           <div className="hidden md:flex items-center gap-1 flex-1">
             <Link
               href="/docs"
-              className="px-3 py-1.5 text-sm font-medium text-[var(--docs-text-secondary)]
-                         hover:text-[var(--docs-text)] rounded-md hover:bg-[var(--docs-sidebar-active)]
-                         transition-colors"
+              className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
               Docs
             </Link>
             <Link
-              href="/docs/components"
-              className="px-3 py-1.5 text-sm font-medium text-[var(--docs-text-secondary)]
-                         hover:text-[var(--docs-text)] rounded-md hover:bg-[var(--docs-sidebar-active)]
-                         transition-colors"
+              href="/docs/components/button"
+              className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
             >
               Components
             </Link>
@@ -148,7 +133,7 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
           <Link
             href="/"
             className="absolute left-1/2 -translate-x-1/2 md:relative md:left-auto md:translate-x-0
-                       text-xl font-bold text-[var(--docs-text)] tracking-tight"
+                       text-xl font-bold text-gray-900 tracking-tight"
           >
             r.ui
           </Link>
@@ -158,17 +143,11 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
             {/* Search button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 rounded-md
-                         text-[var(--docs-text-muted)] text-sm
-                         hover:bg-[var(--docs-sidebar-active)]
-                         transition-colors"
+              className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 text-gray-400 text-sm hover:text-gray-600 transition-colors"
             >
               <SearchIcon className="w-4 h-4" />
               <span className="hidden lg:inline">Search</span>
-              <kbd
-                className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded
-                           bg-[var(--docs-sidebar-active)] text-[10px] font-medium"
-              >
+              <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-gray-100 text-[10px] font-medium text-gray-500">
                 {isMac ? '⌘' : 'Ctrl'}K
               </kbd>
             </button>
@@ -178,21 +157,15 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
               href="https://github.com/ruidssimoes/r-ui"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-md text-[var(--docs-text-secondary)]
-                         hover:text-[var(--docs-text)] hover:bg-[var(--docs-sidebar-active)]
-                         transition-colors"
+              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="GitHub repository"
             >
               <GitHubIcon className="w-5 h-5" />
             </a>
-
-            {/* Theme toggle */}
-            <ThemeToggle />
           </div>
         </div>
       </header>
 
-      {/* Search Modal */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
