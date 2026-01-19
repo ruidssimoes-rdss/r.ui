@@ -485,3 +485,6 @@ export type {
 
 // Tokens
 export * from './tokens';
+
+// Hooks
+export { useReducedMotion, useIsVisible } from './hooks';

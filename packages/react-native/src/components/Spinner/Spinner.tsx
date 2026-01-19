@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, Easing, StyleSheet, ViewStyle } from 'react-native';
 import { colors } from '../../tokens/colors';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 export type SpinnerSize = 'sm' | 'md' | 'lg';
 export type SpinnerVariant = 'default' | 'dots';
@@ -28,6 +29,7 @@ export function Spinner({
   variant = 'default',
   style,
 }: SpinnerProps) {
+  const reducedMotion = useReducedMotion();
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const dotAnims = useRef([
     new Animated.Value(0.3),
@@ -38,6 +40,18 @@ export function Spinner({
   const config = sizeConfig[size];
 
   useEffect(() => {
+    // When reduced motion is preferred, don't animate
+    if (reducedMotion) {
+      // Set static positions for reduced motion
+      if (variant === 'default') {
+        rotateAnim.setValue(0.25); // Show spinner at 90deg position (static)
+      } else {
+        // Set dots to full opacity (static)
+        dotAnims.forEach((anim) => anim.setValue(1));
+      }
+      return;
+    }
+
     if (variant === 'default') {
       const animation = Animated.loop(
         Animated.timing(rotateAnim, {
@@ -71,7 +85,7 @@ export function Spinner({
       animations.forEach((a) => a.start());
       return () => animations.forEach((a) => a.stop());
     }
-  }, [variant]);
+  }, [variant, reducedMotion]);
 
   const spin = rotateAnim.interpolate({
     inputRange: [0, 1],
@@ -80,7 +94,11 @@ export function Spinner({
 
   if (variant === 'dots') {
     return (
-      <View style={[styles.dotsContainer, { gap: config.dot / 2 }, style]}>
+      <View
+        style={[styles.dotsContainer, { gap: config.dot / 2 }, style]}
+        accessibilityRole="progressbar"
+        accessibilityLabel="Loading"
+      >
         {dotAnims.map((anim, i) => (
           <Animated.View
             key={i}
@@ -110,6 +128,8 @@ export function Spinner({
         },
         style,
       ]}
+      accessibilityRole="progressbar"
+      accessibilityLabel="Loading"
     >
       <View
         style={[

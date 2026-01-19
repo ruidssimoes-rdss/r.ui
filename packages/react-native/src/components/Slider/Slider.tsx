@@ -226,7 +226,7 @@ export function Slider({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: spacing[4],
+    paddingVertical: spacing[5],
   },
   track: {
     height: 6,

@@ -130,6 +130,7 @@ export function RadioGroupItem({
           pressed && !disabled && styles.itemPressed,
           style,
         ]}
+        hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         accessibilityRole="radio"
         accessibilityState={{ checked: isSelected, disabled }}
       >

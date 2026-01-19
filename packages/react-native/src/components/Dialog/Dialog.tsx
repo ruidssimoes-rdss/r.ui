@@ -19,6 +19,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 interface DialogContextValue {
   open: boolean;
@@ -131,29 +132,36 @@ export function DialogTrigger({ children, style }: DialogTriggerProps) {
 
 export function DialogContent({ children, style }: DialogContentProps) {
   const { open, onOpenChange } = useDialogContext();
-  const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const reducedMotion = useReducedMotion();
+  const scaleAnim = useRef(new Animated.Value(reducedMotion ? 1 : 0.9)).current;
+  const opacityAnim = useRef(new Animated.Value(reducedMotion ? 1 : 0)).current;
 
   useEffect(() => {
     if (open) {
-      Animated.parallel([
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 65,
-          friction: 8,
-        }),
-        Animated.timing(opacityAnim, {
-          toValue: 1,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      if (reducedMotion) {
+        // Instant appearance for reduced motion
+        scaleAnim.setValue(1);
+        opacityAnim.setValue(1);
+      } else {
+        Animated.parallel([
+          Animated.spring(scaleAnim, {
+            toValue: 1,
+            useNativeDriver: true,
+            tension: 65,
+            friction: 8,
+          }),
+          Animated.timing(opacityAnim, {
+            toValue: 1,
+            duration: 150,
+            useNativeDriver: true,
+          }),
+        ]).start();
+      }
     } else {
-      scaleAnim.setValue(0.9);
+      scaleAnim.setValue(reducedMotion ? 1 : 0.9);
       opacityAnim.setValue(0);
     }
-  }, [open]);
+  }, [open, reducedMotion]);
 
   return (
     <Modal
@@ -208,7 +216,12 @@ export function DialogClose({ children, style }: DialogCloseProps) {
   const { onOpenChange } = useDialogContext();
 
   return (
-    <Pressable onPress={() => onOpenChange(false)} style={style}>
+    <Pressable
+      onPress={() => onOpenChange(false)}
+      style={style}
+      accessibilityRole="button"
+      accessibilityLabel="Close dialog"
+    >
       {children}
     </Pressable>
   );

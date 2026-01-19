@@ -19,6 +19,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 export type ToastVariant = 'default' | 'success' | 'warning' | 'error';
 
@@ -103,24 +104,31 @@ interface ToastItemComponentProps {
 }
 
 function ToastItemComponent({ item, onDismiss }: ToastItemComponentProps) {
-  const translateY = useRef(new Animated.Value(-100)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
+  const reducedMotion = useReducedMotion();
+  const translateY = useRef(new Animated.Value(reducedMotion ? 0 : -100)).current;
+  const opacity = useRef(new Animated.Value(reducedMotion ? 1 : 0)).current;
   const variantStyle = variantStyles[item.variant || 'default'];
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.spring(translateY, {
-        toValue: 0,
-        useNativeDriver: true,
-        tension: 50,
-        friction: 8,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    if (reducedMotion) {
+      // Instant appearance for reduced motion
+      translateY.setValue(0);
+      opacity.setValue(1);
+    } else {
+      Animated.parallel([
+        Animated.spring(translateY, {
+          toValue: 0,
+          useNativeDriver: true,
+          tension: 50,
+          friction: 8,
+        }),
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
 
     if (item.duration !== 0) {
       const timeout = setTimeout(() => {
@@ -128,9 +136,15 @@ function ToastItemComponent({ item, onDismiss }: ToastItemComponentProps) {
       }, item.duration || 4000);
       return () => clearTimeout(timeout);
     }
-  }, []);
+  }, [reducedMotion]);
 
   const dismissWithAnimation = () => {
+    if (reducedMotion) {
+      // Instant dismissal for reduced motion
+      onDismiss(item.id);
+      return;
+    }
+
     Animated.parallel([
       Animated.timing(translateY, {
         toValue: -100,
@@ -172,7 +186,13 @@ function ToastItemComponent({ item, onDismiss }: ToastItemComponentProps) {
           <Text style={styles.actionText}>{item.action.label}</Text>
         </Pressable>
       )}
-      <Pressable onPress={dismissWithAnimation} style={styles.closeButton}>
+      <Pressable
+        onPress={dismissWithAnimation}
+        style={styles.closeButton}
+        hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        accessibilityRole="button"
+        accessibilityLabel="Dismiss"
+      >
         <View style={styles.closeIcon}>
           <View style={[styles.closeLine, styles.closeLine1]} />
           <View style={[styles.closeLine, styles.closeLine2]} />

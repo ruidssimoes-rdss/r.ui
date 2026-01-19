@@ -263,6 +263,7 @@ const styles = StyleSheet.create({
   },
   trigger: {
     flex: 1,
+    minHeight: 44,
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[3],
     alignItems: 'center',
@@ -271,6 +272,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   triggerPill: {
+    minHeight: 44,
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[4],
     alignItems: 'center',
@@ -279,6 +281,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   triggerUnderline: {
+    minHeight: 44,
     paddingVertical: spacing[3],
     paddingHorizontal: spacing[4],
     alignItems: 'center',

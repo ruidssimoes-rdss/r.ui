@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { radius } from '../../tokens/radius';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 export type SkeletonVariant = 'text' | 'circular' | 'rectangular';
 
@@ -46,10 +47,18 @@ export function Skeleton({
   style,
   ...props
 }: SkeletonProps) {
+  const reducedMotion = useReducedMotion();
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
+  // Disable animation when user prefers reduced motion
+  const shouldAnimate = animate && !reducedMotion;
+
   useEffect(() => {
-    if (!animate) return;
+    if (!shouldAnimate) {
+      // Set to static opacity when not animating
+      shimmerAnim.setValue(0.5);
+      return;
+    }
 
     const animation = Animated.loop(
       Animated.sequence([
@@ -69,9 +78,9 @@ export function Skeleton({
     animation.start();
 
     return () => animation.stop();
-  }, [animate, shimmerAnim]);
+  }, [shouldAnimate, shimmerAnim]);
 
-  const opacity = animate
+  const opacity = shouldAnimate
     ? shimmerAnim.interpolate({
         inputRange: [0, 1],
         outputRange: [0.3, 0.7],
@@ -93,6 +102,8 @@ export function Skeleton({
         },
         style,
       ]}
+      accessibilityRole="none"
+      accessibilityLabel="Loading content"
       {...props}
     />
   );

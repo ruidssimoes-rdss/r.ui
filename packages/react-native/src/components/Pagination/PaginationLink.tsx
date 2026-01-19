@@ -48,8 +48,8 @@ export function PaginationLink({
 
 const styles = StyleSheet.create({
   link: {
-    minWidth: 36,
-    height: 36,
+    minWidth: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.md,

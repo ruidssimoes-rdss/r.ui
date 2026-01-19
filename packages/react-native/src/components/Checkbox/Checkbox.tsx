@@ -65,6 +65,10 @@ export function Checkbox({
       onPress={handlePress}
       disabled={disabled}
       style={[styles.container, style]}
+      hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked, disabled }}
+      accessibilityLabel={label}
     >
       <View
         style={[

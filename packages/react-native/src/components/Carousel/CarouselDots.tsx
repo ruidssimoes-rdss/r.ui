@@ -42,6 +42,7 @@ export function CarouselDots({
             },
             pressed && styles.dotPressed,
           ]}
+          hitSlop={{ top: 18, bottom: 18, left: 18, right: 18 }}
           accessibilityRole="button"
           accessibilityLabel={`Go to slide ${index + 1}`}
           accessibilityState={{ selected: index === currentIndex }}

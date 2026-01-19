@@ -12,6 +12,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { useSheet, SheetContentProps, SheetSide } from './SheetContext';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { SheetOverlay } from './SheetOverlay';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -47,6 +48,7 @@ function getContentStyle(side: SheetSide): ViewStyle {
  */
 export function SheetContent({ children, style }: SheetContentProps) {
   const { open, onOpenChange, side } = useSheet();
+  const reducedMotion = useReducedMotion();
   const translateAnim = useRef(new Animated.Value(getInitialTranslate(side))).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -55,6 +57,12 @@ export function SheetContent({ children, style }: SheetContentProps) {
   const dismissThreshold = sheetSize * 0.3;
 
   const openSheet = () => {
+    if (reducedMotion) {
+      // Instant appearance for reduced motion
+      translateAnim.setValue(0);
+      backdropOpacity.setValue(1);
+      return;
+    }
     Animated.parallel([
       Animated.spring(translateAnim, { toValue: 0, useNativeDriver: true, tension: 65, friction: 10 }),
       Animated.timing(backdropOpacity, { toValue: 1, duration: 200, useNativeDriver: true }),
@@ -62,6 +70,11 @@ export function SheetContent({ children, style }: SheetContentProps) {
   };
 
   const closeSheet = () => {
+    if (reducedMotion) {
+      // Instant dismissal for reduced motion
+      onOpenChange(false);
+      return;
+    }
     Animated.parallel([
       Animated.timing(translateAnim, { toValue: getInitialTranslate(side), duration: 200, useNativeDriver: true }),
       Animated.timing(backdropOpacity, { toValue: 0, duration: 200, useNativeDriver: true }),
