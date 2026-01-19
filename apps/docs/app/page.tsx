@@ -1,7 +1,6 @@
 /**
  * Homepage - Editorial / Modern SaaS Style
  *
- * Clean, confident, slightly playful design inspired by Brixel.ai, Codexon, Orren.
  * - Paper-like background with subtle grid
  * - Bold typography
  * - Diagonal stripe dividers
@@ -231,7 +230,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="px-6 md:px-8 py-10 md:py-12 max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-[var(--home-text-muted)]">
-          <div>Built by Rui. Inspired by Raycast & shadcn/ui.</div>
+          <div>Built by Rui.</div>
           <div className="flex items-center gap-6">
             <a
               href="https://github.com/ruidssimoes/r-ui"

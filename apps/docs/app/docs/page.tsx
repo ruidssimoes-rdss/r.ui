@@ -121,8 +121,7 @@ export default function IntroductionPage() {
         </h2>
         <p className="text-sm text-[var(--docs-text-secondary)] leading-relaxed">
           r/ui is a component library that provides building blocks for React Native applications.
-          Like shadcn/ui for the web, r/ui components are designed to be copied into your project —
-          you own the code, with no hidden dependencies.
+          Components are designed to be copied into your project — you own the code, with no hidden dependencies.
         </p>
       </section>
 
