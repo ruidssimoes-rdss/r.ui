@@ -86,28 +86,54 @@ function tokenize(code: string): Token[] {
   return tokens;
 }
 
-function getTokenColor(type: Token['type']): string {
-  switch (type) {
-    case 'keyword':
-      return 'text-purple-400';
-    case 'string':
-      return 'text-green-400';
-    case 'comment':
-      return 'text-zinc-500';
-    case 'number':
-      return 'text-orange-400';
-    case 'operator':
-      return 'text-cyan-400';
-    case 'function':
-      return 'text-blue-400';
-    case 'component':
-      return 'text-yellow-400';
-    case 'prop':
-      return 'text-cyan-300';
-    case 'punctuation':
-      return 'text-zinc-400';
-    default:
-      return 'text-zinc-300';
+function getTokenColor(type: Token['type'], isDark: boolean): string {
+  if (isDark) {
+    switch (type) {
+      case 'keyword':
+        return 'text-purple-400';
+      case 'string':
+        return 'text-green-400';
+      case 'comment':
+        return 'text-zinc-500';
+      case 'number':
+        return 'text-orange-400';
+      case 'operator':
+        return 'text-cyan-400';
+      case 'function':
+        return 'text-blue-400';
+      case 'component':
+        return 'text-yellow-400';
+      case 'prop':
+        return 'text-cyan-300';
+      case 'punctuation':
+        return 'text-zinc-400';
+      default:
+        return 'text-zinc-300';
+    }
+  } else {
+    // Light mode colors
+    switch (type) {
+      case 'keyword':
+        return 'text-purple-600';
+      case 'string':
+        return 'text-green-600';
+      case 'comment':
+        return 'text-gray-400';
+      case 'number':
+        return 'text-orange-600';
+      case 'operator':
+        return 'text-cyan-600';
+      case 'function':
+        return 'text-blue-600';
+      case 'component':
+        return 'text-amber-600';
+      case 'prop':
+        return 'text-cyan-700';
+      case 'punctuation':
+        return 'text-gray-500';
+      default:
+        return 'text-gray-800';
+    }
   }
 }
 
@@ -116,8 +142,9 @@ function getTokenColor(type: Token['type']): string {
 // ========================================
 
 export function PlaygroundCode() {
-  const { activeVariant, copyCode } = usePlayground();
+  const { activeVariant, copyCode, previewTheme } = usePlayground();
   const [copied, setCopied] = useState(false);
+  const isDark = previewTheme === 'dark';
 
   const handleCopy = async () => {
     await copyCode();
@@ -150,30 +177,32 @@ export function PlaygroundCode() {
 
   if (!code) {
     return (
-      <div className="h-full flex items-center justify-center bg-zinc-900 border border-zinc-800">
-        <p className="text-zinc-500 text-xs">No code available</p>
+      <div className={`h-full flex items-center justify-center border ${isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-gray-50 border-gray-200'}`}>
+        <p className={`text-xs ${isDark ? 'text-zinc-500' : 'text-gray-400'}`}>No code available</p>
       </div>
     );
   }
 
   return (
-    <div className="relative h-full bg-zinc-900 overflow-auto group border border-zinc-800">
+    <div className={`relative h-full overflow-auto group border ${isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-gray-50 border-gray-200'}`}>
       {/* Copy button */}
       <button
         onClick={handleCopy}
         className={`
           absolute right-3 top-3 z-10
           p-1.5 rounded-md
-          bg-zinc-800 hover:bg-zinc-700
-          text-zinc-400 hover:text-zinc-200
           transition-all
           opacity-0 group-hover:opacity-100
+          ${isDark
+            ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200'
+            : 'bg-gray-200 hover:bg-gray-300 text-gray-500 hover:text-gray-700'
+          }
         `}
         title={copied ? 'Copied!' : 'Copy code'}
         aria-label={copied ? 'Copied!' : 'Copy code'}
       >
         {copied ? (
-          <CheckIcon className="text-green-400" />
+          <CheckIcon className="text-green-500" />
         ) : (
           <CopyIcon />
         )}
@@ -184,9 +213,9 @@ export function PlaygroundCode() {
         <table className="border-collapse w-full">
           <tbody>
             {lines.map((lineTokens, lineIndex) => (
-              <tr key={lineIndex} className="hover:bg-zinc-800/50">
+              <tr key={lineIndex} className={isDark ? 'hover:bg-zinc-800/50' : 'hover:bg-gray-100/50'}>
                 {/* Line number */}
-                <td className="text-right pr-4 select-none text-zinc-600 w-10 align-top">
+                <td className={`text-right pr-4 select-none w-10 align-top ${isDark ? 'text-zinc-600' : 'text-gray-400'}`}>
                   {lineIndex + 1}
                 </td>
                 {/* Code */}
@@ -194,7 +223,7 @@ export function PlaygroundCode() {
                   {lineTokens.map((token, tokenIndex) => (
                     <span
                       key={tokenIndex}
-                      className={getTokenColor(token.type)}
+                      className={getTokenColor(token.type, isDark)}
                     >
                       {token.value}
                     </span>

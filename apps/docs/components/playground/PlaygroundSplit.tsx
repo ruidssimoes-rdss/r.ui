@@ -68,12 +68,15 @@ function ResizableSplit({
     };
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
+  // Account for gap (1rem = 16px) and resize handle (4px)
+  const gapSize = 20; // 16px gap + 4px handle
+
   return (
-    <div ref={containerRef} className="flex h-full relative gap-4">
+    <div ref={containerRef} className="flex h-full relative w-full">
       {/* Left panel - Preview */}
       <div
-        className="h-full overflow-hidden rounded-lg"
-        style={{ width: `${ratio * 100}%` }}
+        className="h-full overflow-hidden rounded-lg flex-shrink-0"
+        style={{ width: `calc(${ratio * 100}% - ${gapSize / 2}px)` }}
       >
         {left}
       </div>
@@ -81,27 +84,24 @@ function ResizableSplit({
       {/* Resize handle - subtle */}
       <div
         className={`
-          w-1 h-full cursor-col-resize relative group flex-shrink-0
-          ${isDragging ? 'bg-blue-400' : 'bg-transparent hover:bg-gray-200'}
-          transition-colors rounded-full
+          w-5 h-full cursor-col-resize relative group flex-shrink-0
+          flex items-center justify-center
         `}
         onMouseDown={handleMouseDown}
       >
-        {/* Visual indicator on hover */}
+        {/* Visual indicator */}
         <div
           className={`
-            absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-            w-1 h-8 rounded-full
-            ${isDragging ? 'bg-blue-400' : 'bg-gray-300 opacity-0 group-hover:opacity-100'}
-            transition-opacity
+            w-1 h-8 rounded-full transition-colors
+            ${isDragging ? 'bg-blue-400' : 'bg-gray-200 group-hover:bg-gray-300'}
           `}
         />
       </div>
 
       {/* Right panel - Code */}
       <div
-        className="h-full overflow-hidden rounded-lg"
-        style={{ width: `calc(${(1 - ratio) * 100}% - 1.25rem)` }}
+        className="h-full overflow-hidden rounded-lg flex-shrink-0"
+        style={{ width: `calc(${(1 - ratio) * 100}% - ${gapSize / 2}px)` }}
       >
         {right}
       </div>

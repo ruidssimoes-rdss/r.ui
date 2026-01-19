@@ -45,20 +45,20 @@ function PlaygroundInner({ renderPreview }: PlaygroundInnerProps) {
         </div>
 
         {/* Main content area - fixed height that doesn't shift */}
-        <div className="flex-1 min-h-0 pt-6">
+        <div className="pt-6 lg:h-[450px] lg:flex-shrink-0">
           {/* Desktop: Split view - no border/frame */}
           <div className="hidden lg:flex h-full gap-1">
             <PlaygroundSplit previewContent={previewContent} />
           </div>
 
           {/* Mobile/Tablet: Stacked view */}
-          <div className="lg:hidden h-full">
+          <div className="lg:hidden h-[400px]">
             <PlaygroundSplitMobile previewContent={previewContent} />
           </div>
         </div>
 
-        {/* Documentation tabs - no top border */}
-        <div className="hidden lg:block max-h-[40vh] overflow-auto">
+        {/* Documentation tabs - scrollable section */}
+        <div className="hidden lg:block flex-1 min-h-0 overflow-auto">
           <PlaygroundDocs />
         </div>
 
