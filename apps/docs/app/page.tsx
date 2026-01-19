@@ -1,256 +1,173 @@
+'use client';
+
+import { useState } from 'react';
+
 /**
- * Homepage - Editorial / Modern SaaS Style
+ * Homepage - Paso-inspired minimal white canvas
  *
- * - Paper-like background with subtle grid
- * - Bold typography
- * - Diagonal stripe dividers
- * - Tilted product showcase cards
- * - Stats section
+ * - Confident typography
+ * - Floating component previews
+ * - Generous whitespace
  */
 export default function HomePage() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText('npx r-ui init');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <div className="home-page">
-      {/* Diagonal stripe divider */}
-      <div className="diagonal-stripes" />
+    <main className="min-h-screen bg-white">
+      {/* Hero */}
+      <section className="pt-32 pb-20 px-6 lg:px-48 text-center">
+        {/* Eyebrow */}
+        <p className="text-sm text-gray-400 mb-6">
+          Built for solo founders and makers
+        </p>
 
-      {/* Hero Section */}
-      <section className="px-6 md:px-8 py-16 md:py-24 max-w-4xl mx-auto text-center">
-        {/* Announcement badge */}
-        <div className="flex justify-center mb-8 animate-editorial">
-          <div className="pill-badge">
-            <span className="w-2 h-2 bg-green-500 rounded-full" />
-            <span>45 components available</span>
-            <a
-              href="/docs/overview"
-              className="text-[var(--home-accent)] font-medium hover:underline"
-            >
-              Explore →
-            </a>
-          </div>
-        </div>
-
-        {/* Main headline */}
-        <h1
-          className="
-            text-4xl sm:text-5xl md:text-6xl lg:text-7xl
-            font-medium tracking-tight
-            text-[var(--home-text)]
-            leading-[1.1]
-            mb-6
-            animate-editorial-delay-1
-          "
-        >
+        {/* Main headline - large, confident */}
+        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-gray-900 mb-6">
           Beautiful components
           <br />
           for React Native
         </h1>
 
-        {/* Subtext */}
-        <p
-          className="
-            text-base md:text-lg
-            text-[var(--home-text-secondary)]
-            max-w-2xl mx-auto
-            mb-10
-            animate-editorial-delay-2
-          "
-        >
-          r/ui is a collection of beautifully designed, accessible components
-          for React Native — built for developers creating mobile apps at any
-          scale.
+        {/* Subheadline */}
+        <p className="text-lg text-gray-500 max-w-xl mx-auto mb-10">
+          Copy, paste, ship. 45 accessible components that work on iOS, Android, and Web.
         </p>
 
-        {/* CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-4 animate-editorial-delay-3">
-          <a href="/docs/components/button" className="btn-primary">
-            Get Started
-          </a>
-          <a href="/docs/overview" className="btn-secondary">
-            Browse Components
-          </a>
-        </div>
-      </section>
-
-      {/* Product Showcase Section */}
-      <section className="px-6 md:px-8 py-8 md:py-12 max-w-5xl mx-auto">
-        <div className="relative rounded-2xl overflow-hidden showcase-gradient p-6 md:p-10">
-          {/* Dot pattern overlay */}
-          <div className="absolute inset-0 dot-pattern opacity-30" />
-
-          {/* Tilted cards */}
-          <div className="relative flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8">
-            {/* Card 1 - tilted left */}
-            <div className="dark-card tilt-left p-5 md:p-6 w-full max-w-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-cyan-400">●</span>
-                  <span className="text-sm text-gray-300">
-                    Button variants: primary, secondary, ghost
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-green-400">✓</span>
-                  <span className="text-sm text-gray-300">
-                    Fully accessible with ARIA support
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-purple-400">◆</span>
-                  <span className="text-sm text-gray-300">
-                    NativeWind + TypeScript
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2 - tilted right */}
-            <div className="dark-card tilt-right p-5 md:p-6 w-full max-w-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-              </div>
-              <div className="font-mono text-sm space-y-2">
-                <div className="text-gray-500"># Install</div>
-                <div className="text-white">npx r-ui add button</div>
-                <div className="text-gray-500 mt-4"># Use</div>
-                <div className="text-cyan-400">
-                  {'<Button variant="primary">'}
-                </div>
-                <div className="text-white pl-4">Get Started</div>
-                <div className="text-cyan-400">{'</Button>'}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Diagonal stripe divider */}
-      <div className="diagonal-stripes" />
-
-      {/* Stats Section */}
-      <section className="max-w-5xl mx-auto">
-        <div className="stats-grid">
-          <div className="stat-item">
-            <div className="stat-value">45+</div>
-            <div className="stat-label">Components</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">190+</div>
-            <div className="stat-label">Storybook Stories</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">3</div>
-            <div className="stat-label">Theme Variants</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Diagonal stripe divider */}
-      <div className="diagonal-stripes" />
-
-      {/* Features Section */}
-      <section className="px-6 md:px-8 py-16 md:py-20 max-w-4xl mx-auto">
-        <div className="mb-4">
-          <span className="pill-badge">
-            <span className="w-2 h-2 bg-[var(--home-text)] rounded-full" />
-            <span className="uppercase text-xs tracking-wider font-medium">
-              Features
-            </span>
-          </span>
-        </div>
-
-        <h2
-          className="
-            text-3xl md:text-4xl lg:text-5xl
-            font-medium tracking-tight
-            text-[var(--home-text)]
-            leading-[1.1]
-            mb-6
-          "
+        {/* Single CTA */}
+        <a
+          href="/docs/installation"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
         >
-          What you get
-          <br />
-          with r/ui
+          Get Started
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </section>
+
+      {/* Floating Components - the "paso constellation" effect */}
+      <section className="relative py-20 px-6 lg:px-48 overflow-hidden">
+        <div className="relative max-w-5xl mx-auto h-[600px] md:h-[500px]">
+
+          {/* Button preview - top left */}
+          <div className="absolute top-0 left-0 md:left-4 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-8 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+            <p className="text-xs text-gray-400 mb-4">Button</p>
+            <div className="flex gap-3">
+              <button className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm">Primary</button>
+              <button className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Secondary</button>
+            </div>
+          </div>
+
+          {/* Card preview - center right */}
+          <div className="absolute top-32 md:top-20 right-0 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 w-72 transform rotate-2 hover:rotate-0 transition-transform duration-300">
+            <p className="text-xs text-gray-400 mb-4">Card</p>
+            <div className="border border-gray-100 rounded-xl p-4">
+              <h3 className="font-medium text-gray-900">Card Title</h3>
+              <p className="text-sm text-gray-500 mt-1">This is a description of the card component.</p>
+            </div>
+          </div>
+
+          {/* Dialog preview - bottom center */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 w-80 transform rotate-1 hover:rotate-0 transition-transform duration-300">
+            <p className="text-xs text-gray-400 mb-4">Dialog</p>
+            <div className="border border-gray-100 rounded-xl p-4 text-center">
+              <h3 className="font-medium text-gray-900">Confirm action?</h3>
+              <p className="text-sm text-gray-500 mt-1 mb-4">This cannot be undone.</p>
+              <div className="flex gap-2 justify-center">
+                <button className="px-3 py-1.5 text-sm text-gray-500">Cancel</button>
+                <button className="px-3 py-1.5 bg-gray-900 text-white rounded-lg text-sm">Confirm</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Toast preview - top right offset */}
+          <div className="absolute top-56 md:top-40 right-4 md:right-20 bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-4 transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+            <p className="text-xs text-gray-400 mb-3">Toast</p>
+            <div className="flex items-center gap-3 bg-gray-50 rounded-lg px-4 py-3">
+              <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-sm text-gray-700">Changes saved</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Stats - subtle, not shouting */}
+      <section className="py-20 px-6 lg:px-48 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto flex justify-center gap-16 text-center">
+          <div>
+            <p className="text-3xl font-semibold text-gray-900">45+</p>
+            <p className="text-sm text-gray-400 mt-1">Components</p>
+          </div>
+          <div>
+            <p className="text-3xl font-semibold text-gray-900">360+</p>
+            <p className="text-sm text-gray-400 mt-1">Story variations</p>
+          </div>
+          <div>
+            <p className="text-3xl font-semibold text-gray-900">100%</p>
+            <p className="text-sm text-gray-400 mt-1">Accessible</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-32 px-6 lg:px-48 text-center">
+        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
+          Ready to build?
         </h2>
-
-        <p className="text-base md:text-lg text-[var(--home-text-secondary)] mb-12 max-w-2xl">
-          From buttons to dialogs to data tables — everything you need to build
-          beautiful React Native apps, without starting from scratch.
+        <p className="text-gray-500 mb-8">
+          Start with a single command.
         </p>
-
-        {/* Feature grid */}
-        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-          {[
-            {
-              title: 'Universal',
-              desc: 'Works on iOS, Android, and Web via React Native Web',
-            },
-            {
-              title: 'Accessible',
-              desc: 'Built with accessibility in mind from the ground up',
-            },
-            {
-              title: 'Themeable',
-              desc: 'Dark, light, and oatmeal themes out of the box',
-            },
-            {
-              title: 'TypeScript',
-              desc: 'Full TypeScript support with exported types',
-            },
-            {
-              title: 'NativeWind',
-              desc: 'Styled with Tailwind CSS via NativeWind',
-            },
-            {
-              title: 'Copy & Paste',
-              desc: 'Own your code — no hidden dependencies',
-            },
-          ].map((feature, i) => (
-            <div key={i} className="dashed-box p-5 md:p-6">
-              <h3 className="text-base md:text-lg font-medium text-[var(--home-text)] mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-sm text-[var(--home-text-secondary)]">
-                {feature.desc}
-              </p>
-            </div>
-          ))}
+        <div className="inline-flex items-center gap-3 bg-gray-50 rounded-full px-6 py-3 font-mono text-sm">
+          <span className="text-gray-400">$</span>
+          <span>npx r-ui init</span>
+          <button
+            onClick={handleCopy}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+            aria-label={copied ? 'Copied' : 'Copy command'}
+          >
+            {copied ? (
+              <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            )}
+          </button>
         </div>
       </section>
-
-      {/* Diagonal stripe divider */}
-      <div className="diagonal-stripes" />
 
       {/* Footer */}
-      <footer className="px-6 md:px-8 py-10 md:py-12 max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-[var(--home-text-muted)]">
-          <div>Built by Rui.</div>
-          <div className="flex items-center gap-6">
+      <footer className="py-8 px-6 lg:px-48 border-t border-gray-100">
+        <div className="flex justify-between items-center text-sm text-gray-400">
+          <span>r/ui</span>
+          <div className="flex gap-6">
             <a
               href="https://github.com/ruidssimoes/r-ui"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[var(--home-text)] transition-colors"
+              className="hover:text-gray-600 transition-colors"
             >
               GitHub
             </a>
-            <a
-              href="https://x.com/ruidssimoes"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--home-text)] transition-colors"
-            >
-              Twitter
+            <a href="/docs" className="hover:text-gray-600 transition-colors">
+              Documentation
             </a>
           </div>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }
