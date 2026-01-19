@@ -1,0 +1,385 @@
+# Theming
+
+r/ui includes a comprehensive design token system with three built-in themes: Dark, Light, and Oatmeal.
+
+## Built-in Themes
+
+### Dark Theme (Default)
+
+A premium dark theme optimized for OLED displays and reduced eye strain:
+
+- Deep blacks (`#050505` base)
+- High contrast white text
+- Vibrant accent colors
+
+### Light Theme
+
+A clean, bright theme for daytime use:
+
+- Warm whites and light grays
+- Dark text for readability
+- Softer accent colors
+
+### Oatmeal Theme
+
+A unique warm, neutral theme:
+
+- Cream and beige tones
+- Earthy, comfortable feel
+- Reduced blue light
+
+## Design Tokens
+
+r/ui uses a token-based system for consistent styling. All values are defined in `@r-ui/react-native/tokens`.
+
+### Colors
+
+```ts
+import { colors } from '@r-ui/react-native'
+
+// Background hierarchy (5 levels)
+colors.bg.base      // '#050505' — App background
+colors.bg.raised    // '#0a0a0a' — Slightly elevated
+colors.bg.surface   // '#141414' — Cards, inputs
+colors.bg.elevated  // '#1f1f1f' — Modals, popovers
+colors.bg.overlay   // 'rgba(0,0,0,0.8)' — Backdrop
+
+// Text hierarchy
+colors.text.primary   // '#ffffff' — Main text
+colors.text.secondary // 'rgba(255,255,255,0.6)' — Secondary
+colors.text.muted     // 'rgba(255,255,255,0.4)' — Hints
+colors.text.inverse   // '#0a0a0a' — On light backgrounds
+
+// Borders
+colors.border.default // 'rgba(255,255,255,0.1)'
+colors.border.muted   // 'rgba(255,255,255,0.06)'
+colors.border.strong  // 'rgba(255,255,255,0.2)'
+
+// Accent colors (each with light/DEFAULT/dark)
+colors.accent.blue.light   // '#60a5fa'
+colors.accent.blue.DEFAULT // '#3b82f6'
+colors.accent.blue.dark    // '#2563eb'
+
+colors.accent.green.DEFAULT  // '#22c55e'
+colors.accent.amber.DEFAULT  // '#f59e0b'
+colors.accent.red.DEFAULT    // '#ef4444'
+colors.accent.purple.DEFAULT // '#a855f7'
+
+// Semantic colors
+colors.semantic.success // '#22c55e'
+colors.semantic.warning // '#f59e0b'
+colors.semantic.error   // '#ef4444'
+colors.semantic.info    // '#3b82f6'
+```
+
+### Spacing
+
+Based on a 4px grid system:
+
+```ts
+import { spacing, space } from '@r-ui/react-native'
+
+// Numeric scale
+spacing[0]  // 0
+spacing[1]  // 4px
+spacing[2]  // 8px
+spacing[3]  // 12px
+spacing[4]  // 16px
+spacing[6]  // 24px
+spacing[8]  // 32px
+spacing[12] // 48px
+spacing[16] // 64px
+
+// Semantic aliases
+space.none // 0
+space.xs   // 4px
+space.sm   // 8px
+space.md   // 16px
+space.lg   // 24px
+space.xl   // 32px
+```
+
+### Typography
+
+```ts
+import {
+  fontFamilies,
+  fontSizes,
+  fontWeights,
+  textStyles
+} from '@r-ui/react-native'
+
+// Font families
+fontFamilies.sans // 'Inter'
+fontFamilies.mono // 'JetBrains Mono'
+
+// Font sizes
+fontSizes.xs   // 12px
+fontSizes.sm   // 14px
+fontSizes.base // 16px
+fontSizes.lg   // 18px
+fontSizes.xl   // 20px
+fontSizes['2xl'] // 24px
+fontSizes['3xl'] // 30px
+fontSizes['4xl'] // 36px
+
+// Font weights
+fontWeights.normal   // '400'
+fontWeights.medium   // '500'
+fontWeights.semibold // '600'
+fontWeights.bold     // '700'
+
+// Pre-composed text styles
+textStyles.h1   // { fontSize: 36, fontWeight: '700', ... }
+textStyles.h2   // { fontSize: 30, fontWeight: '700', ... }
+textStyles.body // { fontSize: 16, fontWeight: '400', ... }
+textStyles.code // { fontFamily: 'JetBrains Mono', ... }
+```
+
+### Border Radius
+
+```ts
+import { radius } from '@r-ui/react-native'
+
+radius.sm   // 6px
+radius.md   // 10px
+radius.lg   // 14px
+radius.xl   // 20px
+radius.full // 9999px (circular)
+```
+
+### Shadows
+
+Cross-platform shadow system:
+
+```ts
+import { shadows } from '@r-ui/react-native'
+
+// Apply to any View
+<View style={shadows.sm} />  // Subtle shadow
+<View style={shadows.md} />  // Medium shadow
+<View style={shadows.lg} />  // Large shadow
+<View style={shadows.xl} />  // Extra large shadow
+
+// Automatically uses:
+// - shadowColor/shadowOffset/shadowOpacity/shadowRadius on iOS
+// - elevation on Android
+```
+
+## Using Tokens
+
+### Direct Import
+
+```tsx
+import { colors, spacing, radius } from '@r-ui/react-native'
+import { View, Text, StyleSheet } from 'react-native'
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: colors.bg.surface,
+    borderRadius: radius.lg,
+    padding: spacing[4],
+    borderWidth: 1,
+    borderColor: colors.border.default,
+  },
+  title: {
+    color: colors.text.primary,
+    fontSize: fontSizes.lg,
+    marginBottom: spacing[2],
+  },
+})
+```
+
+### With NativeWind
+
+If using NativeWind, tokens are available as Tailwind classes:
+
+```tsx
+<View className="bg-surface rounded-lg p-4 border border-default">
+  <Text className="text-primary text-lg mb-2">Title</Text>
+</View>
+```
+
+## CSS Variables (Web)
+
+On web, r/ui uses CSS variables for theming. This enables smooth theme transitions and runtime customization.
+
+```css
+:root {
+  --color-bg-base: #050505;
+  --color-bg-surface: #141414;
+  --color-text-primary: #ffffff;
+  --color-accent-blue: #3b82f6;
+  /* ... */
+}
+
+[data-theme="light"] {
+  --color-bg-base: #ffffff;
+  --color-bg-surface: #f5f5f5;
+  --color-text-primary: #0a0a0a;
+  /* ... */
+}
+```
+
+## Customizing Tokens
+
+### Override in Your Theme
+
+Create a custom theme by overriding CSS variables:
+
+```css
+/* globals.css */
+:root {
+  /* Override accent color */
+  --color-accent-blue: #6366f1; /* Indigo instead of blue */
+
+  /* Override radius for sharper corners */
+  --radius-md: 4px;
+  --radius-lg: 8px;
+}
+```
+
+### Tailwind Config
+
+Extend your `tailwind.config.js`:
+
+```js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        // Add custom colors
+        brand: {
+          50: '#f0f9ff',
+          500: '#0ea5e9',
+          900: '#0c4a6e',
+        },
+      },
+      spacing: {
+        // Add custom spacing
+        '18': '4.5rem',
+      },
+    },
+  },
+}
+```
+
+## Creating a Custom Theme
+
+### Step 1: Define Your Palette
+
+```ts
+// theme/custom.ts
+export const customColors = {
+  bg: {
+    base: '#1a1625',      // Deep purple-black
+    raised: '#231f2e',
+    surface: '#2d2640',
+    elevated: '#3d3556',
+    overlay: 'rgba(26, 22, 37, 0.9)',
+  },
+  text: {
+    primary: '#f8f4ff',
+    secondary: 'rgba(248, 244, 255, 0.7)',
+    muted: 'rgba(248, 244, 255, 0.4)',
+  },
+  accent: {
+    primary: '#a78bfa', // Purple
+  },
+}
+```
+
+### Step 2: Create CSS Variables
+
+```css
+[data-theme="custom"] {
+  --color-bg-base: #1a1625;
+  --color-bg-raised: #231f2e;
+  --color-bg-surface: #2d2640;
+  --color-bg-elevated: #3d3556;
+  --color-text-primary: #f8f4ff;
+  --color-accent-blue: #a78bfa;
+  /* ... */
+}
+```
+
+### Step 3: Use the Theme
+
+```tsx
+import { ThemeProvider, useTheme } from '@r-ui/react-native'
+
+// Wrap your app
+function App() {
+  return (
+    <ThemeProvider defaultTheme="dark">
+      <MyApp />
+    </ThemeProvider>
+  )
+}
+
+// Toggle theme in a component
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+
+  return (
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      <Button
+        variant={theme === 'dark' ? 'primary' : 'ghost'}
+        onPress={() => setTheme('dark')}
+      >
+        Dark
+      </Button>
+      <Button
+        variant={theme === 'light' ? 'primary' : 'ghost'}
+        onPress={() => setTheme('light')}
+      >
+        Light
+      </Button>
+      <Button
+        variant={theme === 'oatmeal' ? 'primary' : 'ghost'}
+        onPress={() => setTheme('oatmeal')}
+      >
+        Oatmeal
+      </Button>
+    </View>
+  )
+}
+```
+
+## Token Reference
+
+### Background Tokens
+
+| Token | Dark | Light | Oatmeal |
+|-------|------|-------|---------|
+| `bg.base` | `#050505` | `#ffffff` | `#f5f0e8` |
+| `bg.raised` | `#0a0a0a` | `#fafafa` | `#f0ebe2` |
+| `bg.surface` | `#141414` | `#f5f5f5` | `#ebe5da` |
+| `bg.elevated` | `#1f1f1f` | `#ebebeb` | `#e5dfd3` |
+| `bg.overlay` | `rgba(0,0,0,0.8)` | `rgba(0,0,0,0.5)` | `rgba(45,42,38,0.5)` |
+
+### Text Tokens
+
+| Token | Dark | Light | Oatmeal |
+|-------|------|-------|---------|
+| `text.primary` | `#ffffff` | `#0a0a0a` | `#2d2a26` |
+| `text.secondary` | `rgba(255,255,255,0.6)` | `rgba(0,0,0,0.6)` | `rgba(45,42,38,0.6)` |
+| `text.muted` | `rgba(255,255,255,0.4)` | `rgba(0,0,0,0.4)` | `rgba(45,42,38,0.4)` |
+
+### Accent Tokens
+
+| Token | Dark | Light | Oatmeal |
+|-------|------|-------|---------|
+| `accent.blue` | `#3b82f6` | `#2563eb` | `#6366f1` |
+| `accent.green` | `#22c55e` | `#16a34a` | `#059669` |
+| `accent.amber` | `#f59e0b` | `#d97706` | `#b45309` |
+| `accent.red` | `#ef4444` | `#dc2626` | `#dc2626` |
+| `accent.purple` | `#a855f7` | `#9333ea` | `#7c3aed` |
+
+### Border Tokens
+
+| Token | Dark | Light | Oatmeal |
+|-------|------|-------|---------|
+| `border.default` | `rgba(255,255,255,0.1)` | `rgba(0,0,0,0.1)` | `rgba(45,42,38,0.1)` |
+| `border.muted` | `rgba(255,255,255,0.06)` | `rgba(0,0,0,0.06)` | `rgba(45,42,38,0.06)` |
+| `border.strong` | `rgba(255,255,255,0.2)` | `rgba(0,0,0,0.2)` | `rgba(45,42,38,0.2)` |

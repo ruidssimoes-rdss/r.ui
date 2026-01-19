@@ -168,3 +168,100 @@ export function isMinuteDisabled(
 ): boolean {
   return isTimeDisabled({ hours: hour, minutes: minute }, minTime, maxTime);
 }
+
+export type TimeInterval = 1 | 5 | 15 | 30 | 60;
+
+export interface TimeSlot {
+  time: TimeValue;
+  label: string;
+  disabled: boolean;
+}
+
+/**
+ * Generate time slots based on interval
+ */
+export function generateTimeSlots(
+  interval: TimeInterval = 30,
+  use24Hour: boolean = false,
+  minTime?: TimeValue,
+  maxTime?: TimeValue,
+  disabledTimes?: (time: TimeValue) => boolean
+): TimeSlot[] {
+  const slots: TimeSlot[] = [];
+  const totalMinutesInDay = 24 * 60;
+
+  for (let minutes = 0; minutes < totalMinutesInDay; minutes += interval) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    const time: TimeValue = { hours, minutes: mins };
+
+    // Check if disabled by min/max bounds
+    const isOutOfBounds = isTimeDisabled(time, minTime, maxTime);
+
+    // Check if disabled by custom function
+    const isCustomDisabled = disabledTimes ? disabledTimes(time) : false;
+
+    // Format the label
+    const label = formatTime(time, use24Hour ? 'HH:mm' : 'h:mm A', use24Hour);
+
+    slots.push({
+      time,
+      label,
+      disabled: isOutOfBounds || isCustomDisabled,
+    });
+  }
+
+  return slots;
+}
+
+/**
+ * Find the index of the slot closest to the given time
+ */
+export function findClosestSlotIndex(
+  slots: TimeSlot[],
+  time: TimeValue | null
+): number {
+  if (!time || slots.length === 0) {
+    // Default to current time or first slot
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    let closestIndex = 0;
+    let closestDiff = Infinity;
+
+    slots.forEach((slot, index) => {
+      const slotMinutes = slot.time.hours * 60 + slot.time.minutes;
+      const diff = Math.abs(slotMinutes - currentMinutes);
+      if (diff < closestDiff) {
+        closestDiff = diff;
+        closestIndex = index;
+      }
+    });
+
+    return closestIndex;
+  }
+
+  const targetMinutes = time.hours * 60 + time.minutes;
+
+  let closestIndex = 0;
+  let closestDiff = Infinity;
+
+  slots.forEach((slot, index) => {
+    const slotMinutes = slot.time.hours * 60 + slot.time.minutes;
+    const diff = Math.abs(slotMinutes - targetMinutes);
+    if (diff < closestDiff) {
+      closestDiff = diff;
+      closestIndex = index;
+    }
+  });
+
+  return closestIndex;
+}
+
+/**
+ * Check if two TimeValues are equal
+ */
+export function isTimeEqual(a: TimeValue | null, b: TimeValue | null): boolean {
+  if (!a || !b) return a === b;
+  return a.hours === b.hours && a.minutes === b.minutes;
+}

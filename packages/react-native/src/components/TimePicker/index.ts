@@ -14,8 +14,8 @@ export type { TimePickerTriggerProps } from './TimePickerTrigger';
 export { TimePickerContent } from './TimePickerContent';
 export type { TimePickerContentProps } from './TimePickerContent';
 
-export { TimePickerWheel } from './TimePickerWheel';
-export type { TimePickerWheelProps } from './TimePickerWheel';
+export { TimePickerList } from './TimePickerList';
+export type { TimePickerListProps } from './TimePickerList';
 
 export {
   formatTime,
@@ -31,5 +31,8 @@ export {
   isTimeDisabled,
   isHourDisabled,
   isMinuteDisabled,
+  generateTimeSlots,
+  findClosestSlotIndex,
+  isTimeEqual,
 } from './utils';
-export type { TimeValue } from './utils';
+export type { TimeValue, TimeInterval, TimeSlot } from './utils';

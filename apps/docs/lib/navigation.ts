@@ -11,10 +11,16 @@ export interface NavigationSection {
 
 export const navigation: NavigationSection[] = [
   {
-    title: 'Getting Started',
+    title: 'Guides',
     items: [
       { name: 'Introduction', href: '/docs', description: 'Get started with r/ui' },
       { name: 'Installation', href: '/docs/installation', description: 'Install r/ui in your project' },
+      { name: 'Principles', href: '/docs/principles', description: 'Design philosophy behind r/ui' },
+      { name: 'Patterns', href: '/docs/patterns', description: 'Common patterns and conventions' },
+      { name: 'Theming', href: '/docs/theming', description: 'Design tokens and theme system' },
+      { name: 'Dark Mode', href: '/docs/dark-mode', description: 'Dark mode and theme switching' },
+      { name: 'Customization', href: '/docs/customization', description: 'Customize components and styles' },
+      { name: 'Help', href: '/docs/help', description: 'Support and contributing' },
     ],
   },
   {
@@ -67,8 +73,9 @@ export const navigation: NavigationSection[] = [
       { name: 'Checkbox', href: '/docs/components/checkbox', description: 'Checkbox controls' },
       { name: 'Combobox', href: '/docs/components/combobox', description: 'Searchable selection dropdown' },
       { name: 'DatePicker', href: '/docs/components/date-picker', description: 'Calendar date selection' },
+      { name: 'DateRangePicker', href: '/docs/components/date-range-picker', description: 'Date range selection' },
       { name: 'Input', href: '/docs/components/input', description: 'Text input fields' },
-      { name: 'TimePicker', href: '/docs/components/time-picker', description: 'Time selection wheels' },
+      { name: 'TimePicker', href: '/docs/components/time-picker', description: 'Time selection dropdown' },
       { name: 'OTPInput', href: '/docs/components/otp-input', description: 'Verification code input' },
       { name: 'RadioGroup', href: '/docs/components/radio-group', description: 'Radio button group' },
       { name: 'Select', href: '/docs/components/select', description: 'Selection dropdowns' },
@@ -139,6 +146,18 @@ export function getBreadcrumbs(pathname: string): { name: string; href: string }
       }
     } else if (segments[1] === 'installation') {
       breadcrumbs.push({ name: 'Installation', href: '/docs/installation' });
+    } else if (segments[1] === 'principles') {
+      breadcrumbs.push({ name: 'Principles', href: '/docs/principles' });
+    } else if (segments[1] === 'patterns') {
+      breadcrumbs.push({ name: 'Patterns', href: '/docs/patterns' });
+    } else if (segments[1] === 'theming') {
+      breadcrumbs.push({ name: 'Theming', href: '/docs/theming' });
+    } else if (segments[1] === 'dark-mode') {
+      breadcrumbs.push({ name: 'Dark Mode', href: '/docs/dark-mode' });
+    } else if (segments[1] === 'customization') {
+      breadcrumbs.push({ name: 'Customization', href: '/docs/customization' });
+    } else if (segments[1] === 'help') {
+      breadcrumbs.push({ name: 'Help', href: '/docs/help' });
     }
   }
 

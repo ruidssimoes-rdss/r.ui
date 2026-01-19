@@ -3,7 +3,7 @@ import {
   TimePickerContext,
   TimePickerContextValue,
 } from './TimePickerContext';
-import { TimeValue, dateToTime } from './utils';
+import { TimeValue, TimeInterval } from './utils';
 
 export interface TimePickerProps {
   /** TimePicker content */
@@ -26,12 +26,16 @@ export interface TimePickerProps {
   format?: string;
   /** Use 24-hour format */
   use24Hour?: boolean;
-  /** Minute interval (1, 5, 15, 30) */
-  minuteInterval?: number;
+  /** Time slot interval (1, 5, 15, 30, 60) - default 30 */
+  interval?: TimeInterval;
   /** Minimum selectable time */
   minTime?: TimeValue;
   /** Maximum selectable time */
   maxTime?: TimeValue;
+  /** Custom function to disable specific times */
+  disabledTimes?: (time: TimeValue) => boolean;
+  /** Time to auto-scroll to on open (default: selected or now) */
+  scrollToTime?: TimeValue;
 }
 
 export function TimePicker({
@@ -45,9 +49,11 @@ export function TimePicker({
   placeholder = 'Select time...',
   format,
   use24Hour = false,
-  minuteInterval = 1,
+  interval = 30,
   minTime,
   maxTime,
+  disabledTimes,
+  scrollToTime,
 }: TimePickerProps) {
   const [internalValue, setInternalValue] = useState<TimeValue | null>(defaultValue);
   const [internalOpen, setInternalOpen] = useState(false);
@@ -96,9 +102,11 @@ export function TimePicker({
       value,
       onValueChange: handleValueChange,
       use24Hour,
-      minuteInterval,
+      interval,
       minTime,
       maxTime,
+      disabledTimes,
+      scrollToTime,
       disabled,
       placeholder,
       format: timeFormat,
@@ -111,9 +119,11 @@ export function TimePicker({
       value,
       handleValueChange,
       use24Hour,
-      minuteInterval,
+      interval,
       minTime,
       maxTime,
+      disabledTimes,
+      scrollToTime,
       disabled,
       placeholder,
       timeFormat,

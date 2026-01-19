@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { TimeValue } from './utils';
+import { TimeValue, TimeInterval } from './utils';
 
 export interface TimePickerContextValue {
   /** Whether the dropdown is open */
@@ -13,13 +13,17 @@ export interface TimePickerContextValue {
 
   /** Whether to use 24-hour format */
   use24Hour: boolean;
-  /** Minute interval (1, 5, 15, 30) */
-  minuteInterval: number;
+  /** Time interval for slots (1, 5, 15, 30, 60) */
+  interval: TimeInterval;
 
   /** Minimum selectable time */
   minTime?: TimeValue;
   /** Maximum selectable time */
   maxTime?: TimeValue;
+  /** Custom function to disable specific times */
+  disabledTimes?: (time: TimeValue) => boolean;
+  /** Time to auto-scroll to on open (default: selected or now) */
+  scrollToTime?: TimeValue;
 
   /** Whether the picker is disabled */
   disabled: boolean;

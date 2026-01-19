@@ -1,0 +1,321 @@
+# Dark Mode
+
+r/ui fully supports dark mode with automatic system preference detection, manual toggling, and persistence.
+
+## Automatic System Preference
+
+By default, r/ui respects the user's system preference:
+
+```tsx
+import { ThemeProvider } from '@r-ui/react-native'
+
+function App() {
+  return (
+    <ThemeProvider defaultTheme="system">
+      {/* Automatically switches based on device settings */}
+    </ThemeProvider>
+  )
+}
+```
+
+When set to `"system"`:
+- On iOS: Follows Settings > Display & Brightness
+- On Android: Follows Settings > Display > Dark theme
+- On Web: Follows `prefers-color-scheme` media query
+
+## Manual Theme Control
+
+### useColorScheme Hook
+
+Control the theme programmatically:
+
+```tsx
+import { useColorScheme } from '@r-ui/react-native'
+
+function ThemeToggle() {
+  const { colorScheme, setColorScheme, systemColorScheme } = useColorScheme()
+
+  return (
+    <View>
+      <Text>Current: {colorScheme}</Text>
+      <Text>System: {systemColorScheme}</Text>
+
+      <Button onPress={() => setColorScheme('dark')}>
+        Dark
+      </Button>
+      <Button onPress={() => setColorScheme('light')}>
+        Light
+      </Button>
+      <Button onPress={() => setColorScheme('system')}>
+        System
+      </Button>
+    </View>
+  )
+}
+```
+
+### Available Values
+
+| Value | Description |
+|-------|-------------|
+| `'dark'` | Force dark theme |
+| `'light'` | Force light theme |
+| `'oatmeal'` | Force oatmeal theme |
+| `'system'` | Follow system preference |
+
+### Hook Return Values
+
+```tsx
+const {
+  colorScheme,        // Current active theme: 'dark' | 'light' | 'oatmeal'
+  setColorScheme,     // Function to change theme
+  systemColorScheme,  // System preference: 'dark' | 'light'
+  resolvedColorScheme // Actual resolved theme (when using 'system')
+} = useColorScheme()
+```
+
+## Theme Persistence
+
+By default, r/ui persists the user's theme preference:
+
+```tsx
+<ThemeProvider
+  defaultTheme="system"
+  storageKey="my-app-theme"  // AsyncStorage key (default: 'r-ui-theme')
+>
+  {children}
+</ThemeProvider>
+```
+
+### How Persistence Works
+
+- **React Native**: Uses `AsyncStorage`
+- **Web**: Uses `localStorage`
+
+The persisted value is loaded on app start, before the first render, to prevent flash of wrong theme.
+
+### Disabling Persistence
+
+```tsx
+<ThemeProvider
+  defaultTheme="dark"
+  storageKey={null}  // Disable persistence
+>
+  {children}
+</ThemeProvider>
+```
+
+## Components Adapt Automatically
+
+All r/ui components automatically respect the current theme:
+
+```tsx
+// These components automatically adjust colors for dark/light mode
+<Button variant="primary">Works in any theme</Button>
+<Card>Content automatically themed</Card>
+<Input placeholder="Theme-aware input" />
+```
+
+No additional props or configuration needed.
+
+## Building a Theme Toggle
+
+Here's a complete theme toggle component:
+
+```tsx
+import { View, Pressable } from 'react-native'
+import { useColorScheme, Text } from '@r-ui/react-native'
+
+const themes = [
+  { value: 'light', label: 'Light', icon: '☀️' },
+  { value: 'dark', label: 'Dark', icon: '🌙' },
+  { value: 'system', label: 'System', icon: '💻' },
+] as const
+
+export function ThemeToggle() {
+  const { colorScheme, setColorScheme } = useColorScheme()
+
+  return (
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      {themes.map((theme) => (
+        <Pressable
+          key={theme.value}
+          onPress={() => setColorScheme(theme.value)}
+          style={({ pressed }) => ({
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            borderRadius: 8,
+            backgroundColor:
+              colorScheme === theme.value
+                ? 'rgba(255,255,255,0.1)'
+                : 'transparent',
+            opacity: pressed ? 0.7 : 1,
+          })}
+        >
+          <Text>{theme.icon} {theme.label}</Text>
+        </Pressable>
+      ))}
+    </View>
+  )
+}
+```
+
+## Theme Toggle with Icons
+
+A more polished toggle using r/ui components:
+
+```tsx
+import { Button, useColorScheme } from '@r-ui/react-native'
+import { Sun, Moon, Monitor } from 'lucide-react-native'
+
+export function ThemeSwitcher() {
+  const { colorScheme, setColorScheme } = useColorScheme()
+
+  const cycleTheme = () => {
+    const themes = ['light', 'dark', 'system'] as const
+    const currentIndex = themes.indexOf(colorScheme)
+    const nextIndex = (currentIndex + 1) % themes.length
+    setColorScheme(themes[nextIndex])
+  }
+
+  const Icon = {
+    light: Sun,
+    dark: Moon,
+    system: Monitor,
+  }[colorScheme]
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onPress={cycleTheme}
+      icon={<Icon size={18} />}
+    />
+  )
+}
+```
+
+## Select Theme Selector
+
+Using the Select component for a polished theme picker:
+
+```tsx
+import { Select, useColorScheme, View, Text } from '@r-ui/react-native'
+
+const themeOptions = [
+  { label: 'Light', value: 'light' },
+  { label: 'Dark', value: 'dark' },
+  { label: 'Oatmeal', value: 'oatmeal' },
+  { label: 'System', value: 'system' },
+]
+
+export function ThemeSelect() {
+  const { colorScheme, setColorScheme } = useColorScheme()
+
+  return (
+    <View>
+      <Text style={{ marginBottom: 8 }}>Theme</Text>
+      <Select
+        value={colorScheme}
+        onValueChange={setColorScheme}
+        options={themeOptions}
+        placeholder="Select theme"
+      />
+    </View>
+  )
+}
+```
+
+## Dark Mode Toggle Button
+
+A simple toggle button that switches between dark and light:
+
+```tsx
+import { Button, useColorScheme, View } from '@r-ui/react-native'
+
+export function DarkModeToggle() {
+  const { colorScheme, setColorScheme, resolvedColorScheme } = useColorScheme()
+  const isDark = resolvedColorScheme === 'dark'
+
+  const toggleTheme = () => {
+    setColorScheme(isDark ? 'light' : 'dark')
+  }
+
+  return (
+    <Button variant="ghost" onPress={toggleTheme}>
+      {isDark ? '☀️ Light' : '🌙 Dark'}
+    </Button>
+  )
+}
+```
+
+## Conditional Styling by Theme
+
+When you need theme-specific styles beyond what components provide:
+
+```tsx
+import { useColorScheme } from '@r-ui/react-native'
+
+function CustomComponent() {
+  const { resolvedColorScheme } = useColorScheme()
+  const isDark = resolvedColorScheme === 'dark'
+
+  return (
+    <View
+      style={{
+        backgroundColor: isDark ? '#1a1a1a' : '#f5f5f5',
+        // Custom theme-dependent styling
+      }}
+    >
+      <Text style={{ color: isDark ? '#fff' : '#000' }}>
+        Theme-aware content
+      </Text>
+    </View>
+  )
+}
+```
+
+## Server-Side Rendering (Web)
+
+For Next.js or other SSR frameworks, prevent hydration mismatch:
+
+```tsx
+// app/layout.tsx
+import { ThemeProvider } from '@r-ui/react-native'
+
+export default function RootLayout({ children }) {
+  return (
+    <html suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          defaultTheme="system"
+          enableSystem
+          attribute="data-theme"
+        >
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+The `suppressHydrationWarning` on `<html>` prevents React warnings when the theme differs between server and client.
+
+## Theme Flash Prevention
+
+r/ui includes a script to prevent theme flash on page load (web only):
+
+```html
+<!-- Add to <head> before other scripts -->
+<script>
+  (function() {
+    const stored = localStorage.getItem('r-ui-theme')
+    const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    const theme = stored === 'system' || !stored ? system : stored
+    document.documentElement.setAttribute('data-theme', theme)
+  })()
+</script>
+```
+
+This runs before React hydrates, ensuring the correct theme is applied immediately.

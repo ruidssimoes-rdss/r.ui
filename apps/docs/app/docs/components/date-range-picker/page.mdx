@@ -1,0 +1,237 @@
+# DateRangePicker
+
+A date range selection component with visual range highlighting and preset options.
+
+## Basic Usage
+
+<ComponentPreview code={`<DateRangePicker value={range} onValueChange={setRange}>
+  <DateRangePickerTrigger placeholder="Select date range..." />
+  <DateRangePickerContent>
+    <DateRangePickerHeader />
+    <DateRangePickerCalendar />
+  </DateRangePickerContent>
+</DateRangePicker>`}>
+  <DateRangePickerBasicPreview />
+</ComponentPreview>
+
+## With Default Value
+
+<ComponentPreview code={`<DateRangePicker value={range} onValueChange={setRange}>
+  <DateRangePickerTrigger />
+  <DateRangePickerContent>
+    <DateRangePickerHeader />
+    <DateRangePickerCalendar />
+  </DateRangePickerContent>
+</DateRangePicker>`}>
+  <DateRangePickerWithDefaultPreview />
+</ComponentPreview>
+
+## With Presets
+
+Quick-select preset ranges like "Last 7 days" or "This month".
+
+<ComponentPreview code={`<DateRangePicker value={range} onValueChange={setRange}>
+  <DateRangePickerTrigger />
+  <DateRangePickerContent>
+    <View style={{ flexDirection: 'row' }}>
+      <View>
+        <DateRangePickerHeader />
+        <DateRangePickerCalendar />
+      </View>
+      <DateRangePickerPresets />
+    </View>
+  </DateRangePickerContent>
+</DateRangePicker>`}>
+  <DateRangePickerWithPresetsPreview />
+</ComponentPreview>
+
+## Without Presets
+
+Hide presets for a simpler interface.
+
+<ComponentPreview code={`<DateRangePicker value={range} onValueChange={setRange} presets={false}>
+  <DateRangePickerTrigger />
+  <DateRangePickerContent>
+    <DateRangePickerHeader />
+    <DateRangePickerCalendar />
+  </DateRangePickerContent>
+</DateRangePicker>`}>
+  <DateRangePickerNoPresetsPreview />
+</ComponentPreview>
+
+## With Min/Max Date
+
+Restrict selection to a specific date range.
+
+<ComponentPreview code={`<DateRangePicker
+  value={range}
+  onValueChange={setRange}
+  minDate={minDate}
+  maxDate={maxDate}
+>
+  <DateRangePickerTrigger placeholder="Select within ±30 days" />
+  <DateRangePickerContent>
+    <DateRangePickerHeader />
+    <DateRangePickerCalendar />
+  </DateRangePickerContent>
+</DateRangePicker>`}>
+  <DateRangePickerWithMinMaxPreview />
+</ComponentPreview>
+
+## Disabled Weekends
+
+Use `disabledDates` to disable specific dates.
+
+<ComponentPreview code={`<DateRangePicker
+  value={range}
+  onValueChange={setRange}
+  disabledDates={(date) => date.getDay() === 0 || date.getDay() === 6}
+>
+  <DateRangePickerTrigger placeholder="Select weekdays only..." />
+  <DateRangePickerContent>
+    <DateRangePickerHeader />
+    <DateRangePickerCalendar />
+  </DateRangePickerContent>
+</DateRangePicker>`}>
+  <DateRangePickerNoWeekendsPreview />
+</ComponentPreview>
+
+## Disabled
+
+<ComponentPreview code={`<DateRangePicker disabled value={{ start: lastWeek, end: today }}>
+  <DateRangePickerTrigger />
+  <DateRangePickerContent>
+    <DateRangePickerHeader />
+    <DateRangePickerCalendar />
+  </DateRangePickerContent>
+</DateRangePicker>`}>
+  <DateRangePickerDisabledPreview />
+</ComponentPreview>
+
+## Installation
+
+```bash
+npx r-ui add date-range-picker
+```
+
+## Usage
+
+```tsx
+import {
+  DateRangePicker,
+  DateRangePickerTrigger,
+  DateRangePickerContent,
+  DateRangePickerHeader,
+  DateRangePickerCalendar,
+  DateRangePickerPresets,
+  DateRange,
+} from '@r-ui/react-native'
+
+export default function MyComponent() {
+  const [range, setRange] = useState<DateRange>({ start: null, end: null })
+
+  return (
+    <DateRangePicker value={range} onValueChange={setRange}>
+      <DateRangePickerTrigger placeholder="Select date range..." />
+      <DateRangePickerContent>
+        <View style={{ flexDirection: 'row' }}>
+          <View>
+            <DateRangePickerHeader />
+            <DateRangePickerCalendar />
+          </View>
+          <DateRangePickerPresets />
+        </View>
+      </DateRangePickerContent>
+    </DateRangePicker>
+  )
+}
+```
+
+## Features
+
+- **Range selection**: Click to select start, click again for end
+- **Visual highlighting**: Range between dates is highlighted
+- **Preset ranges**: Quick-select Today, Last 7 days, This month, etc.
+- **Date constraints**: Set min/max dates or disable specific dates
+- **Month/year navigation**: Click header to switch between views
+- **Accessible**: Full ARIA support
+
+## Props
+
+### DateRangePicker
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `DateRange` | - | Selected date range (controlled) |
+| `onValueChange` | `(range: DateRange) => void` | - | Called when range changes |
+| `defaultValue` | `DateRange` | `{ start: null, end: null }` | Default range (uncontrolled) |
+| `disabled` | `boolean` | `false` | Disable the picker |
+| `placeholder` | `string` | `'Select dates...'` | Placeholder text |
+| `format` | `string` | `'MMM d, yyyy'` | Date display format |
+| `minDate` | `Date` | - | Minimum selectable date |
+| `maxDate` | `Date` | - | Maximum selectable date |
+| `disabledDates` | `(date: Date) => boolean` | - | Function to disable dates |
+| `presets` | `PresetRange[] \| false` | Default presets | Custom presets or false to hide |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Called when open state changes |
+
+### DateRangePickerTrigger
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder` | `string` | - | Override placeholder text |
+| `style` | `ViewStyle` | - | Additional styles |
+
+### DateRange Type
+
+```tsx
+interface DateRange {
+  start: Date | null
+  end: Date | null
+}
+```
+
+### PresetRange Type
+
+```tsx
+interface PresetRange {
+  label: string
+  value: DateRange
+}
+```
+
+### Default Presets
+
+The following presets are included by default:
+
+- **Today** - Current date
+- **Yesterday** - Previous day
+- **Last 7 days** - Past week including today
+- **Last 30 days** - Past month including today
+- **This month** - First to last day of current month
+- **Last month** - First to last day of previous month
+
+### Custom Presets
+
+```tsx
+const customPresets: PresetRange[] = [
+  {
+    label: 'Q1 2026',
+    value: {
+      start: new Date(2026, 0, 1),
+      end: new Date(2026, 2, 31),
+    },
+  },
+  {
+    label: 'Q2 2026',
+    value: {
+      start: new Date(2026, 3, 1),
+      end: new Date(2026, 5, 30),
+    },
+  },
+]
+
+<DateRangePicker presets={customPresets}>
+  {/* ... */}
+</DateRangePicker>
+```

@@ -232,3 +232,14 @@ export {
   TimePickerDisabledPreview,
   TimePickerCustomFormatPreview,
 } from './TimePickerPreviews';
+
+// DateRangePicker previews
+export {
+  DateRangePickerBasicPreview,
+  DateRangePickerWithDefaultPreview,
+  DateRangePickerWithPresetsPreview,
+  DateRangePickerNoPresetsPreview,
+  DateRangePickerWithMinMaxPreview,
+  DateRangePickerDisabledPreview,
+  DateRangePickerNoWeekendsPreview,
+} from './DateRangePickerPreviews';

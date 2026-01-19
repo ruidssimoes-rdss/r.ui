@@ -1,0 +1,402 @@
+# Patterns
+
+Common patterns and conventions used throughout r/ui components.
+
+## Compound Components
+
+Many r/ui components use a compound component pattern — a root component with multiple sub-components that work together.
+
+### The Pattern
+
+```tsx
+import {
+  DatePicker,
+  DatePickerTrigger,
+  DatePickerContent,
+  DatePickerCalendar,
+  Button,
+} from '@r-ui/react-native'
+
+<DatePicker>
+  <DatePickerTrigger>
+    <Button>Pick a date</Button>
+  </DatePickerTrigger>
+  <DatePickerContent>
+    <DatePickerCalendar />
+  </DatePickerContent>
+</DatePicker>
+```
+
+### Why Compound Components?
+
+1. **Flexibility** — Rearrange, hide, or customize any part
+2. **Composition** — Add your own components between parts
+3. **Context** — State is shared automatically between parts
+4. **Accessibility** — ARIA relationships are handled for you
+
+### r/ui Compound Components
+
+Here are the compound component structures in r/ui:
+
+**DatePicker:**
+```
+DatePicker → DatePickerTrigger → DatePickerContent → DatePickerHeader → DatePickerCalendar
+```
+
+**TimePicker:**
+```
+TimePicker → TimePickerTrigger → TimePickerContent → TimePickerList
+```
+
+**Dialog:**
+```
+Dialog → DialogTrigger → DialogContent → DialogHeader → DialogTitle → DialogDescription → DialogFooter → DialogClose
+```
+
+**Sheet:**
+```
+Sheet → SheetTrigger → SheetContent → SheetHeader → SheetFooter
+```
+
+**Accordion:**
+```
+Accordion → AccordionItem → AccordionTrigger → AccordionContent
+```
+
+**Tabs:**
+```
+Tabs → TabsList → TabsTrigger → TabsContent
+```
+
+**AlertDialog:**
+```
+AlertDialog → AlertDialogTrigger → AlertDialogContent → AlertDialogHeader → AlertDialogTitle → AlertDialogDescription → AlertDialogFooter → AlertDialogAction → AlertDialogCancel
+```
+
+**ActionSheet:**
+```
+ActionSheet → ActionSheetTrigger → ActionSheetContent → ActionSheetHeader → ActionSheetItem → ActionSheetCancel
+```
+
+### Common Sub-Component Names
+
+| Name | Purpose |
+|------|---------|
+| `Trigger` | Element that opens/activates the component |
+| `Content` | The main content area (popover, modal, etc.) |
+| `Header` | Header section of content |
+| `Footer` | Footer section of content |
+| `Title` | Title text with proper heading semantics |
+| `Description` | Description text |
+| `Close` | Close button/trigger |
+| `Item` | Individual item in a list/menu |
+| `Overlay` | Background overlay/backdrop |
+
+### Context Hooks
+
+Every compound component exposes a context hook for advanced use cases:
+
+```tsx
+import { useDatePicker, Pressable, Text } from '@r-ui/react-native'
+
+function CustomDateTrigger() {
+  const { open, setOpen, value } = useDatePicker()
+
+  return (
+    <Pressable onPress={() => setOpen(true)}>
+      <Text>{value ? format(value, 'PP') : 'Select date'}</Text>
+    </Pressable>
+  )
+}
+```
+
+```tsx
+import { useTimePicker, Text } from '@r-ui/react-native'
+
+function TimeDisplay() {
+  const { value, use24Hour } = useTimePicker()
+
+  if (!value) return <Text>No time selected</Text>
+
+  return (
+    <Text>
+      {use24Hour
+        ? `${value.hours}:${value.minutes}`
+        : formatTime(value)}
+    </Text>
+  )
+}
+```
+
+### Available Context Hooks
+
+| Hook | Returns |
+|------|---------|
+| `useDatePicker()` | `{ open, setOpen, value, onValueChange, mode, minDate, maxDate }` |
+| `useTimePicker()` | `{ open, setOpen, value, onValueChange, use24Hour, interval, minTime, maxTime }` |
+| `useDialog()` | `{ open, setOpen }` |
+| `useSheet()` | `{ open, setOpen, side }` |
+| `useAccordion()` | `{ value, onValueChange, type }` |
+| `useTabs()` | `{ value, onValueChange }` |
+| `useDropdown()` | `{ open, onOpenChange, triggerLayout }` |
+| `useAlertDialog()` | `{ open, setOpen }` |
+| `useActionSheet()` | `{ open, setOpen }` |
+
+## Props Patterns
+
+### Variants and Sizes
+
+Most visible components support `variant` and `size` props:
+
+```tsx
+// Button variants
+<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="destructive">Destructive</Button>
+
+// Size variants (consistent across components)
+<Button size="sm">Small</Button>
+<Button size="md">Medium (default)</Button>
+<Button size="lg">Large</Button>
+
+// Same size system works for Input
+<Input size="sm" placeholder="Small input" />
+<Input size="md" placeholder="Medium input" />
+<Input size="lg" placeholder="Large input" />
+
+// And for other form components
+<Select size="sm" options={options} />
+<Textarea size="lg" placeholder="Large textarea" />
+```
+
+**Button Variants:**
+
+| Variant | Use Case |
+|---------|----------|
+| `primary` | Main action, prominent blue styling |
+| `secondary` | Secondary action, subtle styling |
+| `ghost` | Minimal styling, toolbars, subtle actions |
+| `destructive` | Dangerous actions, red styling |
+
+**Size Variants:**
+
+| Size | Height | Use Case |
+|------|--------|----------|
+| `sm` | 32px | Compact UI, toolbars |
+| `md` | 40px | Default, forms |
+| `lg` | 48px | Prominent CTAs |
+
+### Controlled vs Uncontrolled
+
+Components can be controlled (you manage state) or uncontrolled (internal state):
+
+```tsx
+// Uncontrolled — component manages its own state
+<Switch defaultChecked={true} />
+
+// Controlled — you manage state
+const [checked, setChecked] = useState(true)
+<Switch checked={checked} onCheckedChange={setChecked} />
+```
+
+**When to use each:**
+- **Uncontrolled** — Simple forms, quick prototypes
+- **Controlled** — Complex forms, validation, derived state
+
+### Value and onChange Patterns
+
+Form components follow consistent naming:
+
+| Component | Value Prop | Change Handler |
+|-----------|------------|----------------|
+| Input | `value` | `onChangeText` |
+| Textarea | `value` | `onChangeText` |
+| Checkbox | `checked` | `onCheckedChange` |
+| Switch | `checked` | `onCheckedChange` |
+| Select | `value` | `onValueChange` |
+| Slider | `value` | `onValueChange` |
+| DatePicker | `value` | `onValueChange` |
+| TimePicker | `value` | `onValueChange` |
+| RadioGroup | `value` | `onValueChange` |
+| Tabs | `value` | `onValueChange` |
+| Accordion | `value` | `onValueChange` |
+
+### Disabled State
+
+All interactive components support `disabled`:
+
+```tsx
+<Button disabled>Can't click</Button>
+<Input disabled value="Read only" />
+<Switch disabled checked />
+```
+
+Disabled components:
+- Reduce opacity
+- Remove hover/press states
+- Prevent interaction
+- Set `aria-disabled` for accessibility
+
+### Loading State
+
+Components that trigger async actions support `loading`:
+
+```tsx
+<Button loading>Saving...</Button>
+<Button loading loadingText="Please wait">Submit</Button>
+```
+
+## Slot Pattern
+
+Some components accept content via props instead of children for specific use cases:
+
+### Icons with Components
+
+```tsx
+<Button icon={<IconPlus />}>Add Item</Button>
+<Input leftIcon={<IconSearch />} placeholder="Search..." />
+<Alert icon={<IconWarning />} title="Warning" />
+```
+
+### When to Use Props vs Children
+
+**Use children when:**
+- Content is the primary purpose (Button label, Card content)
+- Content structure varies widely
+
+**Use props when:**
+- Content is supplementary (icons, badges)
+- Content has a specific position (left/right icons)
+- Content is optional decoration
+
+## Styling Patterns
+
+### Style Props
+
+Most components accept standard React Native style props:
+
+```tsx
+<Button style={{ marginTop: 16 }}>Styled</Button>
+<Card style={{ backgroundColor: '#f0f0f0' }}>Custom Card</Card>
+```
+
+### Specific Style Props
+
+Some components expose granular style props:
+
+```tsx
+<Button
+  style={{ marginHorizontal: 8 }}        // Container
+  textStyle={{ fontWeight: 'bold' }}      // Text inside
+/>
+
+<Input
+  style={{ marginBottom: 12 }}            // Container
+  inputStyle={{ textAlign: 'right' }}     // TextInput
+/>
+```
+
+### NativeWind / className
+
+On web and with NativeWind configured, you can use `className`:
+
+```tsx
+<Button className="mt-4 hover:scale-105">
+  Tailwind Styled
+</Button>
+```
+
+## Composition Patterns
+
+### Wrapping Components
+
+Create your own variants by wrapping r/ui components:
+
+```tsx
+function PrimaryButton({ children, ...props }) {
+  return (
+    <Button
+      variant="primary"
+      size="lg"
+      style={{ minWidth: 200 }}
+      {...props}
+    >
+      {children}
+    </Button>
+  )
+}
+```
+
+### Compound Component Composition
+
+Extend compound components with your own logic:
+
+```tsx
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+  Button,
+} from '@r-ui/react-native'
+
+function ConfirmDialog({ title, description, onConfirm, destructive, children }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="ghost">Cancel</Button>
+          </DialogClose>
+          <Button
+            variant={destructive ? 'destructive' : 'primary'}
+            onPress={onConfirm}
+          >
+            Confirm
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+// Usage
+<ConfirmDialog
+  title="Delete item?"
+  description="This action cannot be undone."
+  onConfirm={handleDelete}
+  destructive
+>
+  <Button variant="destructive">Delete</Button>
+</ConfirmDialog>
+```
+
+## Ref Forwarding
+
+All r/ui components forward refs to their underlying element:
+
+```tsx
+const buttonRef = useRef(null)
+
+<Button ref={buttonRef}>Click me</Button>
+
+// Later
+buttonRef.current?.focus()
+```
+
+This enables:
+- Imperative focus management
+- Measuring layout
+- Integration with third-party libraries

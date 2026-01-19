@@ -1,0 +1,223 @@
+# Help
+
+Get support, report issues, and contribute to r/ui.
+
+## Getting Help
+
+### Documentation
+
+You're in the right place! Browse the sidebar for:
+
+- **Guides** — Core concepts and patterns
+- **Components** — Individual component documentation with examples
+
+### Search
+
+Use `Cmd/Ctrl + K` to open the search modal and quickly find what you need.
+
+## Reporting Issues
+
+### Bug Reports
+
+Found a bug? Please report it on GitHub:
+
+1. Go to [github.com/rui-ui/react-native/issues](https://github.com/rui-ui/react-native/issues)
+2. Click "New Issue"
+3. Select "Bug Report"
+4. Include:
+   - r/ui version
+   - React Native version
+   - Platform (iOS/Android/Web)
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - Code snippet if applicable
+
+### Bug Report Template
+
+```markdown
+**Component:** DatePicker
+**r/ui version:** 1.2.3
+**React Native version:** 0.73.0
+**Platform:** iOS 17 / Android 14 / Web (Chrome 120)
+
+**Description:**
+Calendar doesn't close after selecting a date.
+
+**Steps to reproduce:**
+1. Open DatePicker by pressing the trigger
+2. Select any date from the calendar
+3. Observe the calendar remains open
+
+**Expected behavior:**
+Calendar should close after date selection.
+
+**Actual behavior:**
+Calendar stays open, requiring manual close.
+
+**Code snippet:**
+```tsx
+<DatePicker value={date} onValueChange={setDate}>
+  <DatePickerTrigger>
+    <Button>Select Date</Button>
+  </DatePickerTrigger>
+  <DatePickerContent>
+    <DatePickerCalendar />
+  </DatePickerContent>
+</DatePicker>
+```
+
+**Screenshots/Video:**
+[Attach if helpful]
+```
+
+## Feature Requests
+
+Have an idea for a new component or enhancement?
+
+1. Go to [github.com/rui-ui/react-native/issues](https://github.com/rui-ui/react-native/issues)
+2. Click "New Issue"
+3. Select "Feature Request"
+4. Describe:
+   - The problem you're trying to solve
+   - Your proposed solution
+   - Any alternatives you've considered
+
+We review all feature requests and prioritize based on community interest and alignment with r/ui's design principles.
+
+## Contributing
+
+We welcome contributions! Here's how to get started:
+
+### Quick Fixes
+
+For typos, documentation fixes, or small bugs:
+
+1. Fork the repository
+2. Make your change
+3. Submit a pull request
+
+### Larger Changes
+
+For new features or significant changes:
+
+1. Open an issue first to discuss
+2. Get approval from maintainers
+3. Fork and create a feature branch
+4. Make your changes
+5. Add/update tests
+6. Update documentation
+7. Submit a pull request
+
+### Development Setup
+
+```bash
+# Clone your fork
+git clone https://github.com/YOUR_USERNAME/rui-ui.git
+
+# Install dependencies
+cd rui-ui
+pnpm install
+
+# Start the docs dev server
+pnpm docs:dev
+
+# Run tests
+pnpm test
+
+# Build all packages
+pnpm build
+```
+
+### Code Style
+
+- TypeScript for all code
+- Follow existing patterns and conventions
+- Add JSDoc comments for public APIs
+- Include unit tests for new functionality
+- Update documentation for user-facing changes
+
+### Commit Messages
+
+We use conventional commits:
+
+```
+feat: add new DateRangePicker component
+fix: Button loading spinner not visible on Android
+docs: improve Theming guide examples
+chore: update dependencies
+```
+
+## Resources
+
+### GitHub Repository
+
+- **Source Code:** [github.com/rui-ui/react-native](https://github.com/rui-ui/react-native)
+- **Issues:** [github.com/rui-ui/react-native/issues](https://github.com/rui-ui/react-native/issues)
+- **Discussions:** [github.com/rui-ui/react-native/discussions](https://github.com/rui-ui/react-native/discussions)
+- **Pull Requests:** [github.com/rui-ui/react-native/pulls](https://github.com/rui-ui/react-native/pulls)
+
+### Changelog
+
+See the [CHANGELOG.md](https://github.com/rui-ui/react-native/blob/main/CHANGELOG.md) for version history and breaking changes.
+
+### License
+
+r/ui is MIT licensed. See [LICENSE](https://github.com/rui-ui/react-native/blob/main/LICENSE) for details.
+
+## FAQ
+
+### Is r/ui production ready?
+
+Yes! r/ui is used in production applications. We follow semantic versioning and maintain backwards compatibility within major versions.
+
+### How do I update r/ui?
+
+```bash
+npm update @r-ui/react-native
+# or
+yarn upgrade @r-ui/react-native
+# or
+pnpm update @r-ui/react-native
+```
+
+Check the [changelog](https://github.com/rui-ui/react-native/blob/main/CHANGELOG.md) for any breaking changes between versions.
+
+### Does r/ui support Expo?
+
+Yes! r/ui works with Expo out of the box. No additional configuration required.
+
+### Can I use r/ui with web-only React?
+
+r/ui is built for React Native and React Native Web. For web-only React projects, consider using shadcn/ui or Radix UI directly.
+
+### How do I use r/ui with TypeScript?
+
+r/ui is written in TypeScript and includes full type definitions. No additional `@types` packages needed.
+
+```tsx
+import { Button, ButtonProps } from '@r-ui/react-native'
+
+// Full autocomplete and type checking
+const MyButton: React.FC<ButtonProps> = (props) => (
+  <Button variant="primary" {...props} />
+)
+```
+
+### What's the bundle size?
+
+r/ui is tree-shakeable. You only pay for what you import:
+
+```tsx
+// Only Button code is included
+import { Button } from '@r-ui/react-native'
+```
+
+Individual component sizes vary from 1-5KB minified+gzipped.
+
+## Contact
+
+- **GitHub Issues:** Best for bugs and features
+- **GitHub Discussions:** Best for questions and community help
+- **Twitter/X:** [@r_ui_dev](https://twitter.com/r_ui_dev) for announcements
+
+Thank you for using r/ui!

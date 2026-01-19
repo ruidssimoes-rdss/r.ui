@@ -1,0 +1,452 @@
+# Customization
+
+Learn how to customize r/ui components to match your design system.
+
+## Style Overrides
+
+### Inline Styles
+
+All components accept a `style` prop for quick overrides:
+
+```tsx
+<Button
+  style={{ marginTop: 16, minWidth: 200 }}
+>
+  Custom Margins
+</Button>
+
+<Card
+  style={{
+    backgroundColor: '#1a1a2e',
+    borderWidth: 2,
+    borderColor: '#e94560',
+  }}
+>
+  Custom Colors
+</Card>
+```
+
+### Granular Style Props
+
+Many components expose multiple style props for different parts:
+
+```tsx
+<Button
+  style={{ margin: 8 }}           // Container
+  textStyle={{ letterSpacing: 2 }} // Button text
+>
+  Styled Text
+</Button>
+
+<Input
+  style={{ marginBottom: 16 }}     // Outer container
+  inputStyle={{ textAlign: 'right' }} // TextInput itself
+  labelStyle={{ fontSize: 12 }}    // Label text
+/>
+
+<Card
+  style={{ padding: 0 }}           // Card container
+  headerStyle={{ padding: 16 }}    // Card.Header
+  contentStyle={{ padding: 16 }}   // Card.Content
+>
+  {/* ... */}
+</Card>
+```
+
+### NativeWind / className
+
+On web or with NativeWind configured, use Tailwind classes:
+
+```tsx
+// Add custom width
+<Input className="w-full max-w-md" />
+
+// Override background with gradient
+<Card className="bg-gradient-to-r from-purple-500 to-pink-500">
+  Gradient Background
+</Card>
+
+// Custom padding and hover effects
+<Button className="px-8 py-4 hover:scale-105 transition-transform">
+  Extra Padded
+</Button>
+
+// Combine with style prop
+<Button
+  className="mt-4"
+  style={{ minWidth: 200 }}
+>
+  Combined Styling
+</Button>
+```
+
+## Extending Components
+
+### Creating Variants
+
+Wrap r/ui components to create your own variants:
+
+```tsx
+// components/ui/CallToAction.tsx
+import { Button, ButtonProps } from '@r-ui/react-native'
+import { StyleSheet } from 'react-native'
+
+interface CallToActionProps extends Omit<ButtonProps, 'variant' | 'size'> {
+  fullWidth?: boolean
+}
+
+export function CallToAction({ fullWidth, style, ...props }: CallToActionProps) {
+  return (
+    <Button
+      variant="primary"
+      size="lg"
+      style={[
+        styles.cta,
+        fullWidth && styles.fullWidth,
+        style,
+      ]}
+      textStyle={styles.text}
+      {...props}
+    />
+  )
+}
+
+const styles = StyleSheet.create({
+  cta: {
+    borderRadius: 50,
+    paddingHorizontal: 32,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  text: {
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+})
+```
+
+### Composing Compound Components
+
+Build higher-level components from r/ui primitives:
+
+```tsx
+// components/ui/ConfirmationDialog.tsx
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+  Button,
+} from '@r-ui/react-native'
+
+interface ConfirmationDialogProps {
+  title: string
+  description: string
+  confirmText?: string
+  cancelText?: string
+  onConfirm: () => void
+  destructive?: boolean
+  children: React.ReactNode
+}
+
+export function ConfirmationDialog({
+  title,
+  description,
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
+  onConfirm,
+  destructive = false,
+  children,
+}: ConfirmationDialogProps) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="ghost">{cancelText}</Button>
+          </DialogClose>
+          <Button
+            variant={destructive ? 'destructive' : 'primary'}
+            onPress={onConfirm}
+          >
+            {confirmText}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+// Usage
+<ConfirmationDialog
+  title="Delete project?"
+  description="This action cannot be undone."
+  confirmText="Delete"
+  destructive
+  onConfirm={handleDelete}
+>
+  <Button variant="destructive">Delete Project</Button>
+</ConfirmationDialog>
+```
+
+## Adding Custom Variants
+
+### Method 1: Wrapper Component
+
+```tsx
+// Add an "outline" variant to Button
+function OutlineButton({ children, ...props }) {
+  return (
+    <Button
+      variant="ghost"
+      style={{
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.2)',
+      }}
+      {...props}
+    >
+      {children}
+    </Button>
+  )
+}
+```
+
+### Method 2: Extended Component
+
+```tsx
+import { Button as BaseButton, ButtonProps as BaseButtonProps } from '@r-ui/react-native'
+
+type CustomVariant = 'outline' | 'gradient'
+
+interface ButtonProps extends Omit<BaseButtonProps, 'variant'> {
+  variant?: BaseButtonProps['variant'] | CustomVariant
+}
+
+export function Button({ variant, style, ...props }: ButtonProps) {
+  if (variant === 'outline') {
+    return (
+      <BaseButton
+        variant="ghost"
+        style={[{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }, style]}
+        {...props}
+      />
+    )
+  }
+
+  if (variant === 'gradient') {
+    // Custom gradient implementation
+    return (
+      <LinearGradient colors={['#6366f1', '#8b5cf6']} style={[styles.gradient, style]}>
+        <BaseButton variant="ghost" {...props} />
+      </LinearGradient>
+    )
+  }
+
+  return <BaseButton variant={variant} style={style} {...props} />
+}
+```
+
+## Global Style Overrides
+
+### Using CSS Variables (Web)
+
+Override component styles globally:
+
+```css
+/* globals.css */
+:root {
+  /* Make all buttons more rounded */
+  --button-radius: 9999px;
+
+  /* Change primary color globally */
+  --color-accent-blue: #6366f1;
+
+  /* Adjust shadows */
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+```
+
+### Tailwind Config Override
+
+Override r/ui tokens via `tailwind.config.js`:
+
+```js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        // Override accent color
+        accent: {
+          DEFAULT: '#8B5CF6', // Custom purple instead of blue
+          foreground: '#FFFFFF',
+        },
+        // Add brand colors
+        brand: {
+          50: '#fdf4ff',
+          500: '#d946ef',
+          900: '#701a75',
+        },
+      },
+      borderRadius: {
+        // Override radius scale
+        md: '8px',
+        lg: '12px',
+      },
+    },
+  },
+}
+```
+
+### Using a StyleSheet Override
+
+Create a shared stylesheet that components import:
+
+```tsx
+// styles/overrides.ts
+import { StyleSheet } from 'react-native'
+
+export const buttonOverrides = StyleSheet.create({
+  base: {
+    borderRadius: 9999,
+  },
+})
+
+// In your wrapped Button component
+<BaseButton style={[buttonOverrides.base, style]} {...props} />
+```
+
+## Theme Customization
+
+See the [Theming](/docs/theming) guide for comprehensive theme customization, including:
+
+- Overriding design tokens
+- Creating custom themes
+- Extending the color palette
+
+## When to Fork a Component
+
+Sometimes you need deeper customization than wrapping allows. Consider forking (copying) a component when:
+
+1. **Structural changes** — Need to change the component's DOM/element structure
+2. **Animation changes** — Need different animation behavior
+3. **Accessibility changes** — Need different ARIA patterns
+4. **Major visual overhaul** — More than 50% of styles need changing
+
+### How to Fork
+
+1. Copy the component source from `node_modules/@r-ui/react-native/src/components/`
+2. Place in your project's `components/ui/` directory
+3. Modify as needed
+4. Import from your local version instead of `@r-ui/react-native`
+
+```tsx
+// Before
+import { Button } from '@r-ui/react-native'
+
+// After forking
+import { Button } from '@/components/ui/Button'
+```
+
+### Fork Considerations
+
+- You'll need to maintain the component yourself
+- Updates to r/ui won't automatically apply to your fork
+- Consider contributing changes back if they'd benefit others
+
+## Best Practices
+
+### Do
+
+- Use style props for one-off overrides
+- Create wrapper components for reusable variants
+- Use the theme system for global changes
+- Keep customizations minimal and purposeful
+
+### Don't
+
+- Override styles in ways that break accessibility
+- Fight the design system — if you're fighting constantly, consider if r/ui is the right fit
+- Duplicate component code unnecessarily
+- Ignore the existing variant/size props before adding custom styles
+
+## Example: Branded Button System
+
+A complete example of customizing Button for a brand:
+
+```tsx
+// components/ui/Button.tsx
+import {
+  Button as BaseButton,
+  ButtonProps as BaseButtonProps,
+} from '@r-ui/react-native'
+import { StyleSheet } from 'react-native'
+
+// Your brand colors
+const brandColors = {
+  primary: '#6366f1',
+  primaryDark: '#4f46e5',
+  secondary: '#ec4899',
+}
+
+type BrandVariant = 'brand' | 'brandSecondary'
+
+interface ButtonProps extends Omit<BaseButtonProps, 'variant'> {
+  variant?: BaseButtonProps['variant'] | BrandVariant
+}
+
+export function Button({ variant, style, textStyle, ...props }: ButtonProps) {
+  if (variant === 'brand') {
+    return (
+      <BaseButton
+        variant="primary"
+        style={[styles.brand, style]}
+        textStyle={[styles.brandText, textStyle]}
+        {...props}
+      />
+    )
+  }
+
+  if (variant === 'brandSecondary') {
+    return (
+      <BaseButton
+        variant="secondary"
+        style={[styles.brandSecondary, style]}
+        {...props}
+      />
+    )
+  }
+
+  return <BaseButton variant={variant} style={style} textStyle={textStyle} {...props} />
+}
+
+const styles = StyleSheet.create({
+  brand: {
+    backgroundColor: brandColors.primary,
+    borderRadius: 12,
+  },
+  brandText: {
+    fontWeight: '600',
+  },
+  brandSecondary: {
+    borderColor: brandColors.secondary,
+    borderWidth: 2,
+  },
+})
+
+// Re-export everything else
+export * from '@r-ui/react-native'
+```

@@ -190,6 +190,14 @@ import {
   TimePickerWithMinMaxPreview,
   TimePickerDisabledPreview,
   TimePickerCustomFormatPreview,
+  // DateRangePicker
+  DateRangePickerBasicPreview,
+  DateRangePickerWithDefaultPreview,
+  DateRangePickerWithPresetsPreview,
+  DateRangePickerNoPresetsPreview,
+  DateRangePickerWithMinMaxPreview,
+  DateRangePickerDisabledPreview,
+  DateRangePickerNoWeekendsPreview,
 } from '@/components/previews';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -385,6 +393,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     TimePickerWithMinMaxPreview,
     TimePickerDisabledPreview,
     TimePickerCustomFormatPreview,
+    // DateRangePicker
+    DateRangePickerBasicPreview,
+    DateRangePickerWithDefaultPreview,
+    DateRangePickerWithPresetsPreview,
+    DateRangePickerNoPresetsPreview,
+    DateRangePickerWithMinMaxPreview,
+    DateRangePickerDisabledPreview,
+    DateRangePickerNoWeekendsPreview,
     // React Native components for static previews
     Button,
     Switch,

@@ -1,0 +1,250 @@
+# Principles
+
+The design philosophy behind r/ui and how it shapes every component.
+
+## Universal First
+
+r/ui is built from the ground up to work on iOS, Android, and Web from a single codebase. Every component is tested across platforms, ensuring consistent behavior and appearance.
+
+```tsx
+// This exact code runs on iOS, Android, AND Web
+import { Card, CardHeader, CardTitle, CardContent, Text, Button } from '@r-ui/react-native'
+
+function WelcomeCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Welcome</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Text>Works everywhere — same code, same behavior.</Text>
+        <Button onPress={() => alert('Hello!')}>
+          Get Started
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+No platform-specific code required for the common case. When you need platform differences, you can still use React Native's `Platform` API.
+
+## Accessibility by Default
+
+Every r/ui component is built with accessibility in mind:
+
+- **WCAG compliance** — Color contrast, focus indicators, and semantic markup
+- **Screen reader support** — Proper ARIA roles and labels out of the box
+- **Keyboard navigation** — Full keyboard support for web and connected devices
+- **Reduced motion** — Respects user preferences for reduced animations
+
+```tsx
+// Accessibility is automatic
+<Button onPress={handleSubmit}>Submit Form</Button>
+
+// The rendered button includes:
+// - role="button"
+// - Proper focus states
+// - Touch target sizing (44px minimum)
+// - Screen reader announcements
+```
+
+## Premium Feel
+
+r/ui prioritizes a polished, premium aesthetic:
+
+- **Glassmorphism effects** — Subtle blur and transparency
+- **Smooth animations** — 60fps springs and transitions
+- **Attention to detail** — Consistent spacing, refined shadows, micro-interactions
+
+Every component feels crafted, not just functional.
+
+## Composable Architecture
+
+Complex components use a compound component pattern for maximum flexibility:
+
+### Simple Usage
+
+For common cases, use the component directly with minimal props:
+
+```tsx
+// Simple button
+<Button>Click me</Button>
+
+// Simple select with options
+<Select
+  value={country}
+  onValueChange={setCountry}
+  options={countries}
+/>
+
+// Simple date picker
+<DatePicker value={date} onValueChange={setDate} />
+```
+
+### Composable Usage
+
+For full control, compose the sub-components:
+
+```tsx
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+  Button,
+} from '@r-ui/react-native'
+
+<Dialog>
+  <DialogTrigger asChild>
+    <Button>Open Dialog</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Edit Profile</DialogTitle>
+      <DialogDescription>
+        Make changes to your profile here.
+      </DialogDescription>
+    </DialogHeader>
+    {/* Your custom content */}
+    <DialogFooter>
+      <DialogClose asChild>
+        <Button variant="ghost">Cancel</Button>
+      </DialogClose>
+      <Button>Save</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+### More Composable Examples
+
+```tsx
+// DatePicker — compose for custom calendar UI
+<DatePicker>
+  <DatePickerTrigger>
+    <Button variant="outline">Pick a date</Button>
+  </DatePickerTrigger>
+  <DatePickerContent>
+    <DatePickerHeader />
+    <DatePickerCalendar />
+  </DatePickerContent>
+</DatePicker>
+
+// TimePicker — compose for custom time selection
+<TimePicker interval={30}>
+  <TimePickerTrigger />
+  <TimePickerContent>
+    <TimePickerList />
+  </TimePickerContent>
+</TimePicker>
+
+// Accordion — compose for expandable sections
+<Accordion>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Section 1</AccordionTrigger>
+    <AccordionContent>Content for section 1</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+This pattern gives you:
+- Full control over layout and structure
+- Custom rendering of any part
+- Animation and transition control
+- Accessibility handled automatically
+
+## Simplicity
+
+r/ui maintains a clean, minimal API:
+
+### Minimal Props for Common Cases
+
+```tsx
+// Most common usage — just works
+<Button>Save</Button>
+
+// Only add props when you need them
+<Button
+  variant="destructive"
+  size="lg"
+  loading={isSaving}
+>
+  Delete Account
+</Button>
+```
+
+### Full Control When Needed
+
+Every component accepts standard React Native props like `style`, and many expose specific style props for fine-grained control:
+
+```tsx
+<Button
+  style={{ marginTop: 16 }}
+  textStyle={{ letterSpacing: 1 }}
+>
+  Custom Styled
+</Button>
+```
+
+## Developer Experience
+
+r/ui is built for developers:
+
+### TypeScript First
+
+Full type definitions with intelligent autocomplete:
+
+```tsx
+// Autocomplete for all props
+<Button
+  variant="primary" // 'primary' | 'secondary' | 'ghost' | 'destructive'
+  size="md"         // 'sm' | 'md' | 'lg'
+  onPress={() => {}}
+/>
+
+// TimePicker with typed interval
+<TimePicker
+  interval={30}     // 1 | 5 | 15 | 30 | 60
+  use24Hour={false}
+/>
+
+// DatePicker with typed mode
+<DatePicker
+  mode="single"     // 'single' | 'range' | 'multiple'
+/>
+```
+
+### Copy-Paste Ready
+
+Every component example in these docs can be copied directly into your project. No additional setup, no hidden dependencies.
+
+### Consistent Patterns
+
+Once you learn one component, you know them all:
+
+| Pattern | Example |
+|---------|---------|
+| Variants | `variant="primary"` |
+| Sizes | `size="md"` |
+| Disabled state | `disabled` |
+| Loading state | `loading` |
+| Controlled | `value` + `onValueChange` |
+| Uncontrolled | `defaultValue` |
+
+## What This Means in Practice
+
+When we build a new component, we ask:
+
+1. Does it work identically on all platforms?
+2. Is it accessible without extra configuration?
+3. Does it feel polished and refined?
+4. Can it be used simply AND composed flexibly?
+5. Is the API minimal but complete?
+6. Will developers enjoy using it?
+
+If we can't answer "yes" to all six, we go back to the drawing board.

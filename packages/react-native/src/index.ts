@@ -426,6 +426,39 @@ export type {
   TimeValue,
 } from './components/TimePicker';
 
+export {
+  DateRangePicker,
+  DateRangePickerTrigger,
+  DateRangePickerContent,
+  DateRangePickerHeader,
+  DateRangePickerCalendar,
+  DateRangePickerPresets,
+  useDateRangePicker,
+  isDateInRange,
+  isRangeStart,
+  isRangeEnd,
+  normalizeDate,
+  compareDates,
+  normalizeRange,
+  formatDateRange,
+  getPresetRanges,
+  addDays,
+  getDaysBetween,
+} from './components/DateRangePicker';
+export type {
+  DateRangePickerProps,
+  DateRangePickerTriggerProps,
+  DateRangePickerContentProps,
+  DateRangePickerHeaderProps,
+  DateRangePickerCalendarProps,
+  DateRangePickerPresetsProps,
+  DateRangePickerContextValue,
+  DateRangePickerView,
+  SelectionMode,
+  DateRange,
+  PresetRange,
+} from './components/DateRangePicker';
+
 // Navigation Components
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/Tabs';
 export type {
