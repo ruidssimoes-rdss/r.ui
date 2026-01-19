@@ -221,3 +221,14 @@ export {
   DatePickerDisabledPreview,
   DatePickerCustomFormatPreview,
 } from './DatePickerPreviews';
+
+// TimePicker previews
+export {
+  TimePickerBasicPreview,
+  TimePickerWithDefaultPreview,
+  TimePicker24HourPreview,
+  TimePickerWithIntervalPreview,
+  TimePickerWithMinMaxPreview,
+  TimePickerDisabledPreview,
+  TimePickerCustomFormatPreview,
+} from './TimePickerPreviews';

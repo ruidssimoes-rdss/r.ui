@@ -68,6 +68,7 @@ export const navigation: NavigationSection[] = [
       { name: 'Combobox', href: '/docs/components/combobox', description: 'Searchable selection dropdown' },
       { name: 'DatePicker', href: '/docs/components/date-picker', description: 'Calendar date selection' },
       { name: 'Input', href: '/docs/components/input', description: 'Text input fields' },
+      { name: 'TimePicker', href: '/docs/components/time-picker', description: 'Time selection wheels' },
       { name: 'OTPInput', href: '/docs/components/otp-input', description: 'Verification code input' },
       { name: 'RadioGroup', href: '/docs/components/radio-group', description: 'Radio button group' },
       { name: 'Select', href: '/docs/components/select', description: 'Selection dropdowns' },

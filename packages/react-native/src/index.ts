@@ -401,6 +401,31 @@ export type {
   DatePickerView,
 } from './components/DatePicker';
 
+export {
+  TimePicker,
+  TimePickerTrigger,
+  TimePickerContent,
+  TimePickerWheel,
+  useTimePicker,
+  formatTime,
+  dateToTime,
+  timeToDate,
+  to12Hour,
+  to24Hour,
+  get12Hours,
+  get24Hours,
+  getMinutes,
+  isTimeDisabled,
+} from './components/TimePicker';
+export type {
+  TimePickerProps,
+  TimePickerTriggerProps,
+  TimePickerContentProps,
+  TimePickerWheelProps,
+  TimePickerContextValue,
+  TimeValue,
+} from './components/TimePicker';
+
 // Navigation Components
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/Tabs';
 export type {
