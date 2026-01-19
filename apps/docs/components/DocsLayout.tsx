@@ -34,8 +34,22 @@ export function DocsLayout({ children }: DocsLayoutProps) {
     setIsMobileMenuOpen(false);
   };
 
+  const isDocsLanding = pathname === '/docs';
+
   // Homepage gets simple full-screen layout
   if (isHomepage) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header onMobileMenuToggle={toggleMobileMenu} isMobileMenuOpen={isMobileMenuOpen} />
+        <main className="w-full">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
+  // Docs landing page - full-width, no sidebars (premium landing experience)
+  if (isDocsLanding) {
     return (
       <div className="min-h-screen bg-white">
         <Header onMobileMenuToggle={toggleMobileMenu} isMobileMenuOpen={isMobileMenuOpen} />

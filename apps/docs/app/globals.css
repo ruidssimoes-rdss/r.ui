@@ -21,8 +21,9 @@
   --docs-border: #e5e7eb;         /* gray-200 - default borders */
   --docs-border-strong: #d1d5db;  /* gray-300 - stronger borders */
 
-  /* Accent - Red for selected items */
-  --docs-accent: #ef4444;         /* red-500 */
+  /* Accent - Blue for links and interactive elements */
+  --docs-accent: #2563eb;         /* blue-600 */
+  --docs-accent-hover: #1d4ed8;   /* blue-700 */
 
   /* Code blocks - Plain text style */
   --docs-code-text: #374151;      /* gray-700 */
@@ -120,7 +121,14 @@ body {
   display: none;
 }
 
-/* Line clamp utility */
+/* Line clamp utilities */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
