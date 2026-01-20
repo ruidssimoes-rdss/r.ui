@@ -1,6 +1,7 @@
-# Dark Mode
-
-r/ui fully supports dark mode with automatic system preference detection, manual toggling, and persistence.
+<GuideLayout
+  title="Dark Mode"
+  description="Implement theme switching with automatic system preference detection."
+>
 
 ## Automatic System Preference
 
@@ -18,10 +19,13 @@ function App() {
 }
 ```
 
-When set to `"system"`:
-- On iOS: Follows Settings > Display & Brightness
-- On Android: Follows Settings > Display > Dark theme
-- On Web: Follows `prefers-color-scheme` media query
+<InfoCard title="System Detection">
+  - **iOS**: Follows Settings → Display & Brightness
+  - **Android**: Follows Settings → Display → Dark theme
+  - **Web**: Follows `prefers-color-scheme` media query
+</InfoCard>
+
+---
 
 ## Manual Theme Control
 
@@ -74,6 +78,8 @@ const {
 } = useColorScheme()
 ```
 
+---
+
 ## Theme Persistence
 
 By default, r/ui persists the user's theme preference:
@@ -105,6 +111,8 @@ The persisted value is loaded on app start, before the first render, to prevent 
 </ThemeProvider>
 ```
 
+---
+
 ## Components Adapt Automatically
 
 All r/ui components automatically respect the current theme:
@@ -117,6 +125,8 @@ All r/ui components automatically respect the current theme:
 ```
 
 No additional props or configuration needed.
+
+---
 
 ## Building a Theme Toggle
 
@@ -160,6 +170,8 @@ export function ThemeToggle() {
 }
 ```
 
+---
+
 ## Theme Toggle with Icons
 
 A more polished toggle using r/ui components:
@@ -195,6 +207,8 @@ export function ThemeSwitcher() {
 }
 ```
 
+---
+
 ## Select Theme Selector
 
 Using the Select component for a polished theme picker:
@@ -226,28 +240,7 @@ export function ThemeSelect() {
 }
 ```
 
-## Dark Mode Toggle Button
-
-A simple toggle button that switches between dark and light:
-
-```tsx
-import { Button, useColorScheme, View } from '@r-ui/react-native'
-
-export function DarkModeToggle() {
-  const { colorScheme, setColorScheme, resolvedColorScheme } = useColorScheme()
-  const isDark = resolvedColorScheme === 'dark'
-
-  const toggleTheme = () => {
-    setColorScheme(isDark ? 'light' : 'dark')
-  }
-
-  return (
-    <Button variant="ghost" onPress={toggleTheme}>
-      {isDark ? '☀️ Light' : '🌙 Dark'}
-    </Button>
-  )
-}
-```
+---
 
 ## Conditional Styling by Theme
 
@@ -274,6 +267,8 @@ function CustomComponent() {
   )
 }
 ```
+
+---
 
 ## Server-Side Rendering (Web)
 
@@ -302,6 +297,8 @@ export default function RootLayout({ children }) {
 
 The `suppressHydrationWarning` on `<html>` prevents React warnings when the theme differs between server and client.
 
+---
+
 ## Theme Flash Prevention
 
 r/ui includes a script to prevent theme flash on page load (web only):
@@ -319,3 +316,5 @@ r/ui includes a script to prevent theme flash on page load (web only):
 ```
 
 This runs before React hydrates, ensuring the correct theme is applied immediately.
+
+</GuideLayout>

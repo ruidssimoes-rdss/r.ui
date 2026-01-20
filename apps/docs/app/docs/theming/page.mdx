@@ -1,32 +1,26 @@
-# Theming
-
-r/ui includes a comprehensive design token system with three built-in themes: Dark, Light, and Oatmeal.
+<GuideLayout
+  title="Theming"
+  description="Comprehensive design token system with three built-in themes: Dark, Light, and Oatmeal."
+>
 
 ## Built-in Themes
 
-### Dark Theme (Default)
+<FeatureGrid>
+  <FeatureCard
+    title="Dark Theme"
+    description="Premium dark theme optimized for OLED displays. Deep blacks (#050505), high contrast white text, vibrant accents."
+  />
+  <FeatureCard
+    title="Light Theme"
+    description="Clean, bright theme for daytime use. Warm whites and light grays with softer accent colors."
+  />
+  <FeatureCard
+    title="Oatmeal Theme"
+    description="Unique warm, neutral theme with cream and beige tones. Earthy feel with reduced blue light."
+  />
+</FeatureGrid>
 
-A premium dark theme optimized for OLED displays and reduced eye strain:
-
-- Deep blacks (`#050505` base)
-- High contrast white text
-- Vibrant accent colors
-
-### Light Theme
-
-A clean, bright theme for daytime use:
-
-- Warm whites and light grays
-- Dark text for readability
-- Softer accent colors
-
-### Oatmeal Theme
-
-A unique warm, neutral theme:
-
-- Cream and beige tones
-- Earthy, comfortable feel
-- Reduced blue light
+---
 
 ## Design Tokens
 
@@ -166,6 +160,8 @@ import { shadows } from '@r-ui/react-native'
 // - elevation on Android
 ```
 
+---
+
 ## Using Tokens
 
 ### Direct Import
@@ -200,6 +196,8 @@ If using NativeWind, tokens are available as Tailwind classes:
 </View>
 ```
 
+---
+
 ## CSS Variables (Web)
 
 On web, r/ui uses CSS variables for theming. This enables smooth theme transitions and runtime customization.
@@ -220,6 +218,8 @@ On web, r/ui uses CSS variables for theming. This enables smooth theme transitio
   /* ... */
 }
 ```
+
+---
 
 ## Customizing Tokens
 
@@ -263,6 +263,8 @@ module.exports = {
   },
 }
 ```
+
+---
 
 ## Creating a Custom Theme
 
@@ -346,6 +348,8 @@ function ThemeToggle() {
 }
 ```
 
+---
+
 ## Token Reference
 
 ### Background Tokens
@@ -383,3 +387,5 @@ function ThemeToggle() {
 | `border.default` | `rgba(255,255,255,0.1)` | `rgba(0,0,0,0.1)` | `rgba(45,42,38,0.1)` |
 | `border.muted` | `rgba(255,255,255,0.06)` | `rgba(0,0,0,0.06)` | `rgba(45,42,38,0.06)` |
 | `border.strong` | `rgba(255,255,255,0.2)` | `rgba(0,0,0,0.2)` | `rgba(45,42,38,0.2)` |
+
+</GuideLayout>

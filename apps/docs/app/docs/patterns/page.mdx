@@ -1,6 +1,7 @@
-# Patterns
-
-Common patterns and conventions used throughout r/ui components.
+<GuideLayout
+  title="Patterns"
+  description="Common patterns and conventions used throughout r/ui components."
+>
 
 ## Compound Components
 
@@ -27,12 +28,12 @@ import {
 </DatePicker>
 ```
 
-### Why Compound Components?
-
-1. **Flexibility** — Rearrange, hide, or customize any part
-2. **Composition** — Add your own components between parts
-3. **Context** — State is shared automatically between parts
-4. **Accessibility** — ARIA relationships are handled for you
+<InfoCard title="Why Compound Components?">
+  1. **Flexibility** — Rearrange, hide, or customize any part
+  2. **Composition** — Add your own components between parts
+  3. **Context** — State is shared automatically between parts
+  4. **Accessibility** — ARIA relationships are handled for you
+</InfoCard>
 
 ### r/ui Compound Components
 
@@ -68,16 +69,6 @@ Accordion → AccordionItem → AccordionTrigger → AccordionContent
 Tabs → TabsList → TabsTrigger → TabsContent
 ```
 
-**AlertDialog:**
-```
-AlertDialog → AlertDialogTrigger → AlertDialogContent → AlertDialogHeader → AlertDialogTitle → AlertDialogDescription → AlertDialogFooter → AlertDialogAction → AlertDialogCancel
-```
-
-**ActionSheet:**
-```
-ActionSheet → ActionSheetTrigger → ActionSheetContent → ActionSheetHeader → ActionSheetItem → ActionSheetCancel
-```
-
 ### Common Sub-Component Names
 
 | Name | Purpose |
@@ -92,7 +83,9 @@ ActionSheet → ActionSheetTrigger → ActionSheetContent → ActionSheetHeader 
 | `Item` | Individual item in a list/menu |
 | `Overlay` | Background overlay/backdrop |
 
-### Context Hooks
+---
+
+## Context Hooks
 
 Every compound component exposes a context hook for advanced use cases:
 
@@ -110,24 +103,6 @@ function CustomDateTrigger() {
 }
 ```
 
-```tsx
-import { useTimePicker, Text } from '@r-ui/react-native'
-
-function TimeDisplay() {
-  const { value, use24Hour } = useTimePicker()
-
-  if (!value) return <Text>No time selected</Text>
-
-  return (
-    <Text>
-      {use24Hour
-        ? `${value.hours}:${value.minutes}`
-        : formatTime(value)}
-    </Text>
-  )
-}
-```
-
 ### Available Context Hooks
 
 | Hook | Returns |
@@ -139,8 +114,8 @@ function TimeDisplay() {
 | `useAccordion()` | `{ value, onValueChange, type }` |
 | `useTabs()` | `{ value, onValueChange }` |
 | `useDropdown()` | `{ open, onOpenChange, triggerLayout }` |
-| `useAlertDialog()` | `{ open, setOpen }` |
-| `useActionSheet()` | `{ open, setOpen }` |
+
+---
 
 ## Props Patterns
 
@@ -159,15 +134,6 @@ Most visible components support `variant` and `size` props:
 <Button size="sm">Small</Button>
 <Button size="md">Medium (default)</Button>
 <Button size="lg">Large</Button>
-
-// Same size system works for Input
-<Input size="sm" placeholder="Small input" />
-<Input size="md" placeholder="Medium input" />
-<Input size="lg" placeholder="Large input" />
-
-// And for other form components
-<Select size="sm" options={options} />
-<Textarea size="lg" placeholder="Large textarea" />
 ```
 
 **Button Variants:**
@@ -187,7 +153,9 @@ Most visible components support `variant` and `size` props:
 | `md` | 40px | Default, forms |
 | `lg` | 48px | Prominent CTAs |
 
-### Controlled vs Uncontrolled
+---
+
+## Controlled vs Uncontrolled
 
 Components can be controlled (you manage state) or uncontrolled (internal state):
 
@@ -200,11 +168,20 @@ const [checked, setChecked] = useState(true)
 <Switch checked={checked} onCheckedChange={setChecked} />
 ```
 
-**When to use each:**
-- **Uncontrolled** — Simple forms, quick prototypes
-- **Controlled** — Complex forms, validation, derived state
+<FeatureGrid>
+  <FeatureCard
+    title="Uncontrolled"
+    description="Simple forms, quick prototypes. Component manages its own state."
+  />
+  <FeatureCard
+    title="Controlled"
+    description="Complex forms, validation, derived state. You manage state externally."
+  />
+</FeatureGrid>
 
-### Value and onChange Patterns
+---
+
+## Value and onChange Patterns
 
 Form components follow consistent naming:
 
@@ -222,7 +199,9 @@ Form components follow consistent naming:
 | Tabs | `value` | `onValueChange` |
 | Accordion | `value` | `onValueChange` |
 
-### Disabled State
+---
+
+## Disabled State
 
 All interactive components support `disabled`:
 
@@ -238,7 +217,9 @@ Disabled components:
 - Prevent interaction
 - Set `aria-disabled` for accessibility
 
-### Loading State
+---
+
+## Loading State
 
 Components that trigger async actions support `loading`:
 
@@ -247,9 +228,11 @@ Components that trigger async actions support `loading`:
 <Button loading loadingText="Please wait">Submit</Button>
 ```
 
+---
+
 ## Slot Pattern
 
-Some components accept content via props instead of children for specific use cases:
+Some components accept content via props instead of children:
 
 ### Icons with Components
 
@@ -269,6 +252,8 @@ Some components accept content via props instead of children for specific use ca
 - Content is supplementary (icons, badges)
 - Content has a specific position (left/right icons)
 - Content is optional decoration
+
+---
 
 ## Styling Patterns
 
@@ -306,6 +291,8 @@ On web and with NativeWind configured, you can use `className`:
   Tailwind Styled
 </Button>
 ```
+
+---
 
 ## Composition Patterns
 
@@ -371,17 +358,9 @@ function ConfirmDialog({ title, description, onConfirm, destructive, children })
     </Dialog>
   )
 }
-
-// Usage
-<ConfirmDialog
-  title="Delete item?"
-  description="This action cannot be undone."
-  onConfirm={handleDelete}
-  destructive
->
-  <Button variant="destructive">Delete</Button>
-</ConfirmDialog>
 ```
+
+---
 
 ## Ref Forwarding
 
@@ -400,3 +379,5 @@ This enables:
 - Imperative focus management
 - Measuring layout
 - Integration with third-party libraries
+
+</GuideLayout>

@@ -1,6 +1,7 @@
-# Customization
-
-Learn how to customize r/ui components to match your design system.
+<GuideLayout
+  title="Customization"
+  description="Learn how to customize r/ui components to match your design system."
+>
 
 ## Style Overrides
 
@@ -79,6 +80,8 @@ On web or with NativeWind configured, use Tailwind classes:
   Combined Styling
 </Button>
 ```
+
+---
 
 ## Extending Components
 
@@ -202,6 +205,8 @@ export function ConfirmationDialog({
 </ConfirmationDialog>
 ```
 
+---
+
 ## Adding Custom Variants
 
 ### Method 1: Wrapper Component
@@ -258,6 +263,8 @@ export function Button({ variant, style, ...props }: ButtonProps) {
   return <BaseButton variant={variant} style={style} {...props} />
 }
 ```
+
+---
 
 ## Global Style Overrides
 
@@ -329,6 +336,8 @@ export const buttonOverrides = StyleSheet.create({
 <BaseButton style={[buttonOverrides.base, style]} {...props} />
 ```
 
+---
+
 ## Theme Customization
 
 See the [Theming](/docs/theming) guide for comprehensive theme customization, including:
@@ -336,6 +345,8 @@ See the [Theming](/docs/theming) guide for comprehensive theme customization, in
 - Overriding design tokens
 - Creating custom themes
 - Extending the color palette
+
+---
 
 ## When to Fork a Component
 
@@ -361,27 +372,28 @@ import { Button } from '@r-ui/react-native'
 import { Button } from '@/components/ui/Button'
 ```
 
-### Fork Considerations
+<InfoCard title="Fork Considerations" variant="warning">
+  - You'll need to maintain the component yourself
+  - Updates to r/ui won't automatically apply to your fork
+  - Consider contributing changes back if they'd benefit others
+</InfoCard>
 
-- You'll need to maintain the component yourself
-- Updates to r/ui won't automatically apply to your fork
-- Consider contributing changes back if they'd benefit others
+---
 
 ## Best Practices
 
-### Do
+<FeatureGrid>
+  <FeatureCard
+    title="Do"
+    description="Use style props for one-off overrides. Create wrapper components for reusable variants. Use the theme system for global changes."
+  />
+  <FeatureCard
+    title="Don't"
+    description="Override styles in ways that break accessibility. Fight the design system constantly. Duplicate component code unnecessarily."
+  />
+</FeatureGrid>
 
-- Use style props for one-off overrides
-- Create wrapper components for reusable variants
-- Use the theme system for global changes
-- Keep customizations minimal and purposeful
-
-### Don't
-
-- Override styles in ways that break accessibility
-- Fight the design system — if you're fighting constantly, consider if r/ui is the right fit
-- Duplicate component code unnecessarily
-- Ignore the existing variant/size props before adding custom styles
+---
 
 ## Example: Branded Button System
 
@@ -450,3 +462,5 @@ const styles = StyleSheet.create({
 // Re-export everything else
 export * from '@r-ui/react-native'
 ```
+
+</GuideLayout>

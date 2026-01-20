@@ -1,6 +1,7 @@
-# Principles
-
-The design philosophy behind r/ui and how it shapes every component.
+<GuideLayout
+  title="Principles"
+  description="The design philosophy and principles behind r/ui."
+>
 
 ## Universal First
 
@@ -29,14 +30,30 @@ function WelcomeCard() {
 
 No platform-specific code required for the common case. When you need platform differences, you can still use React Native's `Platform` API.
 
+---
+
 ## Accessibility by Default
 
 Every r/ui component is built with accessibility in mind:
 
-- **WCAG compliance** — Color contrast, focus indicators, and semantic markup
-- **Screen reader support** — Proper ARIA roles and labels out of the box
-- **Keyboard navigation** — Full keyboard support for web and connected devices
-- **Reduced motion** — Respects user preferences for reduced animations
+<FeatureGrid>
+  <FeatureCard
+    title="WCAG Compliance"
+    description="Color contrast, focus indicators, and semantic markup out of the box."
+  />
+  <FeatureCard
+    title="Screen Reader Support"
+    description="Proper ARIA roles and labels — no configuration needed."
+  />
+  <FeatureCard
+    title="Keyboard Navigation"
+    description="Full keyboard support for web and connected devices."
+  />
+  <FeatureCard
+    title="Reduced Motion"
+    description="Respects user preferences for reduced animations."
+  />
+</FeatureGrid>
 
 ```tsx
 // Accessibility is automatic
@@ -49,6 +66,8 @@ Every r/ui component is built with accessibility in mind:
 // - Screen reader announcements
 ```
 
+---
+
 ## Premium Feel
 
 r/ui prioritizes a polished, premium aesthetic:
@@ -58,6 +77,8 @@ r/ui prioritizes a polished, premium aesthetic:
 - **Attention to detail** — Consistent spacing, refined shadows, micro-interactions
 
 Every component feels crafted, not just functional.
+
+---
 
 ## Composable Architecture
 
@@ -121,42 +142,14 @@ import {
 </Dialog>
 ```
 
-### More Composable Examples
+<InfoCard title="Composable Pattern Benefits">
+  - Full control over layout and structure
+  - Custom rendering of any part
+  - Animation and transition control
+  - Accessibility handled automatically
+</InfoCard>
 
-```tsx
-// DatePicker — compose for custom calendar UI
-<DatePicker>
-  <DatePickerTrigger>
-    <Button variant="outline">Pick a date</Button>
-  </DatePickerTrigger>
-  <DatePickerContent>
-    <DatePickerHeader />
-    <DatePickerCalendar />
-  </DatePickerContent>
-</DatePicker>
-
-// TimePicker — compose for custom time selection
-<TimePicker interval={30}>
-  <TimePickerTrigger />
-  <TimePickerContent>
-    <TimePickerList />
-  </TimePickerContent>
-</TimePicker>
-
-// Accordion — compose for expandable sections
-<Accordion>
-  <AccordionItem value="item-1">
-    <AccordionTrigger>Section 1</AccordionTrigger>
-    <AccordionContent>Content for section 1</AccordionContent>
-  </AccordionItem>
-</Accordion>
-```
-
-This pattern gives you:
-- Full control over layout and structure
-- Custom rendering of any part
-- Animation and transition control
-- Accessibility handled automatically
+---
 
 ## Simplicity
 
@@ -190,6 +183,8 @@ Every component accepts standard React Native props like `style`, and many expos
   Custom Styled
 </Button>
 ```
+
+---
 
 ## Developer Experience
 
@@ -236,6 +231,8 @@ Once you learn one component, you know them all:
 | Controlled | `value` + `onValueChange` |
 | Uncontrolled | `defaultValue` |
 
+---
+
 ## What This Means in Practice
 
 When we build a new component, we ask:
@@ -248,3 +245,5 @@ When we build a new component, we ask:
 6. Will developers enjoy using it?
 
 If we can't answer "yes" to all six, we go back to the drawing board.
+
+</GuideLayout>

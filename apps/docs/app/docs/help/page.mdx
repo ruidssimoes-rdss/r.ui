@@ -1,19 +1,22 @@
-# Help
-
-Get support, report issues, and contribute to r/ui.
+<GuideLayout
+  title="Help"
+  description="Get support, report issues, and contribute to r/ui."
+>
 
 ## Getting Help
 
-### Documentation
+<FeatureGrid>
+  <FeatureCard
+    title="Documentation"
+    description="Browse the sidebar for Guides (core concepts) and Components (with examples)."
+  />
+  <FeatureCard
+    title="Search"
+    description="Use Cmd/Ctrl + K to open the search modal and quickly find what you need."
+  />
+</FeatureGrid>
 
-You're in the right place! Browse the sidebar for:
-
-- **Guides** — Core concepts and patterns
-- **Components** — Individual component documentation with examples
-
-### Search
-
-Use `Cmd/Ctrl + K` to open the search modal and quickly find what you need.
+---
 
 ## Reporting Issues
 
@@ -53,22 +56,9 @@ Calendar should close after date selection.
 
 **Actual behavior:**
 Calendar stays open, requiring manual close.
-
-**Code snippet:**
-```tsx
-<DatePicker value={date} onValueChange={setDate}>
-  <DatePickerTrigger>
-    <Button>Select Date</Button>
-  </DatePickerTrigger>
-  <DatePickerContent>
-    <DatePickerCalendar />
-  </DatePickerContent>
-</DatePicker>
 ```
 
-**Screenshots/Video:**
-[Attach if helpful]
-```
+---
 
 ## Feature Requests
 
@@ -83,6 +73,8 @@ Have an idea for a new component or enhancement?
    - Any alternatives you've considered
 
 We review all feature requests and prioritize based on community interest and alignment with r/ui's design principles.
+
+---
 
 ## Contributing
 
@@ -147,22 +139,30 @@ docs: improve Theming guide examples
 chore: update dependencies
 ```
 
+---
+
 ## Resources
 
-### GitHub Repository
+<FeatureGrid>
+  <FeatureCard
+    title="Source Code"
+    description="github.com/rui-ui/react-native"
+  />
+  <FeatureCard
+    title="Issues"
+    description="github.com/rui-ui/react-native/issues"
+  />
+  <FeatureCard
+    title="Discussions"
+    description="github.com/rui-ui/react-native/discussions"
+  />
+  <FeatureCard
+    title="Changelog"
+    description="See CHANGELOG.md for version history"
+  />
+</FeatureGrid>
 
-- **Source Code:** [github.com/rui-ui/react-native](https://github.com/rui-ui/react-native)
-- **Issues:** [github.com/rui-ui/react-native/issues](https://github.com/rui-ui/react-native/issues)
-- **Discussions:** [github.com/rui-ui/react-native/discussions](https://github.com/rui-ui/react-native/discussions)
-- **Pull Requests:** [github.com/rui-ui/react-native/pulls](https://github.com/rui-ui/react-native/pulls)
-
-### Changelog
-
-See the [CHANGELOG.md](https://github.com/rui-ui/react-native/blob/main/CHANGELOG.md) for version history and breaking changes.
-
-### License
-
-r/ui is MIT licensed. See [LICENSE](https://github.com/rui-ui/react-native/blob/main/LICENSE) for details.
+---
 
 ## FAQ
 
@@ -180,7 +180,7 @@ yarn upgrade @r-ui/react-native
 pnpm update @r-ui/react-native
 ```
 
-Check the [changelog](https://github.com/rui-ui/react-native/blob/main/CHANGELOG.md) for any breaking changes between versions.
+Check the changelog for any breaking changes between versions.
 
 ### Does r/ui support Expo?
 
@@ -214,6 +214,8 @@ import { Button } from '@r-ui/react-native'
 
 Individual component sizes vary from 1-5KB minified+gzipped.
 
+---
+
 ## Contact
 
 - **GitHub Issues:** Best for bugs and features
@@ -221,3 +223,5 @@ Individual component sizes vary from 1-5KB minified+gzipped.
 - **Twitter/X:** [@r_ui_dev](https://twitter.com/r_ui_dev) for announcements
 
 Thank you for using r/ui!
+
+</GuideLayout>

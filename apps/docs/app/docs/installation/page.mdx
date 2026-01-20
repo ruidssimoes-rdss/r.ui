@@ -1,19 +1,21 @@
-# Installation
+<GuideLayout
+  title="Installation"
+  description="Get started with r/ui in your React Native or Expo project."
+>
 
-Get started with r/ui in your React Native or Expo project.
-
-## Prerequisites
-
-- React Native 0.70+ or Expo SDK 47+
-- TypeScript (recommended) — all components include full type definitions
+<InfoCard title="Prerequisites">
+  - React Native 0.70+ or Expo SDK 47+
+  - TypeScript (recommended) — all components include full type definitions
+</InfoCard>
 
 ## Quick Start
 
 Install the r/ui package in your project:
 
-```bash
-npm install @r-ui/react-native@latest
-```
+<QuickStartCard
+  command="npm install @r-ui/react-native@latest"
+  description="Install the core package with npm"
+/>
 
 Or with other package managers:
 
@@ -27,6 +29,8 @@ pnpm add @r-ui/react-native
 # bun
 bun add @r-ui/react-native
 ```
+
+---
 
 ## Usage
 
@@ -47,6 +51,8 @@ export default function App() {
 }
 ```
 
+---
+
 ## Theme Setup
 
 For full theming support (dark/light/oatmeal modes and glassmorphism effects), wrap your app with the ThemeProvider:
@@ -63,7 +69,7 @@ export default function App() {
 }
 ```
 
-The ThemeProvider accepts these options:
+### ThemeProvider Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -71,6 +77,8 @@ The ThemeProvider accepts these options:
 | `storageKey` | `string` | `'r-ui-theme'` | AsyncStorage key for persistence |
 
 Components work without the provider, but theming features require it.
+
+---
 
 ## Web Support
 
@@ -80,15 +88,38 @@ r/ui works with React Native Web out of the box. For Next.js or other web framew
 npm install react-native-web
 ```
 
+---
+
 ## Expo
 
 For Expo projects, r/ui works without additional configuration:
 
-```bash
-npx expo install @r-ui/react-native
-```
+<QuickStartCard
+  command="npx expo install @r-ui/react-native"
+  description="Use the Expo CLI for automatic peer dependency resolution"
+/>
+
+---
 
 ## What's Next?
 
-- Browse the [Button](/docs/components/button) component to see r/ui in action
-- [Explore all available components](/docs/components) in the sidebar
+<FeatureGrid>
+  <FeatureCard
+    title="Browse Components"
+    description="See the Button component to get a feel for r/ui's design language."
+  />
+  <FeatureCard
+    title="Explore All Components"
+    description="Browse the full component library in the sidebar."
+  />
+  <FeatureCard
+    title="Learn Theming"
+    description="Customize colors, spacing, and typography to match your brand."
+  />
+  <FeatureCard
+    title="Customization"
+    description="Learn how to extend and customize components."
+  />
+</FeatureGrid>
+
+</GuideLayout>

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { TableOfContents } from './TableOfContents';
 
 interface DocsLayoutProps {
   children: React.ReactNode;
@@ -84,25 +83,22 @@ export function DocsLayout({ children }: DocsLayoutProps) {
     );
   }
 
-  // Guide pages - traditional three-column layout
+  // Guide pages - two-column layout with sidebar (TOC handled by GuideLayout)
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <Header onMobileMenuToggle={toggleMobileMenu} isMobileMenuOpen={isMobileMenuOpen} />
 
-      {/* Three-column layout */}
-      <div className="w-full px-6 lg:px-48">
-        <div className="flex pt-6 pb-8 gap-12">
+      {/* Two-column layout */}
+      <div className="w-full px-6 lg:px-32 xl:px-48">
+        <div className="flex pt-8 pb-12 gap-12">
           {/* Left Sidebar */}
           <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={closeMobileMenu} />
 
-          {/* Main content */}
+          {/* Main content - GuideLayout handles TOC internally */}
           <main className="flex-1 min-w-0 py-6">
             {children}
           </main>
-
-          {/* Right Table of Contents */}
-          <TableOfContents />
         </div>
       </div>
     </div>
