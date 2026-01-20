@@ -4,6 +4,9 @@ import React, {
   useState,
   useEffect,
   useRef,
+  cloneElement,
+  isValidElement,
+  Children,
 } from 'react';
 import {
   View,
@@ -15,11 +18,22 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import Svg, { Line } from 'react-native-svg';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+
+// Built-in X icon for close button
+function CloseIcon({ size = 20, color = colors.text.secondary }: { size?: number; color?: string }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <Line x1="18" y1="6" x2="6" y2="18" />
+      <Line x1="6" y1="6" x2="18" y2="18" />
+    </Svg>
+  );
+}
 
 interface DialogContextValue {
   open: boolean;
@@ -52,6 +66,8 @@ export interface DialogTriggerProps {
   children: React.ReactElement;
   /** Additional styles */
   style?: ViewStyle;
+  /** Render as child element (polymorphic rendering) */
+  asChild?: boolean;
 }
 
 export interface DialogContentProps {
@@ -59,6 +75,8 @@ export interface DialogContentProps {
   children: React.ReactNode;
   /** Additional styles */
   style?: ViewStyle;
+  /** Show a built-in close button (X) in the top-right corner */
+  showCloseButton?: boolean;
 }
 
 export interface DialogHeaderProps {
@@ -94,6 +112,8 @@ export interface DialogCloseProps {
   children: React.ReactNode;
   /** Additional styles */
   style?: ViewStyle;
+  /** Render as child element (polymorphic rendering) */
+  asChild?: boolean;
 }
 
 export function Dialog({
@@ -120,8 +140,26 @@ export function Dialog({
   );
 }
 
-export function DialogTrigger({ children, style }: DialogTriggerProps) {
+export function DialogTrigger({ children, style, asChild = false }: DialogTriggerProps) {
   const { onOpenChange } = useDialogContext();
+
+  if (asChild) {
+    const child = Children.only(children);
+    if (isValidElement(child)) {
+      const childProps = child.props as Record<string, unknown>;
+      return cloneElement(child, {
+        ...childProps,
+        onPress: () => {
+          onOpenChange(true);
+          if (typeof childProps.onPress === 'function') {
+            childProps.onPress();
+          }
+        },
+        style: style ? [style, childProps.style] : childProps.style,
+        accessibilityRole: 'button',
+      } as Record<string, unknown>);
+    }
+  }
 
   return (
     <Pressable
@@ -134,7 +172,7 @@ export function DialogTrigger({ children, style }: DialogTriggerProps) {
   );
 }
 
-export function DialogContent({ children, style }: DialogContentProps) {
+export function DialogContent({ children, style, showCloseButton = false }: DialogContentProps) {
   const { open, onOpenChange } = useDialogContext();
   const reducedMotion = useReducedMotion();
   const scaleAnim = useRef(new Animated.Value(reducedMotion ? 1 : 0.9)).current;
@@ -198,6 +236,20 @@ export function DialogContent({ children, style }: DialogContentProps) {
             style,
           ]}
         >
+          {showCloseButton && (
+            <Pressable
+              onPress={() => onOpenChange(false)}
+              style={({ pressed }) => [
+                styles.closeButton,
+                pressed && styles.closeButtonPressed,
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Close dialog"
+              hitSlop={8}
+            >
+              <CloseIcon size={20} color={colors.text.secondary} />
+            </Pressable>
+          )}
           {children}
         </Animated.View>
       </View>
@@ -221,8 +273,27 @@ export function DialogDescription({ children, style }: DialogDescriptionProps) {
   return <Text style={[styles.description, style]}>{children}</Text>;
 }
 
-export function DialogClose({ children, style }: DialogCloseProps) {
+export function DialogClose({ children, style, asChild = false }: DialogCloseProps) {
   const { onOpenChange } = useDialogContext();
+
+  if (asChild) {
+    const child = Children.only(children);
+    if (isValidElement(child)) {
+      const childProps = child.props as Record<string, unknown>;
+      return cloneElement(child, {
+        ...childProps,
+        onPress: () => {
+          onOpenChange(false);
+          if (typeof childProps.onPress === 'function') {
+            childProps.onPress();
+          }
+        },
+        style: style ? [style, childProps.style] : childProps.style,
+        accessibilityRole: 'button',
+        accessibilityLabel: 'Close dialog',
+      } as Record<string, unknown>);
+    }
+  }
 
   return (
     <Pressable
@@ -234,6 +305,31 @@ export function DialogClose({ children, style }: DialogCloseProps) {
       {children}
     </Pressable>
   );
+}
+
+/**
+ * Slot component for polymorphic rendering (asChild pattern)
+ * Merges props and styles from parent onto the child element
+ */
+function Slot({
+  children,
+  style,
+  ...props
+}: {
+  children: React.ReactNode;
+  style?: ViewStyle | ViewStyle[];
+} & Record<string, unknown>) {
+  if (isValidElement(children)) {
+    const childProps = children.props as Record<string, unknown>;
+    return cloneElement(children, {
+      ...props,
+      ...childProps,
+      style: Array.isArray(style)
+        ? [...style, childProps.style]
+        : [style, childProps.style],
+    } as Record<string, unknown>);
+  }
+  return null;
 }
 
 const styles = StyleSheet.create({
@@ -277,5 +373,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text.secondary,
     lineHeight: 20,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    width: 32,
+    height: 32,
+    borderRadius: radius.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+  },
+  closeButtonPressed: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
 });

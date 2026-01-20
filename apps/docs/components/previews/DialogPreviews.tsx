@@ -181,3 +181,126 @@ export function DialogAlertPreview() {
     </>
   );
 }
+
+function XIconSvg({ className = 'w-5 h-5' }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  );
+}
+
+function DialogWithClose({
+  open,
+  onClose,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      {/* Dialog content */}
+      <div className="relative z-10 w-full max-w-md mx-4 p-6 rounded-xl bg-[var(--component-bg)] border border-[var(--component-border)] shadow-xl animate-in zoom-in-95 fade-in duration-200">
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-md text-[var(--component-text-muted)] hover:text-[var(--component-text)] hover:bg-[var(--component-bg-hover)] transition-colors"
+          aria-label="Close dialog"
+        >
+          <XIconSvg className="w-5 h-5" />
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export function DialogWithCloseButtonPreview() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className={`${buttonStyles} bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]`}
+      >
+        Open Dialog with Close Button
+      </button>
+
+      <DialogWithClose open={open} onClose={() => setOpen(false)}>
+        <div className="space-y-4 pr-8">
+          <div>
+            <h3 className="text-lg font-semibold text-[var(--component-text)]">Dialog with Close Button</h3>
+            <p className="text-sm text-[var(--component-text-muted)] mt-1">
+              Click the X in the corner to close this dialog. This provides a familiar pattern for users who expect a close button.
+            </p>
+          </div>
+          <p className="text-sm text-[var(--component-text-muted)]">
+            The close button is positioned in the top-right corner with proper spacing and hover states.
+          </p>
+        </div>
+      </DialogWithClose>
+    </>
+  );
+}
+
+export function DialogCloseButtonComparisonPreview() {
+  const [withoutX, setWithoutX] = useState(false);
+  const [withX, setWithX] = useState(false);
+
+  return (
+    <div className="flex gap-3">
+      <button
+        onClick={() => setWithoutX(true)}
+        className={`${buttonStyles} bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)] border border-[var(--btn-secondary-border)]`}
+      >
+        Without X
+      </button>
+      <button
+        onClick={() => setWithX(true)}
+        className={`${buttonStyles} bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]`}
+      >
+        With X
+      </button>
+
+      <Dialog open={withoutX} onClose={() => setWithoutX(false)}>
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-lg font-semibold text-[var(--component-text)]">No Close Button</h3>
+            <p className="text-sm text-[var(--component-text-muted)] mt-1">
+              This dialog requires clicking a button to close.
+            </p>
+          </div>
+          <div className="flex justify-end">
+            <button
+              onClick={() => setWithoutX(false)}
+              className={`${buttonStyles} bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]`}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </Dialog>
+
+      <DialogWithClose open={withX} onClose={() => setWithX(false)}>
+        <div className="space-y-4 pr-8">
+          <div>
+            <h3 className="text-lg font-semibold text-[var(--component-text)]">With Close Button</h3>
+            <p className="text-sm text-[var(--component-text-muted)] mt-1">
+              This dialog has a built-in X button in the corner.
+            </p>
+          </div>
+        </div>
+      </DialogWithClose>
+    </div>
+  );
+}

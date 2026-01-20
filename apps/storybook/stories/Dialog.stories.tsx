@@ -620,6 +620,161 @@ export const VideoPlayer: Story = {
   ),
 };
 
+// === Close Button Stories ===
+
+export const WithCloseButton: Story = {
+  render: () => (
+    <View style={styles.container}>
+      <Dialog>
+        <DialogTrigger>
+          <Button>Open with Close Button</Button>
+        </DialogTrigger>
+        <DialogContent showCloseButton>
+          <DialogHeader>
+            <DialogTitle>Settings</DialogTitle>
+            <DialogDescription>
+              This dialog has a built-in close button in the top-right corner.
+              Click the X to close it.
+            </DialogDescription>
+          </DialogHeader>
+          <View style={styles.dialogBody}>
+            <Text style={styles.bodyText}>
+              The close button provides a familiar pattern for users who expect
+              an X button to dismiss dialogs.
+            </Text>
+          </View>
+          <DialogFooter>
+            <Button>Save changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </View>
+  ),
+};
+
+export const CloseButtonComparison: Story = {
+  render: () => (
+    <View style={styles.container}>
+      <View style={styles.buttonRow}>
+        <Dialog>
+          <DialogTrigger>
+            <Button variant="outline">Without X</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>No Close Button</DialogTitle>
+              <DialogDescription>
+                This dialog requires clicking a button or the backdrop to close.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose>
+                <Button>Close</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog>
+          <DialogTrigger>
+            <Button>With X</Button>
+          </DialogTrigger>
+          <DialogContent showCloseButton>
+            <DialogHeader>
+              <DialogTitle>With Close Button</DialogTitle>
+              <DialogDescription>
+                This dialog has a built-in X button in the corner.
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </View>
+    </View>
+  ),
+};
+
+export const WithCloseButtonAndAsChild: Story = {
+  render: () => (
+    <View style={styles.container}>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="secondary">Open (asChild trigger)</Button>
+        </DialogTrigger>
+        <DialogContent showCloseButton>
+          <DialogHeader>
+            <DialogTitle>asChild Pattern</DialogTitle>
+            <DialogDescription>
+              This dialog uses asChild on the trigger for polymorphic rendering.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="ghost">Cancel (asChild)</Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button>Confirm (asChild)</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </View>
+  ),
+};
+
+export const CloseButtonWithForm: Story = {
+  render: function CloseButtonWithFormStory() {
+    const [name, setName] = useState('John Doe');
+    const [email, setEmail] = useState('john@example.com');
+
+    return (
+      <View style={styles.container}>
+        <Dialog>
+          <DialogTrigger>
+            <Button>Edit Profile</Button>
+          </DialogTrigger>
+          <DialogContent showCloseButton>
+            <DialogHeader>
+              <DialogTitle>Edit Profile</DialogTitle>
+              <DialogDescription>
+                Make changes to your profile. Click the X or save to close.
+              </DialogDescription>
+            </DialogHeader>
+
+            <View style={styles.formContainer}>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Name</Text>
+                <Input
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Enter your name"
+                />
+              </View>
+              <View style={styles.formField}>
+                <Text style={styles.formLabel}>Email</Text>
+                <Input
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder="Enter your email"
+                  keyboardType="email-address"
+                />
+              </View>
+            </View>
+
+            <DialogFooter>
+              <DialogClose>
+                <Button variant="ghost">Cancel</Button>
+              </DialogClose>
+              <DialogClose>
+                <Button>Save Changes</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </View>
+    );
+  },
+};
+
 const styles = StyleSheet.create({
   container: {
     width: 360,

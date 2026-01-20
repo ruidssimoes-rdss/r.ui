@@ -286,8 +286,8 @@ export type {
 } from './components/ActionSheet';
 
 // Form Components
-export { Input } from './components/Input';
-export type { InputProps, InputSize } from './components/Input';
+export { Input, SearchInput, PasswordInput } from './components/Input';
+export type { InputProps, InputSize, SearchInputProps, PasswordInputProps } from './components/Input';
 
 export { Textarea } from './components/Textarea';
 export type { TextareaProps } from './components/Textarea';
