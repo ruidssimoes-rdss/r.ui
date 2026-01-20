@@ -1,8 +1,17 @@
-export interface StudioColor {
+// ============================================
+// COLOR TOKENS
+// ============================================
+
+export interface ColorValue {
+  light: string;
+  dark: string;
+}
+
+export interface ColorToken {
   id: string;
-  name: string; // User-defined name (e.g., "brand", "accent", "cta")
-  value: string; // Hex value
-  scale?: ColorScale; // Auto-generated 50-950 scale
+  name: string;
+  value: ColorValue;
+  description?: string;
 }
 
 export interface ColorScale {
@@ -19,38 +28,146 @@ export interface ColorScale {
   950: string;
 }
 
-export interface StudioTokens {
-  colors: StudioColor[];
-  radius: {
-    base: number; // e.g., 8
-    scale: number[]; // Multipliers: [0.5, 1, 1.5, 2, 4] → [4, 8, 12, 16, 32]
+export interface ColorTokens {
+  brand: ColorToken[];
+  semantic: ColorToken[];
+  neutral: {
+    baseColor: string;
+    scale: ColorScale;
   };
-  spacing: {
-    base: number; // e.g., 4
-    scale: number[]; // Values: [4, 8, 12, 16, 20, 24, 32, 48, 64]
+  surface: {
+    background: ColorValue;
+    foreground: ColorValue;
+    card: ColorValue;
+    muted: ColorValue;
+    mutedForeground: ColorValue;
+    border: ColorValue;
   };
 }
+
+// ============================================
+// TYPOGRAPHY TOKENS
+// ============================================
+
+export interface FontFamily {
+  id: string;
+  name: string;
+  value: string;
+}
+
+export interface FontSizeToken {
+  name: string;
+  size: number;
+  lineHeight: number;
+}
+
+export interface FontWeightToken {
+  name: string;
+  value: number;
+}
+
+export interface TypographyTokens {
+  families: FontFamily[];
+  sizes: FontSizeToken[];
+  weights: FontWeightToken[];
+}
+
+// ============================================
+// SPACING TOKENS
+// ============================================
+
+export interface SpacingTokens {
+  baseUnit: number;
+  scale: number[];
+}
+
+// ============================================
+// RADIUS TOKENS
+// ============================================
+
+export interface RadiusToken {
+  name: string;
+  value: number;
+}
+
+export interface RadiusTokens {
+  base: number;
+  scale: RadiusToken[];
+}
+
+// ============================================
+// SHADOW TOKENS
+// ============================================
+
+export interface ShadowToken {
+  name: string;
+  value: string;
+}
+
+export interface ShadowTokens {
+  scale: ShadowToken[];
+}
+
+// ============================================
+// ANIMATION TOKENS
+// ============================================
+
+export interface DurationToken {
+  name: string;
+  value: number;
+}
+
+export interface EasingToken {
+  name: string;
+  value: string;
+}
+
+export interface AnimationTokens {
+  durations: DurationToken[];
+  easings: EasingToken[];
+}
+
+// ============================================
+// COMPLETE TOKEN SYSTEM
+// ============================================
+
+export interface TokenSystem {
+  name: string;
+  colors: ColorTokens;
+  typography: TypographyTokens;
+  spacing: SpacingTokens;
+  radius: RadiusTokens;
+  shadows: ShadowTokens;
+  animations: AnimationTokens;
+}
+
+// ============================================
+// UI STATE
+// ============================================
+
+export type TokenTab =
+  | 'colors'
+  | 'typography'
+  | 'spacing'
+  | 'radius'
+  | 'shadows'
+  | 'animations';
+export type PreviewMode = 'light' | 'dark';
+export type PreviewDevice = 'mobile' | 'tablet' | 'desktop';
+export type ExportFormat = 'css' | 'tailwind' | 'rui' | 'json';
 
 export interface StudioState {
-  tokens: StudioTokens;
-  previewMode: 'light' | 'dark';
-  previewDevice: 'mobile' | 'tablet' | 'desktop';
-  viewMode: 'preview' | 'code';
-  exportFormat: 'css' | 'theme' | 'tailwind' | 'json';
+  tokens: TokenSystem;
+  activeTab: TokenTab;
+  previewMode: PreviewMode;
+  previewDevice: PreviewDevice;
+  exportFormat: ExportFormat;
+  validationErrors: ValidationError[];
 }
 
-export interface ReviewResult {
-  score: number; // 0-100
-  issues: ReviewIssue[];
-}
-
-export interface ReviewIssue {
-  type: 'error' | 'warning' | 'info';
+export interface ValidationError {
+  type: 'error' | 'warning';
+  category: string;
   message: string;
   suggestion?: string;
 }
-
-export type ThemeMode = 'light' | 'dark';
-export type DeviceFrame = 'mobile' | 'tablet' | 'desktop';
-export type ViewMode = 'preview' | 'code';
-export type ExportFormat = 'css' | 'theme' | 'tailwind' | 'json';

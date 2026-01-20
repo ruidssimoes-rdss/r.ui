@@ -1,9 +1,9 @@
-import { StudioProvider } from '@/lib/studio/studio-context';
+import { TokenProvider } from '@/lib/studio/context';
 
 export const metadata = {
-  title: 'r/ui Studio - Visual Theme Builder',
+  title: 'r/ui Token Builder - Design System Generator',
   description:
-    'Design your theme visually, preview on real components, export production-ready code.',
+    'Define your design system once. Get production-ready code for everything.',
 };
 
 export default function StudioLayout({
@@ -11,5 +11,5 @@ export default function StudioLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <StudioProvider>{children}</StudioProvider>;
+  return <TokenProvider>{children}</TokenProvider>;
 }

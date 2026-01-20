@@ -1,23 +1,25 @@
-// Main page component
-export { StudioPage } from './StudioPage';
-
-// Layout components
-export { StudioHeader } from './StudioHeader';
-export { StudioToolbar } from './StudioToolbar';
-export { StudioPreview } from './StudioPreview';
-export { StudioCodeView } from './StudioCodeView';
-export { StudioControls } from './StudioControls';
-
-// Token controls
-export { ColorPalette } from './ColorPalette';
-export { ColorSwatch } from './ColorSwatch';
-export { RadiusControl } from './RadiusControl';
-export { SpacingControl } from './SpacingControl';
-
-// Preview
-export { ComponentShowcase } from './ComponentShowcase';
-
-// Modals
-export { HelpModal } from './HelpModal';
-export { ReviewModal } from './ReviewModal';
+// Main components
+export { TokenBuilder } from './TokenBuilder';
+export { TokenSidebar } from './TokenSidebar';
+export { TokenPreview } from './TokenPreview';
+export { TokenExport } from './TokenExport';
 export { ExportModal } from './ExportModal';
+export { ValidationPanel } from './ValidationPanel';
+
+// Tabs
+export { ColorsTab } from './tabs/ColorsTab';
+export { TypographyTab } from './tabs/TypographyTab';
+export { SpacingTab } from './tabs/SpacingTab';
+export { RadiusTab } from './tabs/RadiusTab';
+export { ShadowsTab } from './tabs/ShadowsTab';
+export { AnimationsTab } from './tabs/AnimationsTab';
+
+// Shared components
+export { ColorPicker } from './shared/ColorPicker';
+export { ContrastChecker } from './shared/ContrastChecker';
+export { ScaleEditor, BaseWithScale } from './shared/ScaleEditor';
+export { TokenInput } from './shared/TokenInput';
+
+// Preview components
+export { PreviewToolbar } from './preview/PreviewToolbar';
+export { PreviewShowcase } from './preview/PreviewShowcase';

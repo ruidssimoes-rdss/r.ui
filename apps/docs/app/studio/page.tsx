@@ -1,7 +1,7 @@
 'use client';
 
-import { StudioPage } from '@/components/studio/StudioPage';
+import { TokenBuilder } from '@/components/studio/TokenBuilder';
 
-export default function Page() {
-  return <StudioPage />;
+export default function StudioPage() {
+  return <TokenBuilder />;
 }

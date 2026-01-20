@@ -1,18 +1,13 @@
 import chroma from 'chroma-js';
-
-import { ColorScale } from './types';
+import { ColorScale } from '../types';
 
 /**
- * Generate a full color scale from a single color
+ * Generate a full color scale (50-950) from a single base color
  * Uses perceptually uniform color manipulation
  */
 export function generateColorScale(baseColor: string): ColorScale {
   try {
     const base = chroma(baseColor);
-
-    // Generate lighter shades (50-400)
-    // Generate darker shades (600-950)
-    // 500 is closest to the input color
 
     return {
       50: base.brighten(2.5).desaturate(0.5).hex(),
@@ -46,30 +41,6 @@ export function generateColorScale(baseColor: string): ColorScale {
 }
 
 /**
- * Check WCAG contrast ratio between two colors
- * Returns 'AAA' | 'AA' | 'FAIL'
- */
-export function checkContrast(
-  foreground: string,
-  background: string
-): {
-  ratio: number;
-  level: 'AAA' | 'AA' | 'FAIL';
-} {
-  try {
-    const ratio = chroma.contrast(foreground, background);
-
-    let level: 'AAA' | 'AA' | 'FAIL' = 'FAIL';
-    if (ratio >= 7) level = 'AAA';
-    else if (ratio >= 4.5) level = 'AA';
-
-    return { ratio, level };
-  } catch {
-    return { ratio: 0, level: 'FAIL' };
-  }
-}
-
-/**
  * Get a readable text color (black or white) for a given background
  */
 export function getContrastText(background: string): string {
@@ -82,32 +53,6 @@ export function getContrastText(background: string): string {
 }
 
 /**
- * Generate semantic colors based on a primary color
- */
-export function generateSemanticColors(
-  _primary: string,
-  mode: 'light' | 'dark'
-) {
-  if (mode === 'dark') {
-    return {
-      background: '#09090b',
-      foreground: '#fafafa',
-      muted: '#27272a',
-      mutedForeground: '#a1a1aa',
-      border: '#27272a',
-    };
-  }
-
-  return {
-    background: '#ffffff',
-    foreground: '#09090b',
-    muted: '#f4f4f5',
-    mutedForeground: '#71717a',
-    border: '#e4e4e7',
-  };
-}
-
-/**
  * Validate if a string is a valid hex color
  */
 export function isValidHexColor(color: string): boolean {
@@ -115,7 +60,7 @@ export function isValidHexColor(color: string): boolean {
 }
 
 /**
- * Lighten a color by a percentage
+ * Lighten a color by an amount
  */
 export function lightenColor(color: string, amount: number): string {
   try {
@@ -126,11 +71,44 @@ export function lightenColor(color: string, amount: number): string {
 }
 
 /**
- * Darken a color by a percentage
+ * Darken a color by an amount
  */
 export function darkenColor(color: string, amount: number): string {
   try {
     return chroma(color).darken(amount).hex();
+  } catch {
+    return color;
+  }
+}
+
+/**
+ * Mix two colors together
+ */
+export function mixColors(color1: string, color2: string, ratio = 0.5): string {
+  try {
+    return chroma.mix(color1, color2, ratio).hex();
+  } catch {
+    return color1;
+  }
+}
+
+/**
+ * Adjust saturation of a color
+ */
+export function saturate(color: string, amount: number): string {
+  try {
+    return chroma(color).saturate(amount).hex();
+  } catch {
+    return color;
+  }
+}
+
+/**
+ * Desaturate a color
+ */
+export function desaturate(color: string, amount: number): string {
+  try {
+    return chroma(color).desaturate(amount).hex();
   } catch {
     return color;
   }
