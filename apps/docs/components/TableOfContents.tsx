@@ -153,17 +153,17 @@ export function TableOfContents() {
                 <a
                   href={`#${heading.id}`}
                   onClick={(e) => handleClick(e, heading.id)}
-                  className={`block py-1 text-sm transition-colors relative
+                  className={`block py-1.5 text-sm transition-colors relative
                              ${heading.level === 3 ? 'pl-4' : 'pl-2'}
                              ${isActive
-                               ? 'text-red-500 font-medium'
-                               : 'text-gray-500 hover:text-gray-900'
+                               ? 'text-gray-900 font-medium'
+                               : 'text-gray-400 hover:text-gray-700'
                              }`}
                 >
                   {/* Active indicator */}
                   {isActive && (
                     <span
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-red-500"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-gray-900"
                       aria-hidden="true"
                     />
                   )}

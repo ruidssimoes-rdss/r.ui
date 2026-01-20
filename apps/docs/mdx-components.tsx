@@ -202,46 +202,61 @@ import {
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    // Minimal typography - clean, no backgrounds
+    // Typography - clean, better hierarchy
     h1: ({ children }) => <ComponentPageHeader>{children}</ComponentPageHeader>,
     h2: ({ children }) => (
-      <h2 className="text-sm font-semibold mt-8 mb-3 text-gray-900">{children}</h2>
+      <h2 className="text-lg font-semibold mt-10 mb-4 text-gray-900 border-b border-gray-100 pb-2">{children}</h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-sm font-medium mt-6 mb-2 text-gray-900">{children}</h3>
+      <h3 className="text-base font-medium mt-8 mb-3 text-gray-900">{children}</h3>
     ),
     p: ({ children }) => (
-      <p className="text-sm text-gray-600 mb-4 leading-relaxed">{children}</p>
+      <p className="text-base text-gray-600 mb-4 leading-relaxed">{children}</p>
     ),
-    // Inline code - plain text, no background
+    ul: ({ children }) => (
+      <ul className="text-base text-gray-600 mb-4 leading-relaxed list-disc list-inside space-y-1">{children}</ul>
+    ),
+    ol: ({ children }) => (
+      <ol className="text-base text-gray-600 mb-4 leading-relaxed list-decimal list-inside space-y-1">{children}</ol>
+    ),
+    li: ({ children }) => (
+      <li className="text-gray-600">{children}</li>
+    ),
+    // Inline code - subtle background
     code: ({ children }) => (
-      <code className="text-xs font-mono text-gray-700">
+      <code className="text-sm font-mono text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">
         {children}
       </code>
     ),
-    // Code blocks - bordered container, no background
+    // Code blocks - subtle background, better padding
     pre: ({ children }) => (
-      <div className="border border-gray-200 rounded-lg p-6 mb-4 overflow-x-auto">
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 overflow-x-auto">
         <pre className="text-sm font-mono text-gray-800 leading-relaxed">
           {children}
         </pre>
       </div>
     ),
-    // Tables - clean borders, no grey backgrounds
+    // Tables - clean borders, subtle header
     table: ({ children }) => (
-      <div className="overflow-x-auto mb-4 border border-gray-200 rounded-lg">
+      <div className="overflow-x-auto mb-6 border border-gray-200 rounded-lg">
         <table className="w-full text-sm">{children}</table>
       </div>
     ),
     th: ({ children }) => (
-      <th className="text-left px-3 py-2 border-b border-gray-200 text-gray-500 text-xs font-medium uppercase tracking-wide">
+      <th className="text-left px-4 py-3 bg-gray-50 border-b border-gray-200 text-gray-600 text-xs font-semibold uppercase tracking-wide">
         {children}
       </th>
     ),
     td: ({ children }) => (
-      <td className="px-3 py-2 border-b border-gray-100 text-gray-600 text-sm">
+      <td className="px-4 py-3 border-b border-gray-100 text-gray-600 text-sm">
         {children}
       </td>
+    ),
+    // Links
+    a: ({ children, href }) => (
+      <a href={href} className="text-gray-900 underline underline-offset-2 hover:text-gray-600 transition-colors">
+        {children}
+      </a>
     ),
     // Documentation components
     CodeBlock,

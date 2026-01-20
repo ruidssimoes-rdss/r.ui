@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { Breadcrumbs } from './Breadcrumbs';
 import { TableOfContents } from './TableOfContents';
 
 interface DocsLayoutProps {
@@ -99,8 +98,6 @@ export function DocsLayout({ children }: DocsLayoutProps) {
 
           {/* Main content */}
           <main className="flex-1 min-w-0 py-6">
-            {/* Breadcrumbs - only for non-introduction pages */}
-            {pathname !== '/docs' && <Breadcrumbs />}
             {children}
           </main>
 
