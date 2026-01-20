@@ -41,7 +41,7 @@ export default function HomePage() {
 
         {/* Centered CTA */}
         <a
-          href="/docs/installation"
+          href="/docs/get-started"
           className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors"
         >
           Get Started
