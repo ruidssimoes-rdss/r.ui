@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LintEditor } from '@/components/lint/LintEditor';
 import { LintResults } from '@/components/lint/LintResults';
@@ -39,6 +40,33 @@ const ALL_RULES = [
 ];
 
 export default function LintPage() {
+  return (
+    <Suspense fallback={<LintPageSkeleton />}>
+      <LintPageContent />
+    </Suspense>
+  );
+}
+
+function LintPageSkeleton() {
+  return (
+    <div className="min-h-screen bg-white dark:bg-gray-950">
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+            r/ui Design Linter
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Catch accessibility and design issues in your React Native code before they reach
+            production.
+          </p>
+        </div>
+        <div className="h-64 rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 animate-pulse" />
+      </div>
+    </div>
+  );
+}
+
+function LintPageContent() {
   const searchParams = useSearchParams();
   const [code, setCode] = React.useState('');
   const [results, setResults] = React.useState<LintIssue[]>([]);
