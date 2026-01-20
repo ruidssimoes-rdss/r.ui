@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Header } from './Header';
-import { Sidebar } from './Sidebar';
 
 interface DocsLayoutProps {
   children: React.ReactNode;
@@ -27,10 +26,6 @@ export function DocsLayout({ children }: DocsLayoutProps) {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
   };
 
   const isDocsLanding = pathname === '/docs';
@@ -83,24 +78,14 @@ export function DocsLayout({ children }: DocsLayoutProps) {
     );
   }
 
-  // Guide pages - two-column layout with sidebar (TOC handled by GuideLayout)
+  // Guide pages - full-width layout (same as component pages, no sidebars)
+  // GuideLayout handles its own navigation and TOC
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
       <Header onMobileMenuToggle={toggleMobileMenu} isMobileMenuOpen={isMobileMenuOpen} />
-
-      {/* Two-column layout */}
-      <div className="w-full px-6 lg:px-32 xl:px-48">
-        <div className="flex pt-8 pb-12 gap-12">
-          {/* Left Sidebar */}
-          <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={closeMobileMenu} />
-
-          {/* Main content - GuideLayout handles TOC internally */}
-          <main className="flex-1 min-w-0 py-6">
-            {children}
-          </main>
-        </div>
-      </div>
+      <main className="w-full">
+        {children}
+      </main>
     </div>
   );
 }

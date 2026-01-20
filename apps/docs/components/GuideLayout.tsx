@@ -25,6 +25,14 @@ export interface GuideLayoutProps {
 // Icons
 // ========================================
 
+function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 function DownloadIcon({ className }: { className?: string }) {
   return (
     <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -100,6 +108,15 @@ function SlidersIcon({ className }: { className?: string }) {
   );
 }
 
+function BookOpenIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    </svg>
+  );
+}
+
 // Map page slugs to icons
 const pageIcons: Record<string, ReactNode> = {
   installation: <DownloadIcon className="w-6 h-6" />,
@@ -109,77 +126,140 @@ const pageIcons: Record<string, ReactNode> = {
   help: <HelpCircleIcon className="w-6 h-6" />,
   patterns: <LayoutIcon className="w-6 h-6" />,
   principles: <CompassIcon className="w-6 h-6" />,
+  overview: <BookOpenIcon className="w-6 h-6" />,
 };
 
+// Guide navigation data
+const guideNavigation = [
+  { id: 'docs', label: 'Overview', href: '/docs' },
+  { id: 'installation', label: 'Installation', href: '/docs/installation' },
+  { id: 'principles', label: 'Principles', href: '/docs/principles' },
+  { id: 'patterns', label: 'Patterns', href: '/docs/patterns' },
+  { id: 'theming', label: 'Theming', href: '/docs/theming' },
+  { id: 'dark-mode', label: 'Dark Mode', href: '/docs/dark-mode' },
+  { id: 'customization', label: 'Customization', href: '/docs/customization' },
+  { id: 'help', label: 'Help', href: '/docs/help' },
+];
+
 // ========================================
-// Breadcrumbs
+// Dropdown Component (similar to PlaygroundNav)
 // ========================================
 
-function GuideBreadcrumbs({ title }: { title: string }) {
+interface DropdownOption {
+  id: string;
+  label: string;
+  href?: string;
+}
+
+interface DropdownProps {
+  label: string;
+  options: DropdownOption[];
+  value: string;
+}
+
+function Dropdown({ label, options, value }: DropdownProps) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open]);
+
+  const selectedOption = options.find(o => o.id === value);
+
   return (
-    <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="flex items-center gap-1.5 text-sm">
-        <li className="flex items-center gap-1.5">
-          <Link
-            href="/"
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            Home
-          </Link>
-        </li>
-        <li className="flex items-center gap-1.5">
-          <span className="text-gray-300" aria-hidden="true">/</span>
-          <Link
-            href="/docs"
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            Docs
-          </Link>
-        </li>
-        <li className="flex items-center gap-1.5">
-          <span className="text-gray-300" aria-hidden="true">/</span>
-          <span className="text-gray-900 font-semibold">
-            {title}
-          </span>
-        </li>
-      </ol>
-    </nav>
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className={`
+          flex items-center gap-1 px-2 py-1.5 text-sm font-medium rounded-md
+          transition-colors text-[#374151]
+          ${open ? 'bg-[#F3F4F6]' : 'hover:bg-[#F9FAFB]'}
+        `}
+      >
+        <span className="leading-5">{selectedOption?.label || label}</span>
+        <ChevronDownIcon className={`text-[#374151] transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1 z-50 min-w-[200px] max-h-[300px] overflow-auto rounded-lg bg-white border border-[#E5E7EB] shadow-lg animate-in fade-in slide-in-from-top-2">
+          <div className="py-1">
+            {options.map((option) => {
+              const isSelected = option.id === value;
+
+              if (option.href) {
+                return (
+                  <Link
+                    key={option.id}
+                    href={option.href}
+                    onClick={() => setOpen(false)}
+                    className={`
+                      block w-full px-3 py-2 text-sm text-left leading-5
+                      ${isSelected ? 'bg-[#F9FAFB] text-[#111827] font-medium' : 'text-[#374151] hover:bg-[#F9FAFB]'}
+                    `}
+                  >
+                    {option.label}
+                  </Link>
+                );
+              }
+
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => setOpen(false)}
+                  className={`
+                    block w-full px-3 py-2 text-sm text-left leading-5
+                    ${isSelected ? 'bg-[#F9FAFB] text-[#111827] font-medium' : 'text-[#374151] hover:bg-[#F9FAFB]'}
+                  `}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
 // ========================================
-// Hero Section
+// Guide Navigation Bar
 // ========================================
 
-interface HeroSectionProps {
-  title: string;
-  description: string;
-  icon?: ReactNode;
+interface GuideNavProps {
+  currentGuide: string;
 }
 
-function HeroSection({ title, description, icon }: HeroSectionProps) {
-  const pathname = usePathname();
-  const slug = pathname.split('/').pop() || '';
-  const defaultIcon = pageIcons[slug];
-  const displayIcon = icon || defaultIcon;
-
+function GuideNav({ currentGuide }: GuideNavProps) {
   return (
-    <div className="mb-8 pb-8 border-b border-gray-100">
-      <GuideBreadcrumbs title={title} />
-      <div className="flex items-start gap-4">
-        {displayIcon && (
-          <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-600">
-            {displayIcon}
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
-            {title}
-          </h1>
-          <p className="text-lg text-gray-500 leading-relaxed">
-            {description}
-          </p>
-        </div>
+    <div className="flex items-center justify-between h-12 py-2">
+      {/* Left: Empty or can add toolbar buttons later */}
+      <div className="flex items-center" />
+
+      {/* Right: Navigation dropdown (breadcrumb style) */}
+      <div className="flex items-center">
+        {/* Guides label */}
+        <span className="text-sm font-medium text-[#374151] px-2 py-1.5">Guides</span>
+
+        {/* Slash separator */}
+        <span className="text-[#D1D5DB] text-base leading-6 px-0.5">/</span>
+
+        {/* Guide dropdown */}
+        <Dropdown
+          label="Guide"
+          options={guideNavigation}
+          value={currentGuide}
+        />
       </div>
     </div>
   );
@@ -197,7 +277,7 @@ interface TabNavigationProps {
 
 function TabNavigation({ tabs, activeTab, onTabChange }: TabNavigationProps) {
   return (
-    <div className="mb-8 border-b border-gray-100">
+    <div className="border-b border-gray-200">
       <div className="flex overflow-x-auto scrollbar-hide gap-1">
         {tabs.map((tab) => (
           <button
@@ -223,7 +303,44 @@ function TabNavigation({ tabs, activeTab, onTabChange }: TabNavigationProps) {
 }
 
 // ========================================
-// Table of Contents (Improved)
+// Hero Section
+// ========================================
+
+interface HeroSectionProps {
+  title: string;
+  description: string;
+  icon?: ReactNode;
+}
+
+function HeroSection({ title, description, icon }: HeroSectionProps) {
+  const pathname = usePathname();
+  const slug = pathname === '/docs' ? 'overview' : pathname.split('/').pop() || '';
+  const defaultIcon = pageIcons[slug];
+  const displayIcon = icon || defaultIcon;
+
+  return (
+    <div className="mb-8">
+      <div className="flex items-start gap-4">
+        {displayIcon && (
+          <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-600">
+            {displayIcon}
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
+            {title}
+          </h1>
+          <p className="text-lg text-gray-500 leading-relaxed">
+            {description}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ========================================
+// Table of Contents (Right Sidebar)
 // ========================================
 
 interface TOCItem {
@@ -352,10 +469,10 @@ function GuideTableOfContents() {
 
   return (
     <nav
-      className="hidden xl:block w-56 flex-shrink-0 sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto"
+      className="hidden xl:block w-56 flex-shrink-0"
       aria-label="Table of contents"
     >
-      <div className="py-4 pr-4">
+      <div className="sticky top-20 py-4 pr-4">
         <h4 className="mb-4 text-xs font-semibold text-gray-900 uppercase tracking-wider">
           On this page
         </h4>
@@ -399,7 +516,11 @@ export function GuideLayout({
   tabs,
   children,
 }: GuideLayoutProps) {
+  const pathname = usePathname();
   const [activeTab, setActiveTab] = useState(tabs?.[0]?.id || '');
+
+  // Determine current guide from pathname
+  const currentGuide = pathname === '/docs' ? 'docs' : pathname.split('/').pop() || 'docs';
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
@@ -413,11 +534,20 @@ export function GuideLayout({
   };
 
   return (
-    <div className="flex gap-12">
-      {/* Main content */}
-      <div className="flex-1 min-w-0">
-        <HeroSection title={title} description={description} icon={icon} />
+    <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-white">
+      {/* Contained layout - 320px side padding on desktop (same as PlaygroundLayout) */}
+      <div className="w-full mx-auto px-4 lg:px-[320px] flex flex-col">
+        {/* Navigation bar - 60px top padding */}
+        <div className="pt-[60px]">
+          <GuideNav currentGuide={currentGuide} />
+        </div>
 
+        {/* Hero section */}
+        <div className="pt-6">
+          <HeroSection title={title} description={description} icon={icon} />
+        </div>
+
+        {/* Tabs (if provided) */}
         {tabs && tabs.length > 0 && (
           <TabNavigation
             tabs={tabs}
@@ -426,13 +556,19 @@ export function GuideLayout({
           />
         )}
 
-        <div data-guide-content className="guide-content">
-          {children}
+        {/* Main content with optional TOC */}
+        <div className="flex gap-12 pt-8 pb-12">
+          {/* Main content */}
+          <div className="flex-1 min-w-0">
+            <div data-guide-content className="guide-content">
+              {children}
+            </div>
+          </div>
+
+          {/* Table of Contents */}
+          <GuideTableOfContents />
         </div>
       </div>
-
-      {/* Table of Contents */}
-      <GuideTableOfContents />
     </div>
   );
 }
