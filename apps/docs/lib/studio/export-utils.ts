@@ -1,124 +1,105 @@
-import { StudioTheme } from './types';
+import { StudioTokens } from './types';
 
-export function generateCSSExport(theme: StudioTheme): string {
+export function generateCSSExport(tokens: StudioTokens): string {
+  const colorVars = tokens.colors
+    .map((c) => {
+      let output = `  /* ${c.name} */\n`;
+      output += `  --color-${c.name}: ${c.value};\n`;
+      if (c.scale) {
+        Object.entries(c.scale).forEach(([key, value]) => {
+          output += `  --color-${c.name}-${key}: ${value};\n`;
+        });
+      }
+      return output;
+    })
+    .join('\n');
+
+  const radiusVars = tokens.radius.scale
+    .map((m, i) => `  --radius-${i}: ${Math.round(tokens.radius.base * m)}px;`)
+    .join('\n');
+
+  const spacingVars = tokens.spacing.scale
+    .map((v, i) => `  --spacing-${i}: ${v}px;`)
+    .join('\n');
+
   return `:root {
-  /* Primary */
-  --color-primary: ${theme.colors.primary};
-  --color-primary-50: ${theme.colors.primaryScale[50]};
-  --color-primary-100: ${theme.colors.primaryScale[100]};
-  --color-primary-200: ${theme.colors.primaryScale[200]};
-  --color-primary-300: ${theme.colors.primaryScale[300]};
-  --color-primary-400: ${theme.colors.primaryScale[400]};
-  --color-primary-500: ${theme.colors.primaryScale[500]};
-  --color-primary-600: ${theme.colors.primaryScale[600]};
-  --color-primary-700: ${theme.colors.primaryScale[700]};
-  --color-primary-800: ${theme.colors.primaryScale[800]};
-  --color-primary-900: ${theme.colors.primaryScale[900]};
-  --color-primary-950: ${theme.colors.primaryScale[950]};
-
-  /* Secondary */
-  --color-secondary: ${theme.colors.secondary};
-
-  /* Accent */
-  --color-accent: ${theme.colors.accent};
-
-  /* Semantic */
-  --color-success: ${theme.colors.success};
-  --color-warning: ${theme.colors.warning};
-  --color-error: ${theme.colors.error};
-  --color-info: ${theme.colors.info};
-
-  /* Border Radius */
-  --radius-none: ${theme.radius.none}px;
-  --radius-sm: ${theme.radius.sm}px;
-  --radius-md: ${theme.radius.md}px;
-  --radius-lg: ${theme.radius.lg}px;
-  --radius-xl: ${theme.radius.xl}px;
-  --radius-full: ${theme.radius.full}px;
-  --radius-default: ${theme.radius[theme.radius.default]}px;
-
-  /* Typography */
-  --font-family: '${theme.typography.fontFamily}', sans-serif;
-  --font-family-mono: '${theme.typography.monoFontFamily}', monospace;
+${colorVars}
+  /* Radius */
+  --radius-base: ${tokens.radius.base}px;
+${radiusVars}
 
   /* Spacing */
-  --spacing-unit: ${theme.spacing.baseUnit}px;
+  --spacing-base: ${tokens.spacing.base}px;
+${spacingVars}
 }`;
 }
 
-export function generateThemeExport(theme: StudioTheme): string {
+export function generateThemeExport(tokens: StudioTokens): string {
+  const colorsObj = tokens.colors
+    .map((c) => `    ${c.name}: '${c.value}',`)
+    .join('\n');
+
   return `import { createTheme } from '@r-ui/react-native';
 
 export const customTheme = createTheme({
-  name: '${theme.name}',
-
   colors: {
-    primary: '${theme.colors.primary}',
-    secondary: '${theme.colors.secondary}',
-    accent: '${theme.colors.accent}',
-    success: '${theme.colors.success}',
-    warning: '${theme.colors.warning}',
-    error: '${theme.colors.error}',
-    info: '${theme.colors.info}',
+${colorsObj}
   },
 
   radius: {
-    none: ${theme.radius.none},
-    sm: ${theme.radius.sm},
-    md: ${theme.radius.md},
-    lg: ${theme.radius.lg},
-    xl: ${theme.radius.xl},
-    full: ${theme.radius.full},
-    default: '${theme.radius.default}',
-  },
-
-  typography: {
-    fontFamily: '${theme.typography.fontFamily}',
-    monoFontFamily: '${theme.typography.monoFontFamily}',
+    base: ${tokens.radius.base},
   },
 
   spacing: {
-    baseUnit: ${theme.spacing.baseUnit},
+    base: ${tokens.spacing.base},
   },
 });`;
 }
 
-export function generateTailwindExport(theme: StudioTheme): string {
+export function generateTailwindExport(tokens: StudioTokens): string {
+  const colorsObj = tokens.colors.reduce(
+    (acc, c) => {
+      if (c.scale) {
+        acc[c.name] = {
+          DEFAULT: c.value,
+          ...c.scale,
+        };
+      } else {
+        acc[c.name] = c.value;
+      }
+      return acc;
+    },
+    {} as Record<string, unknown>
+  );
+
+  const radiusObj = tokens.radius.scale.reduce(
+    (acc, m, i) => {
+      acc[String(i)] = `${Math.round(tokens.radius.base * m)}px`;
+      return acc;
+    },
+    { DEFAULT: `${tokens.radius.base}px` } as Record<string, string>
+  );
+
+  const spacingObj = tokens.spacing.scale.reduce(
+    (acc, v, i) => {
+      acc[String(i)] = `${v}px`;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
+
   return `// tailwind.config.js
 module.exports = {
   theme: {
     extend: {
-      colors: {
-        primary: {
-          DEFAULT: '${theme.colors.primary}',
-          50: '${theme.colors.primaryScale[50]}',
-          100: '${theme.colors.primaryScale[100]}',
-          200: '${theme.colors.primaryScale[200]}',
-          300: '${theme.colors.primaryScale[300]}',
-          400: '${theme.colors.primaryScale[400]}',
-          500: '${theme.colors.primaryScale[500]}',
-          600: '${theme.colors.primaryScale[600]}',
-          700: '${theme.colors.primaryScale[700]}',
-          800: '${theme.colors.primaryScale[800]}',
-          900: '${theme.colors.primaryScale[900]}',
-          950: '${theme.colors.primaryScale[950]}',
-        },
-        secondary: '${theme.colors.secondary}',
-        accent: '${theme.colors.accent}',
-      },
-      borderRadius: {
-        none: '${theme.radius.none}px',
-        sm: '${theme.radius.sm}px',
-        md: '${theme.radius.md}px',
-        lg: '${theme.radius.lg}px',
-        xl: '${theme.radius.xl}px',
-        full: '${theme.radius.full}px',
-      },
-      fontFamily: {
-        sans: ['${theme.typography.fontFamily}', 'sans-serif'],
-        mono: ['${theme.typography.monoFontFamily}', 'monospace'],
-      },
+      colors: ${JSON.stringify(colorsObj, null, 8).replace(/"/g, "'")},
+      borderRadius: ${JSON.stringify(radiusObj, null, 8).replace(/"/g, "'")},
+      spacing: ${JSON.stringify(spacingObj, null, 8).replace(/"/g, "'")},
     },
   },
 };`;
+}
+
+export function generateJSONExport(tokens: StudioTokens): string {
+  return JSON.stringify(tokens, null, 2);
 }

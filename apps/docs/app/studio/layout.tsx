@@ -1,4 +1,4 @@
-import { StudioProvider } from '@/lib/studio/theme-context';
+import { StudioProvider } from '@/lib/studio/studio-context';
 
 export const metadata = {
   title: 'r/ui Studio - Visual Theme Builder',
@@ -6,10 +6,10 @@ export const metadata = {
     'Design your theme visually, preview on real components, export production-ready code.',
 };
 
-export default function StudioLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <StudioProvider>
-      {children}
-    </StudioProvider>
-  );
+export default function StudioLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <StudioProvider>{children}</StudioProvider>;
 }

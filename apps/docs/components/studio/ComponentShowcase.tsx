@@ -1,501 +1,161 @@
 'use client';
 
 import { useState } from 'react';
-import { useStudio } from '@/lib/studio/theme-context';
+import { useStudio } from '@/lib/studio/studio-context';
 import { getContrastText } from '@/lib/studio/color-utils';
 
 interface ComponentShowcaseProps {
   mode: 'light' | 'dark';
 }
 
-function StarIcon({ size = 20, fill, color }: { size?: number; fill?: string; color: string }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill={fill || 'none'}
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-  );
-}
-
-function SearchIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  );
-}
-
-function MailIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="20" height="16" x="2" y="4" rx="2" />
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-    </svg>
-  );
-}
-
-function ArrowRightIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
-  );
-}
-
-function UserIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
-
 export function ComponentShowcase({ mode }: ComponentShowcaseProps) {
   const { state } = useStudio();
-  const { theme } = state;
+  const { tokens } = state;
   const [switchValue, setSwitchValue] = useState(true);
-  const [checkValue, setCheckValue] = useState(true);
 
-  const textColor = mode === 'dark' ? '#fafafa' : '#09090b';
+  // Get colors by name
+  const getColor = (name: string) => {
+    return tokens.colors.find((c) => c.name === name)?.value || '#888888';
+  };
+
+  const brandColor = getColor('brand');
+  const textColor = mode === 'dark' ? '#fafafa' : getColor('text');
   const mutedColor = mode === 'dark' ? '#a1a1aa' : '#71717a';
-  const borderColor = mode === 'dark' ? '#27272a' : '#e4e4e7';
-  const mutedBg = mode === 'dark' ? '#27272a' : '#f4f4f5';
-  const subtleBorder = mode === 'dark' ? '#3f3f46' : '#d4d4d8';
+  const borderColor = mode === 'dark' ? '#27272a' : '#e5e5e5';
+  const cardBg = mode === 'dark' ? '#18181b' : '#ffffff';
+  const successColor = getColor('success');
+  const errorColor = getColor('error');
 
-  // Apply theme's radius
-  const radius = theme.radius[theme.radius.default];
+  const radius = tokens.radius.base;
 
   return (
-    <div className="space-y-8" style={{ color: textColor }}>
-      {/* Section: Buttons */}
-      <section className="space-y-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: mutedColor }}>
+    <div className="space-y-8 w-full max-w-2xl" style={{ color: textColor }}>
+      {/* Buttons */}
+      <section className="space-y-3">
+        <div
+          className="text-xs uppercase tracking-wider"
+          style={{ color: mutedColor }}
+        >
           Buttons
-        </h3>
+        </div>
         <div className="flex flex-wrap gap-2">
           <button
-            className="px-4 py-2 text-sm font-medium transition-all hover:opacity-90"
-            style={{
-              backgroundColor: theme.colors.primary,
-              color: getContrastText(theme.colors.primary),
-              borderRadius: radius,
-            }}
+            className="px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: brandColor, borderRadius: radius }}
           >
             Primary
           </button>
           <button
-            className="px-4 py-2 text-sm font-medium transition-all hover:opacity-80"
-            style={{
-              backgroundColor: mutedBg,
-              color: textColor,
-              borderRadius: radius,
-            }}
+            className="px-4 py-2 text-sm font-medium border transition-opacity hover:opacity-80"
+            style={{ borderColor, borderRadius: radius, color: textColor }}
           >
             Secondary
           </button>
           <button
-            className="px-4 py-2 text-sm font-medium border transition-all hover:opacity-80"
-            style={{
-              borderColor: borderColor,
-              color: textColor,
-              borderRadius: radius,
-              backgroundColor: 'transparent',
-            }}
-          >
-            Outline
-          </button>
-          <button
-            className="px-4 py-2 text-sm font-medium transition-all hover:opacity-70"
-            style={{
-              color: textColor,
-              borderRadius: radius,
-              backgroundColor: 'transparent',
-            }}
+            className="px-4 py-2 text-sm font-medium transition-opacity hover:opacity-70"
+            style={{ borderRadius: radius, color: textColor }}
           >
             Ghost
           </button>
           <button
-            className="px-4 py-2 text-sm font-medium transition-all hover:opacity-90"
-            style={{
-              backgroundColor: theme.colors.error,
-              color: getContrastText(theme.colors.error),
-              borderRadius: radius,
-            }}
+            className="px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: errorColor, borderRadius: radius }}
           >
             Destructive
           </button>
         </div>
+      </section>
 
-        <div className="flex flex-wrap gap-2">
+      {/* Input */}
+      <section className="space-y-3">
+        <div
+          className="text-xs uppercase tracking-wider"
+          style={{ color: mutedColor }}
+        >
+          Input
+        </div>
+        <input
+          type="text"
+          placeholder="Enter your email..."
+          className="w-full max-w-xs px-3 py-2 text-sm border bg-transparent outline-none focus:ring-2 focus:ring-offset-1"
+          style={{
+            borderColor,
+            borderRadius: radius,
+            color: textColor,
+            // @ts-expect-error CSS variable
+            '--tw-ring-color': brandColor,
+          }}
+        />
+      </section>
+
+      {/* Card */}
+      <section className="space-y-3">
+        <div
+          className="text-xs uppercase tracking-wider"
+          style={{ color: mutedColor }}
+        >
+          Card
+        </div>
+        <div
+          className="p-4 border"
+          style={{
+            borderColor,
+            borderRadius: radius,
+            backgroundColor: cardBg,
+          }}
+        >
+          <h3 className="font-medium">Card Title</h3>
+          <p className="text-sm mt-1" style={{ color: mutedColor }}>
+            This is the card description with some content.
+          </p>
           <button
-            className="px-3 py-1.5 text-xs font-medium transition-all"
+            className="mt-3 px-3 py-1.5 text-xs font-medium transition-opacity hover:opacity-90"
             style={{
-              backgroundColor: theme.colors.primary,
-              color: getContrastText(theme.colors.primary),
-              borderRadius: radius,
+              backgroundColor: brandColor,
+              color: getContrastText(brandColor),
+              borderRadius: radius * 0.75,
             }}
           >
-            Small
-          </button>
-          <button
-            className="px-4 py-2 text-sm font-medium transition-all"
-            style={{
-              backgroundColor: theme.colors.primary,
-              color: getContrastText(theme.colors.primary),
-              borderRadius: radius,
-            }}
-          >
-            Medium
-          </button>
-          <button
-            className="px-6 py-3 text-base font-medium transition-all"
-            style={{
-              backgroundColor: theme.colors.primary,
-              color: getContrastText(theme.colors.primary),
-              borderRadius: radius,
-            }}
-          >
-            Large
-          </button>
-          <button
-            className="w-10 h-10 flex items-center justify-center transition-all"
-            style={{
-              backgroundColor: theme.colors.primary,
-              color: getContrastText(theme.colors.primary),
-              borderRadius: radius,
-            }}
-          >
-            <ArrowRightIcon size={18} />
+            Action
           </button>
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${borderColor} 20%, ${borderColor} 80%, transparent)` }} />
-
-      {/* Section: Inputs */}
-      <section className="space-y-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: mutedColor }}>
-          Inputs
-        </h3>
-        <div className="space-y-3 max-w-sm">
-          <input
-            type="text"
-            placeholder="Default input"
-            className="w-full px-3 py-2.5 text-sm border outline-none transition-all focus:ring-2 focus:ring-offset-1"
-            style={{
-              borderColor: borderColor,
-              borderRadius: radius,
-              backgroundColor: 'transparent',
-              color: textColor,
-              '--tw-ring-color': theme.colors.primary,
-            } as React.CSSProperties}
-          />
-          <div
-            className="flex items-center gap-2.5 px-3 py-2.5 border"
-            style={{
-              borderColor: borderColor,
-              borderRadius: radius,
-            }}
-          >
-            <span style={{ color: mutedColor }}>
-              <SearchIcon size={16} />
-            </span>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="flex-1 text-sm outline-none bg-transparent"
-              style={{ color: textColor }}
-            />
-          </div>
-          <div
-            className="flex items-center gap-2.5 px-3 py-2.5 border"
-            style={{
-              borderColor: borderColor,
-              borderRadius: radius,
-            }}
-          >
-            <span style={{ color: mutedColor }}>
-              <MailIcon size={16} />
-            </span>
-            <input
-              type="email"
-              placeholder="Email address"
-              className="flex-1 text-sm outline-none bg-transparent"
-              style={{ color: textColor }}
-            />
-          </div>
+      {/* Badge */}
+      <section className="space-y-3">
+        <div
+          className="text-xs uppercase tracking-wider"
+          style={{ color: mutedColor }}
+        >
+          Badge
         </div>
-      </section>
-
-      {/* Divider */}
-      <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${borderColor} 20%, ${borderColor} 80%, transparent)` }} />
-
-      {/* Section: Cards */}
-      <section className="space-y-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: mutedColor }}>
-          Cards
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div
-            className="border p-4 space-y-3"
-            style={{
-              borderColor: borderColor,
-              borderRadius: radius,
-            }}
-          >
-            <div>
-              <h4 className="font-semibold text-sm">Card Title</h4>
-              <p className="text-xs" style={{ color: mutedColor }}>
-                Card description goes here
-              </p>
-            </div>
-            <p className="text-sm" style={{ color: mutedColor }}>
-              This is the card content area.
-            </p>
-            <div>
-              <button
-                className="px-3 py-1.5 text-xs font-medium transition-all"
-                style={{
-                  backgroundColor: theme.colors.primary,
-                  color: getContrastText(theme.colors.primary),
-                  borderRadius: radius,
-                }}
-              >
-                Action
-              </button>
-            </div>
-          </div>
-
-          <div
-            className="border p-4 space-y-3"
-            style={{
-              borderColor: borderColor,
-              borderRadius: radius,
-            }}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 flex items-center justify-center"
-                style={{
-                  backgroundColor: mutedBg,
-                  borderRadius: '50%',
-                  color: mutedColor,
-                }}
-              >
-                <UserIcon size={18} />
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm">User Profile</h4>
-                <p className="text-xs" style={{ color: mutedColor }}>
-                  @username
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <span
-                className="px-2 py-0.5 text-[10px] font-semibold"
-                style={{
-                  backgroundColor: theme.colors.primary,
-                  color: getContrastText(theme.colors.primary),
-                  borderRadius: radius,
-                }}
-              >
-                Pro
-              </span>
-              <span
-                className="px-2 py-0.5 text-[10px] font-semibold border"
-                style={{
-                  borderColor: borderColor,
-                  color: textColor,
-                  borderRadius: radius,
-                }}
-              >
-                Verified
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Divider */}
-      <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${borderColor} 20%, ${borderColor} 80%, transparent)` }} />
-
-      {/* Section: Form Controls */}
-      <section className="space-y-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: mutedColor }}>
-          Form Controls
-        </h3>
-        <div className="flex flex-wrap items-center gap-6">
-          {/* Switch */}
-          <button
-            className="relative w-11 h-6 rounded-full transition-colors"
-            style={{
-              backgroundColor: switchValue ? theme.colors.primary : mutedBg,
-            }}
-            onClick={() => setSwitchValue(!switchValue)}
-          >
-            <span
-              className="absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform shadow-sm"
-              style={{
-                left: switchValue ? '22px' : '2px',
-              }}
-            />
-          </button>
-
-          {/* Checkbox */}
-          <label className="flex items-center gap-2 cursor-pointer">
-            <button
-              className="w-4 h-4 border flex items-center justify-center transition-colors"
-              style={{
-                borderColor: checkValue ? theme.colors.primary : subtleBorder,
-                backgroundColor: checkValue ? theme.colors.primary : 'transparent',
-                borderRadius: Math.max(radius / 3, 2),
-              }}
-              onClick={() => setCheckValue(!checkValue)}
-            >
-              {checkValue && (
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke={getContrastText(theme.colors.primary)}
-                  strokeWidth="3"
-                >
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              )}
-            </button>
-            <span className="text-sm">Checkbox</span>
-          </label>
-
-          {/* Stars */}
-          <div className="flex gap-0.5">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <StarIcon
-                key={i}
-                size={18}
-                fill={i <= 4 ? theme.colors.accent : 'none'}
-                color={theme.colors.accent}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Divider */}
-      <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${borderColor} 20%, ${borderColor} 80%, transparent)` }} />
-
-      {/* Section: Badges */}
-      <section className="space-y-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: mutedColor }}>
-          Badges
-        </h3>
         <div className="flex flex-wrap gap-2">
           <span
-            className="px-2.5 py-1 text-[10px] font-semibold"
+            className="px-2 py-0.5 text-xs font-medium"
             style={{
-              backgroundColor: theme.colors.primary,
-              color: getContrastText(theme.colors.primary),
-              borderRadius: radius,
+              backgroundColor: brandColor,
+              color: getContrastText(brandColor),
+              borderRadius: radius * 0.75,
             }}
           >
-            Primary
+            Default
           </span>
           <span
-            className="px-2.5 py-1 text-[10px] font-semibold"
+            className="px-2 py-0.5 text-xs font-medium"
             style={{
-              backgroundColor: theme.colors.secondary,
-              color: getContrastText(theme.colors.secondary),
-              borderRadius: radius,
-            }}
-          >
-            Secondary
-          </span>
-          <span
-            className="px-2.5 py-1 text-[10px] font-semibold"
-            style={{
-              backgroundColor: theme.colors.accent,
-              color: getContrastText(theme.colors.accent),
-              borderRadius: radius,
-            }}
-          >
-            Accent
-          </span>
-          <span
-            className="px-2.5 py-1 text-[10px] font-semibold"
-            style={{
-              backgroundColor: theme.colors.success,
-              color: getContrastText(theme.colors.success),
-              borderRadius: radius,
+              backgroundColor: successColor,
+              color: getContrastText(successColor),
+              borderRadius: radius * 0.75,
             }}
           >
             Success
           </span>
           <span
-            className="px-2.5 py-1 text-[10px] font-semibold"
+            className="px-2 py-0.5 text-xs font-medium"
             style={{
-              backgroundColor: theme.colors.warning,
-              color: getContrastText(theme.colors.warning),
-              borderRadius: radius,
-            }}
-          >
-            Warning
-          </span>
-          <span
-            className="px-2.5 py-1 text-[10px] font-semibold"
-            style={{
-              backgroundColor: theme.colors.error,
-              color: getContrastText(theme.colors.error),
-              borderRadius: radius,
+              backgroundColor: errorColor,
+              color: getContrastText(errorColor),
+              borderRadius: radius * 0.75,
             }}
           >
             Error
@@ -503,46 +163,59 @@ export function ComponentShowcase({ mode }: ComponentShowcaseProps) {
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${borderColor} 20%, ${borderColor} 80%, transparent)` }} />
+      {/* Switch */}
+      <section className="space-y-3">
+        <div
+          className="text-xs uppercase tracking-wider"
+          style={{ color: mutedColor }}
+        >
+          Switch
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSwitchValue(!switchValue)}
+            className="w-10 h-6 flex items-center p-1 transition-colors"
+            style={{
+              backgroundColor: switchValue ? brandColor : borderColor,
+              borderRadius: 999,
+            }}
+          >
+            <div
+              className="w-4 h-4 bg-white transition-transform"
+              style={{
+                borderRadius: 999,
+                transform: switchValue ? 'translateX(16px)' : 'translateX(0)',
+              }}
+            />
+          </button>
+          <span className="text-sm">{switchValue ? 'Enabled' : 'Disabled'}</span>
+        </div>
+      </section>
 
-      {/* Section: Progress */}
-      <section className="space-y-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: mutedColor }}>
-          Progress
-        </h3>
-        <div className="space-y-3 max-w-sm">
+      {/* Avatar */}
+      <section className="space-y-3">
+        <div
+          className="text-xs uppercase tracking-wider"
+          style={{ color: mutedColor }}
+        >
+          Avatar
+        </div>
+        <div className="flex items-center gap-3">
           <div
-            className="h-2 overflow-hidden"
+            className="w-10 h-10 flex items-center justify-center font-medium"
             style={{
-              backgroundColor: mutedBg,
+              backgroundColor: brandColor,
+              color: getContrastText(brandColor),
               borderRadius: radius,
             }}
           >
-            <div
-              className="h-full transition-all"
-              style={{
-                width: '75%',
-                backgroundColor: theme.colors.primary,
-                borderRadius: radius,
-              }}
-            />
+            JD
           </div>
-          <div
-            className="h-2 overflow-hidden"
-            style={{
-              backgroundColor: mutedBg,
-              borderRadius: radius,
-            }}
-          >
-            <div
-              className="h-full transition-all"
-              style={{
-                width: '45%',
-                backgroundColor: theme.colors.accent,
-                borderRadius: radius,
-              }}
-            />
+          <div>
+            <div className="font-medium">John Doe</div>
+            <div className="text-xs" style={{ color: mutedColor }}>
+              @johndoe
+            </div>
           </div>
         </div>
       </section>

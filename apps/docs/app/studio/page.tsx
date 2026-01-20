@@ -1,7 +1,7 @@
 'use client';
 
-import { StudioCanvas } from '@/components/studio/StudioCanvas';
+import { StudioPage } from '@/components/studio/StudioPage';
 
-export default function StudioPage() {
-  return <StudioCanvas />;
+export default function Page() {
+  return <StudioPage />;
 }

@@ -1,57 +1,8 @@
-export interface StudioTheme {
-  name: string;
-
-  colors: {
-    primary: string; // User picks this
-    primaryScale: ColorScale; // Auto-generated
-    secondary: string;
-    secondaryScale: ColorScale;
-    accent: string;
-    accentScale: ColorScale;
-
-    // Semantic (auto-derived or customizable)
-    background: string;
-    foreground: string;
-    muted: string;
-    mutedForeground: string;
-    border: string;
-
-    // Status colors
-    success: string;
-    warning: string;
-    error: string;
-    info: string;
-  };
-
-  radius: {
-    none: number;
-    sm: number;
-    md: number;
-    lg: number;
-    xl: number;
-    full: number;
-    default: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  };
-
-  spacing: {
-    baseUnit: number; // Usually 4
-    scale: number[]; // [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64]
-  };
-
-  typography: {
-    fontFamily: string;
-    monoFontFamily: string;
-    scale: {
-      xs: number;
-      sm: number;
-      base: number;
-      lg: number;
-      xl: number;
-      '2xl': number;
-      '3xl': number;
-      '4xl': number;
-    };
-  };
+export interface StudioColor {
+  id: string;
+  name: string; // User-defined name (e.g., "brand", "accent", "cta")
+  value: string; // Hex value
+  scale?: ColorScale; // Auto-generated 50-950 scale
 }
 
 export interface ColorScale {
@@ -60,7 +11,7 @@ export interface ColorScale {
   200: string;
   300: string;
   400: string;
-  500: string; // Usually the "main" color
+  500: string;
   600: string;
   700: string;
   800: string;
@@ -68,12 +19,38 @@ export interface ColorScale {
   950: string;
 }
 
-export type ThemeMode = 'light' | 'dark';
-export type DeviceFrame = 'mobile' | 'tablet' | 'desktop';
+export interface StudioTokens {
+  colors: StudioColor[];
+  radius: {
+    base: number; // e.g., 8
+    scale: number[]; // Multipliers: [0.5, 1, 1.5, 2, 4] → [4, 8, 12, 16, 32]
+  };
+  spacing: {
+    base: number; // e.g., 4
+    scale: number[]; // Values: [4, 8, 12, 16, 20, 24, 32, 48, 64]
+  };
+}
 
 export interface StudioState {
-  theme: StudioTheme;
-  mode: ThemeMode;
-  device: DeviceFrame;
-  activePreset: string | null;
+  tokens: StudioTokens;
+  previewMode: 'light' | 'dark';
+  previewDevice: 'mobile' | 'tablet' | 'desktop';
+  viewMode: 'preview' | 'code';
+  exportFormat: 'css' | 'theme' | 'tailwind' | 'json';
 }
+
+export interface ReviewResult {
+  score: number; // 0-100
+  issues: ReviewIssue[];
+}
+
+export interface ReviewIssue {
+  type: 'error' | 'warning' | 'info';
+  message: string;
+  suggestion?: string;
+}
+
+export type ThemeMode = 'light' | 'dark';
+export type DeviceFrame = 'mobile' | 'tablet' | 'desktop';
+export type ViewMode = 'preview' | 'code';
+export type ExportFormat = 'css' | 'theme' | 'tailwind' | 'json';
