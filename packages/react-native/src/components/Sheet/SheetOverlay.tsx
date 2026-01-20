@@ -14,7 +14,12 @@ interface SheetOverlayProps {
 export function SheetOverlay({ opacity, onPress }: SheetOverlayProps) {
   return (
     <Animated.View style={[styles.backdrop, { opacity }]}>
-      <Pressable style={StyleSheet.absoluteFill} onPress={onPress} />
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Close sheet"
+        style={StyleSheet.absoluteFill}
+        onPress={onPress}
+      />
     </Animated.View>
   );
 }

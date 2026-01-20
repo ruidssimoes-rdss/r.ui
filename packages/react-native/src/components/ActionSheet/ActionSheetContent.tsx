@@ -106,7 +106,12 @@ export function ActionSheetContent({
     >
       <View style={styles.container}>
         <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]}>
-          <Pressable style={StyleSheet.absoluteFill} onPress={closeSheet} />
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={closeSheet}
+            accessibilityRole="button"
+            accessibilityLabel="Close action sheet"
+          />
         </Animated.View>
 
         <Animated.View

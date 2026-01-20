@@ -190,6 +190,8 @@ export function TestimonialAuthor({
           <Image
             source={{ uri: avatar }}
             style={styles.avatar}
+            accessible
+            accessibilityLabel={`${name}'s avatar`}
           />
         </View>
       )}
@@ -249,6 +251,8 @@ export function TestimonialAvatar({
         style,
       ]}
       onError={() => setImageError(true)}
+      accessible
+      accessibilityLabel="Testimonial author avatar"
     />
   );
 }
@@ -352,6 +356,7 @@ export function TestimonialCarousel({
                 scrollRef.current?.scrollTo({ x: index * containerWidth, animated: true });
                 setActiveIndex(index);
               }}
+              accessibilityRole="button"
             >
               <View
                 style={[

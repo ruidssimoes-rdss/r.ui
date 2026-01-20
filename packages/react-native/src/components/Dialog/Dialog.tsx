@@ -124,7 +124,11 @@ export function DialogTrigger({ children, style }: DialogTriggerProps) {
   const { onOpenChange } = useDialogContext();
 
   return (
-    <Pressable onPress={() => onOpenChange(true)} style={style}>
+    <Pressable
+      onPress={() => onOpenChange(true)}
+      style={style}
+      accessibilityRole="button"
+    >
       {children}
     </Pressable>
   );
@@ -170,7 +174,12 @@ export function DialogContent({ children, style }: DialogContentProps) {
       animationType="none"
       onRequestClose={() => onOpenChange(false)}
     >
-      <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)}>
+      <Pressable
+        style={styles.backdrop}
+        onPress={() => onOpenChange(false)}
+        accessibilityRole="button"
+        accessibilityLabel="Close dialog"
+      >
         <Animated.View
           style={[
             styles.overlay,

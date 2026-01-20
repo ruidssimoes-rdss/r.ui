@@ -182,6 +182,7 @@ function ToastItemComponent({ item, onDismiss }: ToastItemComponentProps) {
             dismissWithAnimation();
           }}
           style={styles.actionButton}
+          accessibilityRole="button"
         >
           <Text style={styles.actionText}>{item.action.label}</Text>
         </Pressable>

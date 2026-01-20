@@ -83,7 +83,12 @@ export function ComboboxContent({ children, style }: ComboboxContentProps) {
       animationType="none"
       onRequestClose={() => setOpen(false)}
     >
-      <Pressable style={styles.backdrop} onPress={() => setOpen(false)} />
+      <Pressable
+        style={styles.backdrop}
+        onPress={() => setOpen(false)}
+        accessibilityRole="button"
+        accessibilityLabel="Close dropdown"
+      />
       <Animated.View
         onLayout={handleLayout}
         style={[

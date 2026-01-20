@@ -132,6 +132,7 @@ export function EmptyStateAction({
 }: EmptyStateActionProps) {
   return (
     <Pressable
+      accessibilityRole="button"
       onPress={onPress}
       style={[
         styles.action,

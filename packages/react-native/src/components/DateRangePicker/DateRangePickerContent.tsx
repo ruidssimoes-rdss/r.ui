@@ -86,7 +86,12 @@ export function DateRangePickerContent({ children, style }: DateRangePickerConte
       animationType="none"
       onRequestClose={() => setOpen(false)}
     >
-      <Pressable style={styles.backdrop} onPress={() => setOpen(false)} />
+      <Pressable
+        style={styles.backdrop}
+        onPress={() => setOpen(false)}
+        accessibilityRole="button"
+        accessibilityLabel="Close picker"
+      />
       <Animated.View
         onLayout={handleLayout}
         style={[

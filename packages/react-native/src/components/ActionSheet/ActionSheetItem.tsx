@@ -49,6 +49,7 @@ export function ActionSheetItem({
         disabled && styles.itemDisabled,
         style,
       ]}
+      accessibilityRole="button"
     >
       {icon && <View style={styles.icon}>{icon}</View>}
       <Text

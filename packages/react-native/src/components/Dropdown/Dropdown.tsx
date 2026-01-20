@@ -134,7 +134,7 @@ export function DropdownTrigger({ children, style }: DropdownTriggerProps) {
   };
 
   return (
-    <Pressable ref={triggerRef} onPress={handlePress} style={style}>
+    <Pressable ref={triggerRef} onPress={handlePress} style={style} accessibilityRole="button">
       {children}
     </Pressable>
   );
@@ -195,7 +195,7 @@ export function DropdownContent({ children, style }: DropdownContentProps) {
 
   return (
     <Modal visible={open} transparent animationType="none" onRequestClose={() => onOpenChange(false)}>
-      <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} />
+      <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} accessibilityRole="button" accessibilityLabel="Close dropdown" />
       <Animated.View
         onLayout={handleLayout}
         style={[
@@ -236,6 +236,7 @@ export function DropdownItem({
 
   return (
     <Pressable
+      accessibilityRole="menuitem"
       onPress={handlePress}
       disabled={disabled}
       style={({ pressed }) => [

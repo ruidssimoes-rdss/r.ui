@@ -41,6 +41,7 @@ export function AlertDialogAction({
         pressed && (destructive ? styles.buttonDestructivePressed : styles.buttonDefaultPressed),
         style,
       ]}
+      accessibilityRole="button"
     >
       <Text style={[styles.text, destructive && styles.textDestructive, textStyle]}>
         {children}

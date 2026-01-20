@@ -122,7 +122,7 @@ export function PopoverTrigger({ children, style }: PopoverTriggerProps) {
   };
 
   return (
-    <Pressable ref={triggerRef} onPress={handlePress} style={style}>
+    <Pressable ref={triggerRef} onPress={handlePress} accessibilityRole="button" style={style}>
       {children}
     </Pressable>
   );
@@ -220,7 +220,7 @@ export function PopoverContent({ children, style }: PopoverContentProps) {
 
   return (
     <Modal visible={open} transparent animationType="none" onRequestClose={() => onOpenChange(false)}>
-      <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} />
+      <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} accessibilityRole="button" accessibilityLabel="Close popover" />
       <Animated.View
         onLayout={handleLayout}
         style={[
@@ -245,7 +245,7 @@ export function PopoverClose({ children, style }: PopoverCloseProps) {
   const { onOpenChange } = usePopoverContext();
 
   return (
-    <Pressable onPress={() => onOpenChange(false)} style={style}>
+    <Pressable onPress={() => onOpenChange(false)} accessibilityRole="button" style={style}>
       {children}
     </Pressable>
   );

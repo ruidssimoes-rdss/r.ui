@@ -106,7 +106,12 @@ export function ComboboxInput({
         {...props}
       />
       {showClear && search.length > 0 && (
-        <Pressable onPress={handleClear} style={styles.clearButton}>
+        <Pressable
+          onPress={handleClear}
+          style={styles.clearButton}
+          accessibilityRole="button"
+          accessibilityLabel="Clear search"
+        >
           <Text style={styles.clearIcon}>×</Text>
         </Pressable>
       )}

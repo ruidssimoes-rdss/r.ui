@@ -68,6 +68,7 @@ export function ContextMenuTrigger({
       onLongPress={handleLongPress}
       delayLongPress={delayMs}
       style={[styles.trigger, style]}
+      accessibilityRole="button"
     >
       {children}
     </Pressable>

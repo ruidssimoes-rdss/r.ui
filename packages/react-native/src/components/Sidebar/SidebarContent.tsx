@@ -43,6 +43,7 @@ export function SidebarContent({
         <Pressable
           style={styles.backdrop}
           onPress={() => setOpen(false)}
+          accessibilityRole="button"
           accessibilityLabel="Close sidebar"
         />
 

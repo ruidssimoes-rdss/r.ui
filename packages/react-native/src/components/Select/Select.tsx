@@ -66,6 +66,7 @@ export function Select({
         </Text>
       )}
       <Pressable
+        accessibilityRole="button"
         onPress={() => !disabled && setIsOpen(true)}
         disabled={disabled}
         style={[
@@ -99,6 +100,8 @@ export function Select({
         onRequestClose={() => setIsOpen(false)}
       >
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Close dropdown"
           style={styles.overlay}
           onPress={() => setIsOpen(false)}
         >
@@ -108,6 +111,7 @@ export function Select({
               keyExtractor={(item) => item.value}
               renderItem={({ item }) => (
                 <Pressable
+                  accessibilityRole="menuitem"
                   onPress={() => handleSelect(item.value)}
                   style={[
                     styles.option,

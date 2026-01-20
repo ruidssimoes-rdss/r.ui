@@ -37,6 +37,7 @@ export function AlertDialogCancel({
         pressed && styles.buttonPressed,
         style,
       ]}
+      accessibilityRole="button"
     >
       <Text style={[styles.text, textStyle]}>{children}</Text>
     </Pressable>

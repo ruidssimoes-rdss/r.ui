@@ -130,7 +130,7 @@ export function HoverCardContent({ children, style }: HoverCardContentProps) {
       animationType="none"
       onRequestClose={() => onOpenChange(false)}
     >
-      <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} />
+      <Pressable accessibilityRole="button" accessibilityLabel="Close" style={styles.backdrop} onPress={() => onOpenChange(false)} />
       <Animated.View
         onLayout={handleLayout}
         style={[

@@ -128,7 +128,12 @@ export function ContextMenuContent({
       animationType="none"
       onRequestClose={() => onOpenChange(false)}
     >
-      <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} />
+      <Pressable
+        style={styles.backdrop}
+        onPress={() => onOpenChange(false)}
+        accessibilityRole="button"
+        accessibilityLabel="Close menu"
+      />
       <Animated.View
         onLayout={handleLayout}
         style={[

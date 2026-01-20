@@ -160,6 +160,7 @@ export function PricingToggle({ style }: PricingToggleProps) {
   return (
     <View style={[styles.toggleContainer, style]}>
       <Pressable
+        accessibilityRole="button"
         onPress={() => setBillingPeriod('monthly')}
         style={[
           styles.toggleButton,
@@ -176,6 +177,7 @@ export function PricingToggle({ style }: PricingToggleProps) {
         </Text>
       </Pressable>
       <Pressable
+        accessibilityRole="button"
         onPress={() => setBillingPeriod('yearly')}
         style={[
           styles.toggleButton,
@@ -344,6 +346,7 @@ export function PricingAction({
 }: PricingActionProps) {
   return (
     <Pressable
+      accessibilityRole="button"
       onPress={onPress}
       disabled={disabled}
       style={({ pressed }) => [

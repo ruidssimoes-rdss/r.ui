@@ -40,6 +40,7 @@ export function HoverCardTrigger({ children, style }: HoverCardTriggerProps) {
 
   return (
     <Pressable
+      accessibilityRole="button"
       ref={triggerRef}
       onLongPress={handleLongPress}
       delayLongPress={500}

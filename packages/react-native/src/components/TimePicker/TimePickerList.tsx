@@ -84,6 +84,7 @@ export function TimePickerList({ style }: TimePickerListProps) {
               key={index}
               onPress={() => handleSelect(slot)}
               disabled={slot.disabled}
+              accessibilityRole="button"
               style={({ pressed }) => [
                 styles.item,
                 isSelected && styles.itemSelected,

@@ -77,6 +77,7 @@ export function CommandItem({
         disabled && styles.disabled,
         style,
       ]}
+      accessibilityRole="button"
     >
       {icon && <View style={styles.icon}>{icon}</View>}
       <Text

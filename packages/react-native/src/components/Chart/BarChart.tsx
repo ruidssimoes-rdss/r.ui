@@ -77,6 +77,8 @@ export function BarChart({
                     marginBottom: index < data.length - 1 ? barGap : 0,
                   },
                 ]}
+                accessibilityRole="button"
+                accessibilityLabel={`${point.label}: ${formatValue(point.value)}`}
               >
                 {activeIndex === index && (
                   <View style={[styles.tooltip, { left: barWidth + 8 }]}>
@@ -111,6 +113,8 @@ export function BarChart({
                 styles.barVerticalWrapper,
                 { width: barWidth, marginRight: index < data.length - 1 ? barGap : 0 },
               ]}
+              accessibilityRole="button"
+              accessibilityLabel={`${point.label}: ${formatValue(point.value)}`}
             >
               <View style={[styles.barVerticalContainer, { height: chartHeight }]}>
                 <View

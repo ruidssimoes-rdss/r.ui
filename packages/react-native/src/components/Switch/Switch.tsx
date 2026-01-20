@@ -64,6 +64,8 @@ export function Switch({
       onPress={handlePress}
       disabled={disabled}
       style={[styles.container, style]}
+      accessibilityRole="switch"
+      accessibilityState={{ checked }}
     >
       <View
         style={[

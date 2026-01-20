@@ -98,6 +98,7 @@ export function DatePickerHeader({ style }: DatePickerHeaderProps) {
           styles.navButton,
           pressed && styles.navButtonPressed,
         ]}
+        accessibilityRole="button"
         accessibilityLabel={
           view === 'years'
             ? 'Previous decade'
@@ -116,6 +117,7 @@ export function DatePickerHeader({ style }: DatePickerHeaderProps) {
           styles.titleButton,
           pressed && styles.titleButtonPressed,
         ]}
+        accessibilityRole="button"
         accessibilityLabel="Change view"
       >
         <Text style={styles.titleText}>{getHeaderText()}</Text>
@@ -128,6 +130,7 @@ export function DatePickerHeader({ style }: DatePickerHeaderProps) {
           styles.navButton,
           pressed && styles.navButtonPressed,
         ]}
+        accessibilityRole="button"
         accessibilityLabel={
           view === 'years'
             ? 'Next decade'

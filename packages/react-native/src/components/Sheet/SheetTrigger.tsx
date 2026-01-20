@@ -9,7 +9,11 @@ export function SheetTrigger({ children, style }: SheetTriggerProps) {
   const { onOpenChange } = useSheet();
 
   return (
-    <Pressable onPress={() => onOpenChange(true)} style={style}>
+    <Pressable
+      accessibilityRole="button"
+      onPress={() => onOpenChange(true)}
+      style={style}
+    >
       {children}
     </Pressable>
   );
@@ -22,7 +26,11 @@ export function SheetClose({ children, style }: SheetCloseProps) {
   const { onOpenChange } = useSheet();
 
   return (
-    <Pressable onPress={() => onOpenChange(false)} style={style}>
+    <Pressable
+      accessibilityRole="button"
+      onPress={() => onOpenChange(false)}
+      style={style}
+    >
       {children}
     </Pressable>
   );

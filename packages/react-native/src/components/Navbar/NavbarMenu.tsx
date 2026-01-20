@@ -32,6 +32,7 @@ export function NavbarMenu({ children, style }: NavbarMenuProps) {
       <Pressable
         style={styles.backdrop}
         onPress={() => setMenuOpen(false)}
+        accessibilityRole="button"
         accessibilityLabel="Close menu"
       />
 

@@ -1,7 +1,13 @@
 import { parse } from '@babel/parser';
-import traverse from '@babel/traverse';
+import traverseModule from '@babel/traverse';
 import type { LintIssue } from './types';
 import type { JSXOpeningElement, JSXAttribute, Node } from '@babel/types';
+
+// Handle both ESM and CJS imports of @babel/traverse
+const traverse =
+  typeof traverseModule === 'function'
+    ? traverseModule
+    : (traverseModule as { default: typeof traverseModule }).default;
 
 export async function lintCode(
   code: string,
@@ -9,27 +15,44 @@ export async function lintCode(
 ): Promise<{ issues: LintIssue[]; score: number }> {
   const issues: LintIssue[] = [];
 
+  // Wrap code in a fragment if it contains multiple adjacent JSX elements
+  // This allows parsing of code snippets that users paste without a wrapper
+  let processedCode = code.trim();
+  let lineOffset = 0; // Track line offset if we add a fragment wrapper
+
+  if (processedCode.startsWith('<') && !processedCode.startsWith('<>')) {
+    // Check if there are multiple root-level JSX elements
+    const hasMultipleRoots = /^<[A-Z][^>]*>[\s\S]*<\/[A-Z][^>]*>\s*<[A-Z]/m.test(processedCode);
+    if (hasMultipleRoots) {
+      processedCode = `<>\n${processedCode}\n</>`;
+      lineOffset = 1; // We added one line at the beginning
+    }
+  }
+
   try {
-    const ast = parse(code, {
+    const ast = parse(processedCode, {
       sourceType: 'module',
       plugins: ['jsx', 'typescript'],
       errorRecovery: true,
     });
+
+    const originalLines = code.trim().split('\n');
 
     traverse(ast, {
       JSXOpeningElement(path) {
         const node = path.node as JSXOpeningElement;
         const elementName = getElementName(node.name);
         const attributes = getAttributes(node.attributes);
-        const line = node.loc?.start.line || 1;
-        const codeSnippet = code.split('\n')[line - 1]?.trim() || '';
+        const astLine = node.loc?.start.line || 1;
+        const line = astLine - lineOffset; // Adjust for fragment wrapper
+        const codeSnippet = originalLines[line - 1]?.trim() || '';
 
         // Rule: missing-accessibility-label
         if (enabledRules.includes('missing-accessibility-label')) {
           if (
             (elementName === 'Pressable' || elementName === 'TouchableOpacity') &&
             !attributes.accessibilityLabel &&
-            hasOnlyIconChild(path, code)
+            hasOnlyIconChild(path, processedCode)
           ) {
             issues.push({
               rule: 'missing-accessibility-label',
@@ -130,13 +153,14 @@ export async function lintCode(
         if (typeof node.name.name !== 'string') return;
 
         const name = node.name.name;
-        const line = node.loc?.start.line || 1;
-        const codeSnippet = code.split('\n')[line - 1]?.trim() || '';
+        const astLine = node.loc?.start.line || 1;
+        const line = astLine - lineOffset; // Adjust for fragment wrapper
+        const codeSnippet = originalLines[line - 1]?.trim() || '';
 
         // Rule: hardcoded-color
         if (enabledRules.includes('hardcoded-color')) {
           if (name === 'style' && node.value) {
-            const styleStr = code.substring(node.value.start || 0, node.value.end || 0);
+            const styleStr = processedCode.substring(node.value.start || 0, node.value.end || 0);
             const hexMatch = styleStr.match(/#[0-9a-fA-F]{3,6}/);
             const rgbMatch = styleStr.match(/rgb\(/);
 
@@ -157,7 +181,7 @@ export async function lintCode(
         // Rule: hardcoded-spacing
         if (enabledRules.includes('hardcoded-spacing')) {
           if (name === 'style' && node.value) {
-            const styleStr = code.substring(node.value.start || 0, node.value.end || 0);
+            const styleStr = processedCode.substring(node.value.start || 0, node.value.end || 0);
             const spacingMatches = styleStr.matchAll(
               /(padding|margin|paddingHorizontal|paddingVertical|marginHorizontal|marginVertical|paddingTop|paddingBottom|paddingLeft|paddingRight|marginTop|marginBottom|marginLeft|marginRight|gap):\s*(\d+)/g
             );
@@ -184,7 +208,7 @@ export async function lintCode(
         // Rule: inconsistent-radius
         if (enabledRules.includes('inconsistent-radius')) {
           if (name === 'style' && node.value) {
-            const styleStr = code.substring(node.value.start || 0, node.value.end || 0);
+            const styleStr = processedCode.substring(node.value.start || 0, node.value.end || 0);
             const radiusMatch = styleStr.match(/borderRadius:\s*(\d+)/);
 
             if (radiusMatch) {
@@ -208,7 +232,7 @@ export async function lintCode(
         // Rule: non-token-font-size
         if (enabledRules.includes('non-token-font-size')) {
           if (name === 'style' && node.value) {
-            const styleStr = code.substring(node.value.start || 0, node.value.end || 0);
+            const styleStr = processedCode.substring(node.value.start || 0, node.value.end || 0);
             const fontMatch = styleStr.match(/fontSize:\s*(\d+)/);
 
             if (fontMatch) {
@@ -299,7 +323,7 @@ function getAttributes(attrs: (Node | null)[]): Record<string, string | boolean>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function hasOnlyIconChild(path: any, code: string): boolean {
+function hasOnlyIconChild(path: any, processedCode: string): boolean {
   const parent = path.parent;
   if (parent?.children?.length === 1) {
     const child = parent.children[0];
@@ -308,9 +332,9 @@ function hasOnlyIconChild(path: any, code: string): boolean {
       return childName === 'Icon' || childName.includes('Icon');
     }
   }
-  // Also check if the next line contains an Icon element
+  // Also check if the next line contains an Icon element (AST line numbers match processedCode)
   const startLine = path.node.loc?.start.line || 1;
-  const lines = code.split('\n');
+  const lines = processedCode.split('\n');
   const nextLine = lines[startLine]?.trim() || '';
   if (nextLine.includes('<Icon') || nextLine.includes('Icon ')) {
     return true;

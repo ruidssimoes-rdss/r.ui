@@ -366,6 +366,7 @@ export function FooterNewsletter({
           autoCorrect={false}
         />
         <Pressable
+          accessibilityRole="button"
           onPress={handleSubmit}
           style={({ pressed }) => [
             styles.newsletterButton,

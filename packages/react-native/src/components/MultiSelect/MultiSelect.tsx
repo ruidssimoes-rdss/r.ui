@@ -254,6 +254,7 @@ export function MultiSelectTrigger({ style }: MultiSelectTriggerProps) {
     <Pressable
       onPress={open}
       disabled={disabled}
+      accessibilityRole="button"
       style={[
         styles.trigger,
         disabled && styles.triggerDisabled,
@@ -293,7 +294,7 @@ export function MultiSelectContent({ children, style }: MultiSelectContentProps)
       animationType="fade"
       onRequestClose={close}
     >
-      <Pressable style={styles.overlay} onPress={close}>
+      <Pressable style={styles.overlay} onPress={close} accessibilityRole="button" accessibilityLabel="Close dropdown">
         <View style={[styles.dropdown, style]}>
           <Pressable>
             {children}
@@ -351,6 +352,7 @@ export function MultiSelectOption({ value: optionValue, children, disabled, styl
     <Pressable
       onPress={() => !isDisabled && toggleValue(optionValue)}
       disabled={isDisabled}
+      accessibilityRole="button"
       style={[
         styles.option,
         isSelected && styles.optionSelected,
@@ -379,7 +381,12 @@ export function MultiSelectTag({ value: tagValue, label, style }: MultiSelectTag
     <View style={[styles.tag, style]}>
       <Text style={styles.tagText} numberOfLines={1}>{label}</Text>
       {!disabled && (
-        <Pressable onPress={() => removeValue(tagValue)} style={styles.tagRemove}>
+        <Pressable
+          onPress={() => removeValue(tagValue)}
+          style={styles.tagRemove}
+          accessibilityLabel={`Remove ${label}`}
+          accessibilityRole="button"
+        >
           <CloseIcon size={10} />
         </Pressable>
       )}

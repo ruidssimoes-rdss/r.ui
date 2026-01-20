@@ -71,7 +71,12 @@ export function CommandDialog({
     >
       <View style={[styles.container, style]}>
         {/* Backdrop */}
-        <Pressable style={styles.backdrop} onPress={handleClose}>
+        <Pressable
+          style={styles.backdrop}
+          onPress={handleClose}
+          accessibilityRole="button"
+          accessibilityLabel="Close command dialog"
+        >
           <Animated.View
             style={[styles.backdropOverlay, { opacity: opacityAnim }]}
           />

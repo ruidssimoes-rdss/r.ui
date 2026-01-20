@@ -49,6 +49,7 @@ export function ContextMenuItem({
         disabled && styles.itemDisabled,
         style,
       ]}
+      accessibilityRole="menuitem"
     >
       {icon && <View style={styles.itemIcon}>{icon}</View>}
       <Text

@@ -41,7 +41,12 @@ export function FileUploadItem({ file, showPreview = true, style }: FileUploadIt
       {/* Preview or Icon */}
       <View style={styles.preview}>
         {showPreview && isImage && file.previewUrl ? (
-          <Image source={{ uri: file.previewUrl }} style={styles.thumbnail} />
+          <Image
+            source={{ uri: file.previewUrl }}
+            style={styles.thumbnail}
+            accessible
+            accessibilityLabel={`Preview of ${file.name}`}
+          />
         ) : (
           <FileIcon type={iconType} />
         )}

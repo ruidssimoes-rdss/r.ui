@@ -192,7 +192,7 @@ export function MenubarContent({
       animationType="none"
       onRequestClose={close}
     >
-      <Pressable style={styles.overlay} onPress={close}>
+      <Pressable accessibilityRole="button" style={styles.overlay} onPress={close}>
         <Animated.View
           style={[
             styles.content,
@@ -203,7 +203,7 @@ export function MenubarContent({
             style,
           ]}
         >
-          <Pressable onPress={(e) => e.stopPropagation()}>
+          <Pressable accessibilityRole="button" onPress={(e) => e.stopPropagation()}>
             {children}
           </Pressable>
         </Animated.View>

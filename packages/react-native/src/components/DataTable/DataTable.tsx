@@ -402,6 +402,9 @@ export function DataTableHeader({ style }: DataTableHeaderProps) {
         <Pressable
           onPress={toggleAllRows}
           style={styles.checkboxCell}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: allSelected }}
+          accessibilityLabel="Select all rows"
         >
           <View style={[styles.checkbox, allSelected && styles.checkboxChecked]}>
             {allSelected && <Text style={styles.checkmark}>✓</Text>}
@@ -444,6 +447,7 @@ export function DataTableHeaderCell({ column, style }: DataTableHeaderCellProps)
         column.width ? { width: column.width } : styles.flexCell,
         style,
       ]}
+      accessibilityRole="button"
     >
       <Text style={styles.headerText}>
         {typeof column.header === 'string' ? column.header : column.header}
@@ -489,6 +493,9 @@ export function DataTableRow<T>({ row, index, style }: DataTableRowProps<T>) {
         <Pressable
           onPress={() => toggleRowSelection(rowKey)}
           style={styles.checkboxCell}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: isSelected }}
+          accessibilityLabel="Select row"
         >
           <View style={[styles.checkbox, isSelected && styles.checkboxChecked]}>
             {isSelected && <Text style={styles.checkmark}>✓</Text>}
@@ -555,6 +562,8 @@ export function DataTablePagination({ pageSizeOptions = [10, 25, 50], style }: D
           onPress={() => setCurrentPage(0)}
           disabled={currentPage === 0}
           style={[styles.paginationButton, currentPage === 0 && styles.paginationButtonDisabled]}
+          accessibilityRole="button"
+          accessibilityLabel="First page"
         >
           <Text style={[styles.paginationButtonText, currentPage === 0 && styles.paginationButtonTextDisabled]}>
             ««
@@ -564,6 +573,8 @@ export function DataTablePagination({ pageSizeOptions = [10, 25, 50], style }: D
           onPress={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 0}
           style={[styles.paginationButton, currentPage === 0 && styles.paginationButtonDisabled]}
+          accessibilityRole="button"
+          accessibilityLabel="Previous page"
         >
           <Text style={[styles.paginationButtonText, currentPage === 0 && styles.paginationButtonTextDisabled]}>
             «
@@ -576,6 +587,8 @@ export function DataTablePagination({ pageSizeOptions = [10, 25, 50], style }: D
           onPress={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage >= totalPages - 1}
           style={[styles.paginationButton, currentPage >= totalPages - 1 && styles.paginationButtonDisabled]}
+          accessibilityRole="button"
+          accessibilityLabel="Next page"
         >
           <Text style={[styles.paginationButtonText, currentPage >= totalPages - 1 && styles.paginationButtonTextDisabled]}>
             »
@@ -585,6 +598,8 @@ export function DataTablePagination({ pageSizeOptions = [10, 25, 50], style }: D
           onPress={() => setCurrentPage(totalPages - 1)}
           disabled={currentPage >= totalPages - 1}
           style={[styles.paginationButton, currentPage >= totalPages - 1 && styles.paginationButtonDisabled]}
+          accessibilityRole="button"
+          accessibilityLabel="Last page"
         >
           <Text style={[styles.paginationButtonText, currentPage >= totalPages - 1 && styles.paginationButtonTextDisabled]}>
             »»
@@ -612,7 +627,12 @@ export function DataTableSearch({ placeholder = 'Search...', style }: DataTableS
         style={styles.searchInput}
       />
       {searchQuery.length > 0 && (
-        <Pressable onPress={() => setSearchQuery('')} style={styles.searchClear}>
+        <Pressable
+          onPress={() => setSearchQuery('')}
+          style={styles.searchClear}
+          accessibilityRole="button"
+          accessibilityLabel="Clear search"
+        >
           <Text style={styles.searchClearText}>×</Text>
         </Pressable>
       )}

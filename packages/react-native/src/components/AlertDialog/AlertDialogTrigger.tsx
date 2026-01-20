@@ -29,7 +29,7 @@ export function AlertDialogTrigger({
   }
 
   return (
-    <Pressable onPress={handlePress} style={style}>
+    <Pressable onPress={handlePress} style={style} accessibilityRole="button">
       {children}
     </Pressable>
   );

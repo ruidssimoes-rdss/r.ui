@@ -152,6 +152,8 @@ export function Dock({
   if (autoHide && !isVisible) {
     return (
       <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Show dock"
         style={[styles.autoHideTrigger, positionStyle.trigger]}
         onPressIn={showDock}
       />
@@ -242,6 +244,8 @@ export function DockItem({
         />
       )}
       <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={label}
         onPress={onPress}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}

@@ -150,6 +150,7 @@ export function TooltipTrigger({ children, style }: TooltipTriggerProps) {
       onPressOut={handlePressOut}
       delayLongPress={300}
       style={style}
+      accessibilityRole="button"
       {...webProps}
     >
       {children}

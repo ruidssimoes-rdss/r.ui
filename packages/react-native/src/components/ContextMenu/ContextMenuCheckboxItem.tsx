@@ -46,6 +46,8 @@ export function ContextMenuCheckboxItem({
         disabled && styles.itemDisabled,
         style,
       ]}
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked }}
     >
       <View style={styles.checkboxContainer}>
         {checked && (

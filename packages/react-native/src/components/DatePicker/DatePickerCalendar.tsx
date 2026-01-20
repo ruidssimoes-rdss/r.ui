@@ -58,6 +58,9 @@ export function DatePickerCalendar({ style }: DatePickerCalendarProps) {
                   isSelected && styles.cellSelected,
                   pressed && !isSelected && styles.cellPressed,
                 ]}
+                accessibilityRole="button"
+                accessibilityLabel={`Select ${monthName}`}
+                accessibilityState={{ selected: isSelected }}
               >
                 <Text
                   style={[
@@ -97,6 +100,9 @@ export function DatePickerCalendar({ style }: DatePickerCalendarProps) {
                   isSelected && styles.cellSelected,
                   pressed && !isSelected && styles.cellPressed,
                 ]}
+                accessibilityRole="button"
+                accessibilityLabel={`Select year ${y}`}
+                accessibilityState={{ selected: isSelected }}
               >
                 <Text
                   style={[

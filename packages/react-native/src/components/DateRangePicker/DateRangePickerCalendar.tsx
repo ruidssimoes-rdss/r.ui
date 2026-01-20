@@ -108,6 +108,8 @@ export function DateRangePickerCalendar({ style }: DateRangePickerCalendarProps)
                   isSelected && styles.cellSelected,
                   pressed && !isSelected && styles.cellPressed,
                 ]}
+                accessibilityRole="button"
+                accessibilityLabel={`Select ${monthName}`}
               >
                 <Text
                   style={[
@@ -147,6 +149,8 @@ export function DateRangePickerCalendar({ style }: DateRangePickerCalendarProps)
                   isSelected && styles.cellSelected,
                   pressed && !isSelected && styles.cellPressed,
                 ]}
+                accessibilityRole="button"
+                accessibilityLabel={`Select year ${y}`}
               >
                 <Text
                   style={[
