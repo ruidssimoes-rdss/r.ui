@@ -1,7 +1,6 @@
 'use client';
 
 import { useTokens } from '@/lib/studio/context';
-import { TokenEditorTabs } from './TokenEditorTabs';
 import { ColorsPanel } from './panels/ColorsPanel';
 import { TypographyPanel } from './panels/TypographyPanel';
 import { SpacingPanel } from './panels/SpacingPanel';
@@ -31,9 +30,6 @@ export function StudioControls() {
 
   return (
     <div className="h-full flex flex-col bg-white">
-      {/* Token Editor Tabs */}
-      <TokenEditorTabs />
-
       {/* Panel Content */}
       <div className="flex-1 overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {renderPanel()}

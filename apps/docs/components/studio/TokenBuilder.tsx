@@ -35,23 +35,6 @@ function GitHubIcon() {
   );
 }
 
-function ChevronLeftIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.33"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m15 18-6-6 6-6" />
-    </svg>
-  );
-}
-
 function RotateCcwIcon() {
   return (
     <svg
@@ -156,49 +139,34 @@ export function TokenBuilder() {
 
       {/* Page Content */}
       <main className="flex-1 flex flex-col overflow-hidden bg-white">
-        {/* Page Header */}
-        <div className="h-14 flex-shrink-0 flex items-center justify-between px-[200px]">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-[#6B7280] hover:text-[#111827] transition-colors"
-            >
-              <ChevronLeftIcon />
-              <span className="text-sm">Back</span>
-            </Link>
-            <div className="h-4 w-px bg-[#E5E7EB]" />
-            <span className="font-semibold text-base text-[#111827]">r/ui Token Builder</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={reset}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm text-[#6B7280] hover:text-[#111827] transition-colors rounded-md"
-            >
-              <RotateCcwIcon />
-              Reset
-            </button>
-            <button
-              onClick={() => setExportOpen(true)}
-              className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium bg-[#18181B] text-white rounded-md hover:bg-[#27272A] transition-colors"
-            >
-              <DownloadIcon />
-              Export
-            </button>
-          </div>
-        </div>
-
         {/* Playground Container */}
-        <div className="flex-1 px-[200px] pb-6 overflow-hidden">
-          <div className="h-full border border-[#E5E7EB] rounded-lg overflow-hidden bg-white flex flex-col">
-            {/* Toolbar */}
+        <div className="flex-1 flex flex-col px-[200px] py-6 overflow-hidden">
+          <div className="flex-1 border border-[#E5E7EB] rounded-lg overflow-hidden bg-white flex flex-col">
+            {/* Toolbar - spans full width with left icons and right icons */}
             <StudioToolbar />
 
             {/* Split View */}
             <div className="flex-1 flex overflow-hidden">
               {/* Preview Panel - ~65% */}
-              <div className="flex-[1.8] border-r border-[#E5E7EB] overflow-hidden">
+              <div className="flex-[1.8] border-r border-[#E5E7EB] overflow-hidden flex flex-col">
                 <StudioPreview />
+                {/* Bottom Action Buttons */}
+                <div className="flex-shrink-0 px-6 py-4 border-t border-[#E5E7EB] bg-white flex items-center gap-3">
+                  <button
+                    onClick={reset}
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm text-[#6B7280] hover:text-[#111827] transition-colors"
+                  >
+                    <RotateCcwIcon />
+                    Reset
+                  </button>
+                  <button
+                    onClick={() => setExportOpen(true)}
+                    className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium bg-[#18181B] text-white rounded-md hover:bg-[#27272A] transition-colors"
+                  >
+                    <DownloadIcon />
+                    Export
+                  </button>
+                </div>
               </div>
 
               {/* Token Editor Panel - ~35% */}

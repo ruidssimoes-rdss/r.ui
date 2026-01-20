@@ -25,12 +25,15 @@ function CheckIcon() {
   );
 }
 
-// Preview Block Component
+// Preview Block Component - Fixed size containers matching Figma (448x519.75)
 function PreviewBlock({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
       <span className="text-xs font-medium text-[#737373] px-1.5 py-2">{label}</span>
-      <div className="border border-dashed border-[#E5E5E5] bg-white p-6">
+      <div
+        className="border border-dashed border-[#E5E5E5] bg-white flex items-center justify-center"
+        style={{ width: '448px', height: '519.75px', padding: '24px' }}
+      >
         {children}
       </div>
     </div>
@@ -57,8 +60,24 @@ function RuiCard({ children, className = '' }: { children: React.ReactNode; clas
   );
 }
 
-function RuiCardHeader({ children }: { children: React.ReactNode }) {
-  return <div className="px-6 pt-6 space-y-1">{children}</div>;
+function RuiCardHeader({ children, showMenu = false }: { children: React.ReactNode; showMenu?: boolean }) {
+  return (
+    <div className="px-6 pt-6 space-y-1 relative">
+      {children}
+      {showMenu && (
+        <button
+          className="absolute top-6 right-6 p-1 text-[#0A0A0A] hover:bg-[#F4F4F5] rounded transition-colors"
+          title="More options"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="5" r="1.5" />
+            <circle cx="12" cy="12" r="1.5" />
+            <circle cx="12" cy="19" r="1.5" />
+          </svg>
+        </button>
+      )}
+    </div>
+  );
 }
 
 function RuiCardContent({ children }: { children: React.ReactNode }) {
@@ -346,6 +365,25 @@ function CardPreview() {
   );
 }
 
+// Select Component (r/ui style)
+function RuiSelect({ placeholder }: { placeholder?: string }) {
+  return (
+    <div
+      className="w-full px-3 py-2 text-sm border rounded-lg flex items-center justify-between cursor-pointer"
+      style={{
+        backgroundColor: 'var(--color-card)',
+        borderColor: '#E5E5E5',
+        color: 'var(--color-muted-foreground)',
+      }}
+    >
+      <span>{placeholder}</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </div>
+  );
+}
+
 // Form Preview
 function FormPreview() {
   const [name, setName] = useState('');
@@ -354,7 +392,7 @@ function FormPreview() {
   return (
     <div className="w-full max-w-md">
       <RuiCard>
-        <RuiCardHeader>
+        <RuiCardHeader showMenu>
           <RuiCardTitle>User Information</RuiCardTitle>
           <RuiCardDescription>Please fill in your details below</RuiCardDescription>
         </RuiCardHeader>
@@ -366,14 +404,22 @@ function FormPreview() {
                 <label className="text-sm font-medium" style={{ color: 'var(--color-foreground)' }}>
                   Name
                 </label>
-                <RuiInput placeholder="Enter name" value={name} onChange={setName} />
+                <RuiInput placeholder="" value={name} onChange={setName} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium" style={{ color: 'var(--color-foreground)' }}>
                   Role
                 </label>
-                <RuiInput placeholder="Select a role" />
+                <RuiSelect placeholder="Select a role" />
               </div>
+            </div>
+
+            {/* Framework */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium" style={{ color: 'var(--color-foreground)' }}>
+                Framework
+              </label>
+              <RuiSelect placeholder="" />
             </div>
 
             {/* Comments */}
@@ -382,7 +428,7 @@ function FormPreview() {
                 Comments
               </label>
               <RuiInput
-                placeholder="Enter comments..."
+                placeholder=""
                 value={comments}
                 onChange={setComments}
                 multiline
@@ -524,7 +570,7 @@ export function PreviewShowcase({ mode }: PreviewShowcaseProps) {
           <CardPreview />
         </PreviewBlock>
 
-        <PreviewBlock label="Settings">
+        <PreviewBlock label="Complex Form">
           <ComplexFormPreview />
         </PreviewBlock>
       </div>
@@ -535,7 +581,7 @@ export function PreviewShowcase({ mode }: PreviewShowcaseProps) {
           <FormPreview />
         </PreviewBlock>
 
-        <PreviewBlock label="Components">
+        <PreviewBlock label="Fields">
           <FieldsPreview />
         </PreviewBlock>
       </div>
