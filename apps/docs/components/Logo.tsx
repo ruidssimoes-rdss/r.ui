@@ -11,9 +11,8 @@ const sizeClasses = {
 
 export function Logo({ className, size = 'md' }: LogoProps) {
   return (
-    <span className={`${sizeClasses[size]} ${className ?? ''}`}>
-      <span className="font-space-mono font-normal text-gray-900">r/</span>
-      <span className="font-script text-gray-900" style={{ fontSize: '1.15em' }}>ui</span>
+    <span className={`font-pixelify text-gray-900 ${sizeClasses[size]} ${className ?? ''}`}>
+      r/ui
     </span>
   );
 }

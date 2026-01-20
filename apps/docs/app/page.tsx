@@ -200,7 +200,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="py-8 px-6 lg:px-48 border-t border-gray-100">
         <div className="max-w-4xl mx-auto flex justify-between items-center text-sm text-gray-400">
-          <span>r/ui</span>
+          <span className="font-pixelify">r/ui</span>
           <div className="flex gap-6">
             <a
               href="https://github.com/ruidssimoes/r-ui"
