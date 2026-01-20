@@ -42,6 +42,26 @@ function CheckIcon({ size = 14, className }: { size?: number; className?: string
   );
 }
 
+function InfoIcon({ size = 12, className }: { size?: number; className?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4" />
+      <path d="M12 8h.01" />
+    </svg>
+  );
+}
+
 const neutralPresets = [
   { name: 'Slate', base: '#64748b' },
   { name: 'Gray', base: '#6b7280' },
@@ -57,6 +77,7 @@ interface NeutralScaleSelectorProps {
 
 export function NeutralScaleSelector({ value, onChange }: NeutralScaleSelectorProps) {
   const [open, setOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const currentPreset =
@@ -77,11 +98,36 @@ export function NeutralScaleSelector({ value, onChange }: NeutralScaleSelectorPr
 
   return (
     <div ref={ref} className="relative">
-      {/* Section Label */}
-      <div className="px-6 pt-6 pb-4">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.5px] text-[#9CA3AF]">
-          Neutral Scale
-        </span>
+      {/* Section Label with Info */}
+      <div className="px-6 pt-6 pb-2">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.5px] text-[#9CA3AF]">
+            Neutral Scale
+          </span>
+          <div className="relative">
+            <button
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              onClick={() => setShowTooltip(!showTooltip)}
+              className="text-[#9CA3AF] hover:text-[#6B7280] transition-colors"
+            >
+              <InfoIcon size={12} />
+            </button>
+            {showTooltip && (
+              <div className="absolute left-0 top-5 z-50 w-56 p-2.5 bg-[#18181B] text-white text-xs rounded-lg shadow-lg">
+                <p className="leading-relaxed">
+                  Neutral colors are used for text, backgrounds, borders, and UI chrome. Choose a preset that complements your brand colors.
+                </p>
+                <div
+                  className="absolute -top-1 left-2 w-2 h-2 bg-[#18181B] rotate-45"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        <p className="text-[10px] text-[#9CA3AF] mt-1">
+          Gray tones for text, borders & backgrounds
+        </p>
       </div>
 
       {/* Dropdown Trigger */}

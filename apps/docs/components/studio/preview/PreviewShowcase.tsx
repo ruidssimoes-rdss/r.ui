@@ -1,30 +1,29 @@
 'use client';
 
+import { useState } from 'react';
 import { PreviewMode } from '@/lib/studio/types';
+import {
+  Button,
+  Switch,
+  Input,
+  Badge,
+  Progress,
+  Checkbox,
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  Slider,
+} from '@r-ui/react-native';
+import { View, Text } from 'react-native';
 
 interface PreviewShowcaseProps {
   mode: PreviewMode;
 }
 
 // Icons
-function MoreVerticalIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="12" cy="5" r="1" />
-      <circle cx="12" cy="19" r="1" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
 function PlusIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.33" strokeLinecap="round" strokeLinejoin="round">
@@ -46,292 +45,230 @@ function PreviewBlock({ label, children }: { label: string; children: React.Reac
   );
 }
 
-// Marketing Card Preview
+// Card Preview using r/ui Card component
 function CardPreview() {
   return (
     <div className="flex justify-center">
-      <div
-        className="w-96 max-w-full overflow-hidden"
-        style={{
-          backgroundColor: 'var(--color-card)',
-          borderRadius: '14px',
-          boxShadow: '0px 0px 0px 1px rgba(10, 10, 10, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.05)',
-        }}
-      >
-        {/* Image Placeholder with grayscale gradient */}
-        <div
-          className="w-full relative overflow-hidden"
-          style={{
-            height: '216px',
-            background: 'linear-gradient(135deg, #374151 0%, #1f2937 50%, #111827 100%)',
-          }}
-        >
-          {/* Subtle noise/texture overlay for more realistic placeholder */}
+      <View style={{ width: 384, maxWidth: '100%' }}>
+        <Card>
+          {/* Image Placeholder with grayscale gradient */}
           <div
-            className="absolute inset-0 opacity-30"
+            className="w-full relative overflow-hidden rounded-t-xl"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+              height: '180px',
+              background: 'linear-gradient(135deg, #374151 0%, #1f2937 50%, #111827 100%)',
             }}
-          />
-        </div>
-
-        {/* Content */}
-        <div className="p-6 space-y-6">
-          <div className="space-y-1">
-            <h3
-              className="text-base font-medium"
-              style={{ color: 'var(--color-foreground)' }}
-            >
-              Observability Plus is replacing Monitoring
-            </h3>
-            <p
-              className="text-sm leading-5"
-              style={{ color: 'var(--color-muted-foreground)' }}
-            >
-              Switch to the improved way to explore your data, with natural language. Monitoring will no longer be available on the Pro plan in November, 2025
-            </p>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <button
-              className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium"
-              style={{
-                backgroundColor: 'var(--color-primary)',
-                color: '#FAFAFA',
-                borderRadius: '8px',
-              }}
-            >
-              Create Query
-              <PlusIcon />
-            </button>
-            <span
-              className="px-2 py-0.5 text-xs font-medium rounded-full"
-              style={{
-                backgroundColor: '#F5F5F5',
-                color: '#171717',
-              }}
-            >
-              Warning
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Form Preview
-function FormPreview() {
-  return (
-    <div
-      className="w-full max-w-md"
-      style={{
-        backgroundColor: 'var(--color-card)',
-        borderRadius: '14px',
-        boxShadow: '0px 0px 0px 1px rgba(10, 10, 10, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.05)',
-      }}
-    >
-      {/* Header */}
-      <div className="p-6 pb-0 flex items-start justify-between">
-        <div>
-          <h3
-            className="text-base font-medium"
-            style={{ color: 'var(--color-foreground)' }}
           >
-            User Information
-          </h3>
-          <p
-            className="text-sm mt-1"
-            style={{ color: 'var(--color-muted-foreground)' }}
-          >
-            Please fill in your details below
-          </p>
-        </div>
-        <button className="p-2 -mr-2" style={{ color: 'var(--color-foreground)' }}>
-          <MoreVerticalIcon />
-        </button>
-      </div>
-
-      {/* Form */}
-      <div className="p-6 space-y-4">
-        {/* Name & Role Row */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium"
-              style={{ color: 'var(--color-foreground)' }}
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              className="w-full px-2.5 py-2 text-sm border"
+            <div
+              className="absolute inset-0 opacity-30"
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.002)',
-                borderColor: '#E5E5E5',
-                borderRadius: '8px',
-                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
               }}
             />
           </div>
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium"
-              style={{ color: 'var(--color-foreground)' }}
-            >
-              Role
-            </label>
-            <div
-              className="w-full flex items-center justify-between px-2.5 py-2 text-sm border cursor-pointer"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.002)',
-                borderColor: '#E5E5E5',
-                borderRadius: '8px',
-                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-              }}
-            >
-              <span style={{ color: 'var(--color-muted-foreground)' }}>Select a role</span>
-              <ChevronDownIcon />
-            </div>
-          </div>
-        </div>
-
-        {/* Framework */}
-        <div className="space-y-2">
-          <label
-            className="text-sm font-medium"
-            style={{ color: 'var(--color-foreground)' }}
-          >
-            Framework
-          </label>
-          <div
-            className="w-full flex items-center justify-between px-2.5 py-2 text-sm border"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.002)',
-              borderColor: '#E5E5E5',
-              borderRadius: '8px',
-              boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-            }}
-          >
-            <span></span>
-            <ChevronDownIcon />
-          </div>
-        </div>
-
-        {/* Comments */}
-        <div className="space-y-2">
-          <label
-            className="text-sm font-medium"
-            style={{ color: 'var(--color-foreground)' }}
-          >
-            Comments
-          </label>
-          <textarea
-            className="w-full px-2.5 py-2 text-sm border min-h-[64px] resize-none"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.002)',
-              borderColor: '#E5E5E5',
-              borderRadius: '8px',
-              boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-            }}
-          />
-        </div>
-
-        {/* Buttons */}
-        <div className="flex gap-3.5 pt-2">
-          <button
-            className="px-2.5 py-1.5 text-sm font-medium"
-            style={{
-              backgroundColor: 'var(--color-primary)',
-              color: '#FAFAFA',
-              borderRadius: '8px',
-            }}
-          >
-            Submit
-          </button>
-          <button
-            className="px-2.5 py-1.5 text-sm font-medium border"
-            style={{
-              backgroundColor: '#FFFFFF',
-              color: 'var(--color-foreground)',
-              borderColor: '#E5E5E5',
-              borderRadius: '8px',
-              boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
+          <CardHeader>
+            <CardTitle>Observability Plus is replacing Monitoring</CardTitle>
+            <CardDescription>
+              Switch to the improved way to explore your data, with natural language.
+            </CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+              <Button size="sm">
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Text style={{ color: '#FAFAFA' }}>Create Query</Text>
+                  <PlusIcon />
+                </View>
+              </Button>
+              <Badge variant="secondary">Warning</Badge>
+            </View>
+          </CardFooter>
+        </Card>
+      </View>
     </div>
   );
 }
 
-// Complex Form Preview (Payment Method)
+// Form Preview using r/ui components
+function FormPreview() {
+  const [name, setName] = useState('');
+  const [comments, setComments] = useState('');
+
+  return (
+    <View style={{ width: '100%', maxWidth: 400 }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>User Information</CardTitle>
+          <CardDescription>Please fill in your details below</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <View style={{ gap: 16 }}>
+            {/* Name & Role Row */}
+            <View style={{ flexDirection: 'row', gap: 16 }}>
+              <View style={{ flex: 1, gap: 8 }}>
+                <Text style={{ fontSize: 14, fontWeight: '500', color: 'var(--color-foreground)' }}>
+                  Name
+                </Text>
+                <Input
+                  placeholder="Enter name"
+                  value={name}
+                  onChangeText={setName}
+                />
+              </View>
+              <View style={{ flex: 1, gap: 8 }}>
+                <Text style={{ fontSize: 14, fontWeight: '500', color: 'var(--color-foreground)' }}>
+                  Role
+                </Text>
+                <Input
+                  placeholder="Select a role"
+                  editable={false}
+                />
+              </View>
+            </View>
+
+            {/* Comments */}
+            <View style={{ gap: 8 }}>
+              <Text style={{ fontSize: 14, fontWeight: '500', color: 'var(--color-foreground)' }}>
+                Comments
+              </Text>
+              <Input
+                placeholder="Enter comments..."
+                value={comments}
+                onChangeText={setComments}
+                multiline
+                numberOfLines={3}
+              />
+            </View>
+          </View>
+        </CardContent>
+        <CardFooter>
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <Button>Submit</Button>
+            <Button variant="outline">Cancel</Button>
+          </View>
+        </CardFooter>
+      </Card>
+    </View>
+  );
+}
+
+// Complex Form Preview (Settings) using r/ui components
 function ComplexFormPreview() {
+  const [notifications, setNotifications] = useState(true);
+  const [marketing, setMarketing] = useState(false);
+  const [progress, setProgress] = useState(65);
+
   return (
-    <div
-      className="w-full max-w-md"
-      style={{
-        backgroundColor: 'var(--color-card)',
-        borderRadius: '14px',
-        boxShadow: '0px 0px 0px 1px rgba(10, 10, 10, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.05)',
-      }}
-    >
-      <div className="p-6">
-        <h3
-          className="text-base font-medium"
-          style={{ color: 'var(--color-foreground)' }}
-        >
-          Payment Method
-        </h3>
-        <p
-          className="text-sm mt-1"
-          style={{ color: 'var(--color-muted-foreground)' }}
-        >
-          All transactions are secure and encrypted
-        </p>
-      </div>
-    </div>
+    <View style={{ width: '100%', maxWidth: 400 }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Account Settings</CardTitle>
+          <CardDescription>Manage your preferences and notifications</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <View style={{ gap: 20 }}>
+            {/* Switch options */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ gap: 2 }}>
+                <Text style={{ fontSize: 14, fontWeight: '500', color: 'var(--color-foreground)' }}>
+                  Push Notifications
+                </Text>
+                <Text style={{ fontSize: 12, color: 'var(--color-muted-foreground)' }}>
+                  Receive alerts on your device
+                </Text>
+              </View>
+              <Switch checked={notifications} onCheckedChange={setNotifications} />
+            </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ gap: 2 }}>
+                <Text style={{ fontSize: 14, fontWeight: '500', color: 'var(--color-foreground)' }}>
+                  Marketing Emails
+                </Text>
+                <Text style={{ fontSize: 12, color: 'var(--color-muted-foreground)' }}>
+                  Get product updates and offers
+                </Text>
+              </View>
+              <Switch checked={marketing} onCheckedChange={setMarketing} />
+            </View>
+
+            {/* Progress indicator */}
+            <View style={{ gap: 8 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 14, fontWeight: '500', color: 'var(--color-foreground)' }}>
+                  Profile Completion
+                </Text>
+                <Text style={{ fontSize: 12, color: 'var(--color-muted-foreground)' }}>
+                  {progress}%
+                </Text>
+              </View>
+              <Progress value={progress} />
+            </View>
+
+            {/* Checkbox */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <Checkbox checked={true} />
+              <Text style={{ fontSize: 14, color: 'var(--color-foreground)' }}>
+                I agree to the terms and conditions
+              </Text>
+            </View>
+          </View>
+        </CardContent>
+      </Card>
+    </View>
   );
 }
 
-// Fields Preview (Compute Environment)
+// Fields Preview using r/ui components
 function FieldsPreview() {
+  const [sliderValue, setSliderValue] = useState([50]);
+
   return (
-    <div className="space-y-3">
-      <h3
-        className="text-base font-medium"
-        style={{ color: 'var(--color-foreground)' }}
-      >
-        Compute Environment
-      </h3>
-      <p
-        className="text-sm"
-        style={{ color: 'var(--color-muted-foreground)' }}
-      >
-        Select the compute environment for your cluster.
-      </p>
-      <div
-        className="flex items-center justify-between px-3 py-2.5 border"
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.002)',
-          borderColor: '#E5E5E5',
-          borderRadius: '8px',
-        }}
-      >
-        <span
-          className="text-sm"
-          style={{ color: 'var(--color-foreground)' }}
-        >
-          Kubernetes
-        </span>
-        <div
-          className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: 'var(--color-foreground)' }}
+    <View style={{ gap: 20 }}>
+      {/* Badges showcase */}
+      <View style={{ gap: 8 }}>
+        <Text style={{ fontSize: 14, fontWeight: '600', color: 'var(--color-foreground)' }}>
+          Status Badges
+        </Text>
+        <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
+          <Badge>Default</Badge>
+          <Badge variant="secondary">Secondary</Badge>
+          <Badge variant="outline">Outline</Badge>
+          <Badge variant="destructive">Error</Badge>
+        </View>
+      </View>
+
+      {/* Slider */}
+      <View style={{ gap: 8 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 14, fontWeight: '500', color: 'var(--color-foreground)' }}>
+            Volume Control
+          </Text>
+          <Text style={{ fontSize: 12, color: 'var(--color-muted-foreground)' }}>
+            {sliderValue[0]}%
+          </Text>
+        </View>
+        <Slider
+          value={sliderValue}
+          onValueChange={setSliderValue}
+          max={100}
+          step={1}
         />
-      </div>
-    </div>
+      </View>
+
+      {/* Button variants */}
+      <View style={{ gap: 8 }}>
+        <Text style={{ fontSize: 14, fontWeight: '600', color: 'var(--color-foreground)' }}>
+          Button Styles
+        </Text>
+        <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
+          <Button size="sm">Primary</Button>
+          <Button size="sm" variant="secondary">Secondary</Button>
+          <Button size="sm" variant="outline">Outline</Button>
+          <Button size="sm" variant="ghost">Ghost</Button>
+        </View>
+      </View>
+    </View>
   );
 }
 
@@ -344,7 +281,7 @@ export function PreviewShowcase({ mode }: PreviewShowcaseProps) {
           <CardPreview />
         </PreviewBlock>
 
-        <PreviewBlock label="Complex Form">
+        <PreviewBlock label="Settings">
           <ComplexFormPreview />
         </PreviewBlock>
       </div>
@@ -355,7 +292,7 @@ export function PreviewShowcase({ mode }: PreviewShowcaseProps) {
           <FormPreview />
         </PreviewBlock>
 
-        <PreviewBlock label="Fields">
+        <PreviewBlock label="Components">
           <FieldsPreview />
         </PreviewBlock>
       </div>

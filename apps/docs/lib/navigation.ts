@@ -11,12 +11,6 @@ export interface NavigationSection {
 
 export const navigation: NavigationSection[] = [
   {
-    title: 'Tools',
-    items: [
-      { name: 'Lint', href: '/lint', description: 'Design and accessibility linter' },
-    ],
-  },
-  {
     title: 'Guides',
     items: [
       { name: 'Overview', href: '/docs', description: 'Get started with r/ui' },

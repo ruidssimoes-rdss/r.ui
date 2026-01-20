@@ -36,23 +36,29 @@ function DesktopIcon() {
 function ZoomInIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+      <path d="M11 8v6" />
+      <path d="M8 11h6" />
     </svg>
   );
 }
 
-function FitScreenIcon() {
+function ZoomOutIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+      <path d="M8 11h6" />
+    </svg>
+  );
+}
+
+function ZoomResetIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+      <path d="M3 3v5h5" />
     </svg>
   );
 }
@@ -158,7 +164,7 @@ function ChevronDownIcon() {
 }
 
 export function StudioToolbar() {
-  const { state, setPreviewDevice, setViewMode, setPreviewMode, zoomIn, zoomReset } = useTokens();
+  const { state, setPreviewDevice, setViewMode, setPreviewMode, zoomIn, zoomOut, zoomReset } = useTokens();
 
   return (
     <div className="h-11 flex-shrink-0 border-b border-[#E5E7EB] flex items-center justify-between px-3 bg-white">
@@ -192,14 +198,40 @@ export function StudioToolbar() {
         {/* Zoom Controls */}
         <div className="flex items-center">
           <button
-            onClick={zoomIn}
+            onClick={zoomOut}
+            disabled={state.zoomLevel <= 50}
             className={cn(
               'p-2 transition-colors',
-              state.zoomLevel > 100
-                ? 'text-[#3B82F6]'
+              state.zoomLevel <= 50
+                ? 'text-[#D1D5DB] cursor-not-allowed'
                 : 'text-[#9CA3AF] hover:text-[#374151]'
             )}
-            title={`Zoom in (${state.zoomLevel}%)`}
+            title="Zoom out"
+          >
+            <ZoomOutIcon />
+          </button>
+          <button
+            onClick={zoomReset}
+            className={cn(
+              'px-1.5 py-1 text-[11px] font-medium transition-colors rounded',
+              state.zoomLevel === 100
+                ? 'text-[#9CA3AF]'
+                : 'text-[#374151] hover:bg-[#F3F4F6]'
+            )}
+            title="Reset zoom to 100%"
+          >
+            {state.zoomLevel}%
+          </button>
+          <button
+            onClick={zoomIn}
+            disabled={state.zoomLevel >= 200}
+            className={cn(
+              'p-2 transition-colors',
+              state.zoomLevel >= 200
+                ? 'text-[#D1D5DB] cursor-not-allowed'
+                : 'text-[#9CA3AF] hover:text-[#374151]'
+            )}
+            title="Zoom in"
           >
             <ZoomInIcon />
           </button>
@@ -208,16 +240,13 @@ export function StudioToolbar() {
             className={cn(
               'p-2 transition-colors',
               state.zoomLevel === 100
-                ? 'text-[#9CA3AF]'
+                ? 'text-[#D1D5DB]'
                 : 'text-[#9CA3AF] hover:text-[#374151]'
             )}
-            title="Reset zoom to 100%"
+            title="Reset to 100%"
           >
-            <FitScreenIcon />
+            <ZoomResetIcon />
           </button>
-          <span className="text-[10px] text-[#9CA3AF] min-w-[32px] text-center">
-            {state.zoomLevel}%
-          </span>
         </div>
 
         <div className="w-px h-4 bg-[#E5E7EB] mx-1" />

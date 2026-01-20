@@ -118,16 +118,10 @@ export function TokenBuilder() {
               Components
             </Link>
             <Link
-              href="/lint"
-              className="px-3 py-1.5 text-sm font-medium text-[#6B7280] hover:text-[#111827] transition-colors"
+              href="/tools"
+              className="px-3 py-1.5 text-sm font-medium text-[#111827] transition-colors"
             >
-              Lint
-            </Link>
-            <Link
-              href="/studio"
-              className="px-3 py-1.5 text-sm font-medium text-[#6B7280] hover:text-[#111827] transition-colors"
-            >
-              Studio
+              Tools
             </Link>
           </nav>
 

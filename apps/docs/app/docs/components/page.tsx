@@ -73,9 +73,9 @@ function CategorySection({ title, items, count }: ComponentCategory & { count: n
 export default function ComponentsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Get only component categories (exclude Guides)
+  // Get only component categories (exclude Guides and Tools)
   const componentCategories = useMemo(() => {
-    return navigation.filter((section) => section.title !== 'Guides');
+    return navigation.filter((section) => section.title !== 'Guides' && section.title !== 'Tools');
   }, []);
 
   // Filter components based on search query
