@@ -1,7 +1,6 @@
 'use client';
 
 import { useStudio } from '@/lib/studio/theme-context';
-import { cn } from '@/lib/utils';
 
 const radiusOptions = ['none', 'sm', 'md', 'lg', 'xl', 'full'] as const;
 
@@ -27,7 +26,7 @@ export function RadiusEditor() {
   const { radius } = state.theme;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Visual radius picker */}
       <div className="grid grid-cols-3 gap-2">
         {radiusOptions.map((key) => {
@@ -38,28 +37,28 @@ export function RadiusEditor() {
             <button
               key={key}
               onClick={() => setDefaultRadius(key)}
-              className={cn(
-                'relative p-3 rounded-lg flex flex-col items-center gap-2 transition-all duration-200',
-                'studio-glass-subtle studio-glass-hover',
-                isSelected && 'studio-glass-active'
-              )}
+              className={`relative p-2.5 rounded-lg flex flex-col items-center gap-2 transition-all duration-200 border ${
+                isSelected
+                  ? 'border-gray-900 bg-gray-50'
+                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+              }`}
             >
               {/* Visual preview */}
               <div
-                className="w-10 h-10 bg-gradient-to-br from-[var(--studio-primary)] to-purple-600 shadow-lg shadow-[var(--studio-primary)]/20"
+                className="w-9 h-9 bg-gray-900"
                 style={{ borderRadius: key === 'full' ? '50%' : value }}
               />
 
               <div className="text-center">
-                <div className="text-xs font-medium text-[var(--studio-text)]">{key}</div>
-                <div className="text-[10px] text-[var(--studio-text-dimmed)]">
+                <div className="text-xs font-medium text-gray-900">{key}</div>
+                <div className="text-[10px] text-gray-500">
                   {key === 'full' ? '50%' : `${value}px`}
                 </div>
               </div>
 
               {/* Selected check */}
               {isSelected && (
-                <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[var(--studio-primary)] flex items-center justify-center text-white">
+                <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-gray-900 flex items-center justify-center text-white">
                   <CheckIcon size={8} />
                 </div>
               )}
@@ -69,9 +68,9 @@ export function RadiusEditor() {
       </div>
 
       {/* Current selection display */}
-      <div className="flex items-center justify-between p-2 rounded-md studio-glass-subtle">
-        <span className="text-xs text-[var(--studio-text-muted)]">Default radius</span>
-        <code className="px-2 py-0.5 rounded text-xs font-mono text-[var(--studio-text)] bg-black/20">
+      <div className="flex items-center justify-between px-2.5 py-2 rounded-md bg-gray-100 text-xs">
+        <span className="text-gray-500">Default</span>
+        <code className="font-mono text-gray-700">
           {radius.default} ({radius[radius.default]}px)
         </code>
       </div>

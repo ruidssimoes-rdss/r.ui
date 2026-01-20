@@ -2,7 +2,6 @@
 
 import { useStudio } from '@/lib/studio/theme-context';
 import { presets, PresetName } from '@/lib/studio/presets';
-import { cn } from '@/lib/utils';
 
 const presetMeta: Record<PresetName, { description: string; colors: string[] }> = {
   minimal: {
@@ -57,18 +56,18 @@ export function PresetPicker() {
           <button
             key={name}
             onClick={() => applyPreset(name)}
-            className={cn(
-              'group relative flex items-center gap-3 p-3 rounded-lg text-left transition-all duration-200',
-              'studio-glass-subtle studio-glass-hover',
-              isActive && 'studio-glass-active'
-            )}
+            className={`group relative flex items-center gap-3 p-2.5 rounded-lg text-left transition-all duration-200 border ${
+              isActive
+                ? 'border-gray-900 bg-gray-50'
+                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+            }`}
           >
             {/* Color swatches */}
             <div className="flex -space-x-1.5">
               {meta.colors.map((color, i) => (
                 <div
                   key={i}
-                  className="w-5 h-5 rounded-full ring-2 ring-[var(--studio-glass-bg-strong)] shadow-sm"
+                  className="w-5 h-5 rounded-full ring-2 ring-white shadow-sm"
                   style={{ backgroundColor: color, zIndex: 3 - i }}
                 />
               ))}
@@ -76,17 +75,17 @@ export function PresetPicker() {
 
             {/* Label */}
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium capitalize text-[var(--studio-text)]">
+              <div className="text-sm font-medium capitalize text-gray-900">
                 {name.replace('_', ' ')}
               </div>
-              <div className="text-xs text-[var(--studio-text-dimmed)] truncate">
+              <div className="text-xs text-gray-500 truncate">
                 {meta.description}
               </div>
             </div>
 
             {/* Active indicator */}
             {isActive && (
-              <div className="w-5 h-5 rounded-full bg-[var(--studio-primary)] flex items-center justify-center text-white">
+              <div className="w-5 h-5 rounded-full bg-gray-900 flex items-center justify-center text-white">
                 <CheckIcon size={10} />
               </div>
             )}

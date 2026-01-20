@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useStudio } from '@/lib/studio/theme-context';
 import { checkContrast, getContrastText } from '@/lib/studio/color-utils';
 import { HexColorPicker, HexColorInput } from 'react-colorful';
-import { cn } from '@/lib/utils';
 
 interface ColorRowProps {
   label: string;
@@ -37,48 +36,46 @@ function ColorRow({ label, color, onChange }: ColorRowProps) {
     <div className="space-y-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          'w-full p-3 rounded-lg flex items-center justify-between transition-all duration-200',
-          'studio-glass-subtle studio-glass-hover',
-          isOpen && 'studio-glass-active'
-        )}
+        className={`w-full p-2.5 rounded-lg flex items-center justify-between transition-all duration-200 border ${
+          isOpen
+            ? 'border-gray-900 bg-gray-50'
+            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+        }`}
       >
         <div className="flex items-center gap-3">
           <div
-            className="w-8 h-8 rounded-md shadow-sm ring-1 ring-white/10"
+            className="w-7 h-7 rounded-md shadow-sm border border-gray-200"
             style={{ backgroundColor: color }}
           />
           <div className="text-left">
-            <div className="text-sm font-medium text-[var(--studio-text)]">{label}</div>
-            <code className="text-xs text-[var(--studio-text-dimmed)]">{color}</code>
+            <div className="text-sm font-medium text-gray-900">{label}</div>
+            <code className="text-xs text-gray-500">{color}</code>
           </div>
         </div>
-        <ChevronDownIcon
-          size={14}
-        />
+        <ChevronDownIcon size={14} />
       </button>
 
       {isOpen && (
-        <div className="studio-glass-strong p-4 rounded-lg space-y-4 animate-in fade-in slide-in-from-top-2">
+        <div className="p-3 rounded-lg border border-gray-200 bg-white space-y-3">
           {/* Color picker */}
-          <div className="[&_.react-colorful]:w-full [&_.react-colorful]:h-[160px] [&_.react-colorful__saturation]:rounded-lg [&_.react-colorful__hue]:rounded-full [&_.react-colorful__hue]:h-3 [&_.react-colorful__pointer]:w-4 [&_.react-colorful__pointer]:h-4">
+          <div className="[&_.react-colorful]:w-full [&_.react-colorful]:h-[140px] [&_.react-colorful__saturation]:rounded-md [&_.react-colorful__hue]:rounded-full [&_.react-colorful__hue]:h-2.5 [&_.react-colorful__pointer]:w-4 [&_.react-colorful__pointer]:h-4">
             <HexColorPicker color={color} onChange={onChange} />
           </div>
 
           {/* Hex input */}
-          <div className="flex items-center gap-2 p-2 rounded-md bg-black/30 border border-[var(--studio-glass-border)]">
-            <span className="text-xs text-[var(--studio-text-dimmed)] pl-1">#</span>
+          <div className="flex items-center gap-2 px-2.5 py-2 rounded-md border border-gray-200 bg-gray-50">
+            <span className="text-xs text-gray-400">#</span>
             <HexColorInput
               color={color}
               onChange={onChange}
-              className="flex-1 bg-transparent text-sm text-[var(--studio-text)] outline-none font-mono"
+              className="flex-1 bg-transparent text-sm text-gray-900 outline-none font-mono"
               prefixed={false}
             />
           </div>
 
           {/* Quick color preview */}
           <div
-            className="h-10 rounded-md flex items-center justify-center text-xs font-medium shadow-inner"
+            className="h-8 rounded-md flex items-center justify-center text-xs font-medium"
             style={{ backgroundColor: color, color: textColor }}
           >
             Preview Text
@@ -98,40 +95,30 @@ export function ColorEditor() {
   const accentContrast = checkContrast(getContrastText(colors.accent), colors.accent);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <ColorRow label="Primary" color={colors.primary} onChange={setPrimaryColor} />
       <ColorRow label="Secondary" color={colors.secondary} onChange={setSecondaryColor} />
       <ColorRow label="Accent" color={colors.accent} onChange={setAccentColor} />
 
-      {/* Contrast indicator */}
-      <div className="studio-glass-subtle p-3 rounded-lg space-y-2">
-        <div className="text-[10px] uppercase tracking-wider text-[var(--studio-text-dimmed)] font-medium">
-          WCAG Contrast
+      {/* Contrast indicator - subtle badges */}
+      <div className="pt-2">
+        <div className="text-[10px] uppercase tracking-wider text-gray-400 font-medium mb-2">
+          Contrast
         </div>
         <div className="flex gap-2">
-          <div className="flex-1">
+          <div className="flex items-center gap-2 px-2 py-1 rounded bg-gray-100 text-xs">
             <div
-              className="h-7 rounded-md flex items-center justify-center text-[10px] font-semibold"
-              style={{
-                backgroundColor: colors.primary,
-                color: getContrastText(colors.primary),
-              }}
-            >
-              {primaryContrast.level}
-            </div>
-            <div className="text-[10px] text-center mt-1 text-[var(--studio-text-dimmed)]">Primary</div>
+              className="w-3 h-3 rounded"
+              style={{ backgroundColor: colors.primary }}
+            />
+            <span className="text-gray-600">{primaryContrast.level}</span>
           </div>
-          <div className="flex-1">
+          <div className="flex items-center gap-2 px-2 py-1 rounded bg-gray-100 text-xs">
             <div
-              className="h-7 rounded-md flex items-center justify-center text-[10px] font-semibold"
-              style={{
-                backgroundColor: colors.accent,
-                color: getContrastText(colors.accent),
-              }}
-            >
-              {accentContrast.level}
-            </div>
-            <div className="text-[10px] text-center mt-1 text-[var(--studio-text-dimmed)]">Accent</div>
+              className="w-3 h-3 rounded"
+              style={{ backgroundColor: colors.accent }}
+            />
+            <span className="text-gray-600">{accentContrast.level}</span>
           </div>
         </div>
       </div>
