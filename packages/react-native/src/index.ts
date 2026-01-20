@@ -1,6 +1,6 @@
 // Components
-export { Button } from './components/Button';
-export type { ButtonProps, ButtonVariant, ButtonSize } from './components/Button';
+export { Button, ButtonGroup } from './components/Button';
+export type { ButtonProps, ButtonGroupProps, ButtonVariant, ButtonSize } from './components/Button';
 
 export { Text, Heading, Code, Label } from './components/Text';
 export type {
