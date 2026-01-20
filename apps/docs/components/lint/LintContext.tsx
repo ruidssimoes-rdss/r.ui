@@ -223,6 +223,10 @@ export function LintProvider({ children, initialReport }: LintProviderProps) {
   const handleCodeChangeFromFix = useCallback((newCode: string) => {
     // Update code state - this will update the code input panel
     setCodeInternal(newCode);
+    // Clear stale issues immediately to prevent showing old highlights on new code
+    // The auto-lint useEffect will repopulate issues after debounce
+    setIssues([]);
+    setScore(null);
     // Clear shared report state
     setIsSharedReport(false);
     setSharedTimestamp(null);
