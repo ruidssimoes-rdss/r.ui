@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import { useStudio } from '@/lib/studio/theme-context';
 import { TokenPanel } from './TokenPanel';
 import { LivePreview } from './LivePreview';
@@ -63,6 +64,106 @@ function ArrowLeftIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+function MoonIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+  );
+}
+
+function SunIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="5" />
+      <line x1="12" y1="1" x2="12" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="23" />
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+      <line x1="1" y1="12" x2="3" y2="12" />
+      <line x1="21" y1="12" x2="23" y2="12" />
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+    </svg>
+  );
+}
+
+function GrainIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 2a10 10 0 1 0 10 10" />
+      <path d="M12 12V2" />
+      <path d="M12 12l7-7" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+const themes = [
+  { name: 'dark', label: 'Dark', icon: MoonIcon },
+  { name: 'light', label: 'Light', icon: SunIcon },
+  { name: 'oatmeal', label: 'Oatmeal', icon: GrainIcon },
+] as const;
+
+function StudioThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div className="w-24 h-8 studio-glass-subtle rounded-lg animate-pulse" />;
+  }
+
+  return (
+    <div className="flex items-center gap-1 studio-glass-subtle rounded-lg p-1">
+      {themes.map(({ name, label, icon: Icon }) => (
+        <button
+          key={name}
+          onClick={() => setTheme(name)}
+          className={`p-1.5 rounded-md transition-all duration-200 ${
+            theme === name
+              ? 'bg-[var(--studio-primary)] text-white shadow-lg shadow-[var(--studio-primary)]/30'
+              : 'text-[var(--studio-text-muted)] hover:text-[var(--studio-text)] hover:bg-white/5'
+          }`}
+          title={label}
+        >
+          <Icon size={14} />
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function StudioCanvas() {
   const { state, reset } = useStudio();
   const [exportOpen, setExportOpen] = useState(false);
@@ -70,7 +171,7 @@ export function StudioCanvas() {
   return (
     <div className="studio-root h-screen flex flex-col relative overflow-hidden">
       {/* Ambient background */}
-      <div className="absolute inset-0 bg-[#030305]">
+      <div className="absolute inset-0 bg-[var(--studio-void)] transition-colors duration-300">
         <div className="studio-orb studio-orb-1" />
         <div className="studio-orb studio-orb-2" />
         <div className="studio-orb studio-orb-3" />
@@ -91,7 +192,7 @@ export function StudioCanvas() {
           <div className="w-px h-5 bg-[var(--studio-glass-border)]" />
 
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-white">r/ui</span>
+            <span className="text-lg font-semibold text-[var(--studio-text)]">r/ui</span>
             <span className="text-sm text-[var(--studio-text-dimmed)]">Studio</span>
           </div>
 
@@ -102,7 +203,11 @@ export function StudioCanvas() {
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <StudioThemeToggle />
+
+          <div className="w-px h-5 bg-[var(--studio-glass-border)]" />
+
           <button
             onClick={reset}
             className="studio-btn studio-btn-ghost"
