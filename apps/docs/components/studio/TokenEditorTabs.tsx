@@ -88,6 +88,7 @@ export function TokenEditorTabs() {
       {tabs.map((tab) => (
         <button
           key={tab.id}
+          type="button"
           onClick={() => setActiveTab(tab.id)}
           className={cn(
             'p-2 rounded-md transition-colors',
