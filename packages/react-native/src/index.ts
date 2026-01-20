@@ -1096,6 +1096,40 @@ export type {
   AnnouncementVariant,
 } from './components/Announcement';
 
+export {
+  Onboarding,
+  useOnboarding,
+  OnboardingStep,
+  OnboardingImage,
+  OnboardingTitle,
+  OnboardingDescription,
+  OnboardingDots,
+  OnboardingProgress,
+  OnboardingActions,
+  OnboardingNextButton,
+  OnboardingBackButton,
+  OnboardingSkipButton,
+} from './components/Onboarding';
+export type {
+  OnboardingProps,
+  OnboardingStepProps,
+  OnboardingImageProps,
+  OnboardingTitleProps,
+  OnboardingDescriptionProps,
+  OnboardingDotsProps,
+  OnboardingProgressProps,
+  OnboardingActionsProps,
+  OnboardingNextButtonProps,
+  OnboardingBackButtonProps,
+  OnboardingSkipButtonProps,
+  StepAnimation,
+  ImageAnimation,
+  TextAnimation,
+  NavigationDirection,
+  OnboardingContextValue,
+  StepInfo,
+} from './components/Onboarding';
+
 // Tokens
 export * from './tokens';
 

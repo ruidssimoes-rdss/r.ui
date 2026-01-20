@@ -5480,6 +5480,347 @@ export default function MyAnnouncement() {
 };
 
 // ========================================
+// Onboarding Component Data
+// ========================================
+
+export const onboardingData: ComponentData = {
+  slug: 'onboarding',
+  name: 'Onboarding',
+  description: 'Premium onboarding flow with swipe gestures, animations, and multiple indicator styles.',
+  category: 'Marketing',
+  categorySlug: 'marketing',
+  variants: [
+    {
+      id: 'basic',
+      label: 'Basic Usage',
+      code: `import { Onboarding } from '@r-ui/react-native'
+import { View } from 'react-native'
+
+export default function BasicOnboarding() {
+  return (
+    <Onboarding onComplete={() => console.log('Onboarding complete!')}>
+      <Onboarding.Step>
+        <View style={{ alignItems: 'center', paddingTop: 60 }}>
+          {/* Your illustration or icon here */}
+        </View>
+        <Onboarding.Title>Welcome to AppName</Onboarding.Title>
+        <Onboarding.Description>
+          Discover a better way to manage your tasks
+        </Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <View style={{ alignItems: 'center', paddingTop: 60 }}>
+          {/* Your illustration or icon here */}
+        </View>
+        <Onboarding.Title>Powerful Features</Onboarding.Title>
+        <Onboarding.Description>
+          Everything you need in one place
+        </Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <View style={{ alignItems: 'center', paddingTop: 60 }}>
+          {/* Your illustration or icon here */}
+        </View>
+        <Onboarding.Title>Ready to Start?</Onboarding.Title>
+        <Onboarding.Description>
+          Let's get you set up in seconds
+        </Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Dots />
+      <Onboarding.Actions>
+        <Onboarding.SkipButton />
+        <Onboarding.NextButton />
+      </Onboarding.Actions>
+    </Onboarding>
+  )
+}`,
+    },
+    {
+      id: 'pills',
+      label: 'Pills Indicator',
+      code: `import { Onboarding } from '@r-ui/react-native'
+
+export default function PillsOnboarding() {
+  return (
+    <Onboarding onComplete={() => console.log('Complete!')}>
+      <Onboarding.Step>
+        <Onboarding.Title>Step One</Onboarding.Title>
+        <Onboarding.Description>Pills expand to show the active step</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <Onboarding.Title>Step Two</Onboarding.Title>
+        <Onboarding.Description>A modern alternative to dots</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <Onboarding.Title>Step Three</Onboarding.Title>
+        <Onboarding.Description>Popular in apps like Instagram</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Dots variant="pills" />
+      <Onboarding.Actions>
+        <Onboarding.SkipButton />
+        <Onboarding.NextButton labelNext="Continue" labelLast="Get Started" />
+      </Onboarding.Actions>
+    </Onboarding>
+  )
+}`,
+    },
+    {
+      id: 'progress-bar',
+      label: 'Progress Bar',
+      code: `import { Onboarding } from '@r-ui/react-native'
+
+export default function ProgressOnboarding() {
+  return (
+    <Onboarding onComplete={() => console.log('Complete!')}>
+      <Onboarding.Progress />
+
+      <Onboarding.Step>
+        <Onboarding.Title>Step 1</Onboarding.Title>
+        <Onboarding.Description>Progress bar shows advancement</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <Onboarding.Title>Step 2</Onboarding.Title>
+        <Onboarding.Description>Animates smoothly between steps</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <Onboarding.Title>Step 3</Onboarding.Title>
+        <Onboarding.Description>Almost there!</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Actions>
+        <Onboarding.BackButton />
+        <Onboarding.NextButton />
+      </Onboarding.Actions>
+    </Onboarding>
+  )
+}`,
+    },
+    {
+      id: 'segmented',
+      label: 'Segmented Progress',
+      code: `import { Onboarding, colors } from '@r-ui/react-native'
+
+export default function SegmentedOnboarding() {
+  return (
+    <Onboarding onComplete={() => console.log('Complete!')}>
+      <Onboarding.Progress variant="segmented" color="#22c55e" height={6} />
+
+      <Onboarding.Step>
+        <Onboarding.Title>Profile Setup</Onboarding.Title>
+        <Onboarding.Description>Each segment represents a step</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <Onboarding.Title>Preferences</Onboarding.Title>
+        <Onboarding.Description>Choose your settings</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <Onboarding.Title>All Set!</Onboarding.Title>
+        <Onboarding.Description>Ready to get started</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Actions>
+        <Onboarding.BackButton />
+        <Onboarding.NextButton labelNext="Continue" labelLast="Finish Setup" />
+      </Onboarding.Actions>
+    </Onboarding>
+  )
+}`,
+    },
+    {
+      id: 'numbers',
+      label: 'Numbers Indicator',
+      code: `import { Onboarding } from '@r-ui/react-native'
+
+export default function NumbersOnboarding() {
+  return (
+    <Onboarding onComplete={() => console.log('Complete!')}>
+      <Onboarding.Step>
+        <Onboarding.Title>Welcome</Onboarding.Title>
+        <Onboarding.Description>Numbered steps for clear progression</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <Onboarding.Title>Features</Onboarding.Title>
+        <Onboarding.Description>Great for wizard-style flows</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step>
+        <Onboarding.Title>Ready</Onboarding.Title>
+        <Onboarding.Description>Click any number to jump to that step</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Dots variant="numbers" />
+      <Onboarding.Actions>
+        <Onboarding.BackButton />
+        <Onboarding.NextButton />
+      </Onboarding.Actions>
+    </Onboarding>
+  )
+}`,
+    },
+    {
+      id: 'animations',
+      label: 'Custom Animations',
+      code: `import { Onboarding } from '@r-ui/react-native'
+
+export default function AnimatedOnboarding() {
+  return (
+    <Onboarding
+      onComplete={() => console.log('Complete!')}
+      onStepChange={(step) => console.log('Step:', step)}
+    >
+      <Onboarding.Step animation="fade">
+        <Onboarding.Title animation="slideDown">Fade Animation</Onboarding.Title>
+        <Onboarding.Description animation="fadeIn" delay={150}>
+          This step uses a simple fade transition
+        </Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step animation="slide">
+        <Onboarding.Title animation="slideUp">Slide Animation</Onboarding.Title>
+        <Onboarding.Description animation="slideUp" delay={100}>
+          This step slides in from the side
+        </Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Step animation="scale">
+        <Onboarding.Title animation="fadeIn">Scale Animation</Onboarding.Title>
+        <Onboarding.Description animation="fadeIn" delay={50}>
+          This step scales in for emphasis
+        </Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Dots />
+      <Onboarding.Actions>
+        <Onboarding.BackButton />
+        <Onboarding.NextButton />
+      </Onboarding.Actions>
+    </Onboarding>
+  )
+}`,
+    },
+  ],
+  installation: 'npx r-ui add onboarding',
+  usage: `import { Onboarding } from '@r-ui/react-native'
+
+export default function MyOnboarding() {
+  return (
+    <Onboarding onComplete={() => navigation.navigate('Home')}>
+      <Onboarding.Step>
+        <Onboarding.Title>Welcome</Onboarding.Title>
+        <Onboarding.Description>Your journey starts here</Onboarding.Description>
+      </Onboarding.Step>
+
+      <Onboarding.Dots />
+      <Onboarding.Actions>
+        <Onboarding.SkipButton />
+        <Onboarding.NextButton />
+      </Onboarding.Actions>
+    </Onboarding>
+  )
+}`,
+  features: [
+    'Swipe gestures with spring physics',
+    'Multiple indicator styles (dots, pills, numbers, progress bar)',
+    'Animated step transitions (fade, slide, scale)',
+    'Parallax effect support for images',
+    'Keyboard navigation on web (arrow keys)',
+    'Reduced motion support for accessibility',
+    'Customizable button labels and styles',
+    'Analytics callbacks (onStepChange)',
+    'Works on iOS, Android, and Web',
+  ],
+  props: [
+    {
+      component: 'Onboarding',
+      props: [
+        { name: 'onComplete', type: '() => void', default: '-', description: 'Called when onboarding finishes' },
+        { name: 'onStepChange', type: '(step: number, stepId?: string) => void', default: '-', description: 'Called on step change' },
+        { name: 'onSkip', type: '() => void', default: '-', description: 'Called when skip is pressed' },
+        { name: 'initialStep', type: 'number', default: '0', description: 'Starting step index' },
+        { name: 'loop', type: 'boolean', default: 'false', description: 'Allow cycling through steps' },
+        { name: 'swipeEnabled', type: 'boolean', default: 'true', description: 'Enable swipe gestures' },
+        { name: 'keyboardEnabled', type: 'boolean', default: 'true', description: 'Enable arrow key navigation (web)' },
+      ],
+    },
+    {
+      component: 'Onboarding.Step',
+      props: [
+        { name: 'id', type: 'string', default: '-', description: 'Step identifier for analytics' },
+        { name: 'animation', type: "'fade' | 'slide' | 'scale' | 'none'", default: "'slide'", description: 'Step transition style' },
+      ],
+    },
+    {
+      component: 'Onboarding.Image',
+      props: [
+        { name: 'source', type: 'ImageSourcePropType', default: '-', description: 'Image source' },
+        { name: 'parallax', type: 'number', default: '0', description: 'Parallax effect intensity (0-1)' },
+        { name: 'animation', type: "'zoom' | 'fade' | 'slide' | 'none'", default: "'fade'", description: 'Image animation' },
+        { name: 'resizeMode', type: "'cover' | 'contain' | 'center'", default: "'contain'", description: 'Image resize mode' },
+      ],
+    },
+    {
+      component: 'Onboarding.Title / Onboarding.Description',
+      props: [
+        { name: 'animation', type: "'slideUp' | 'slideDown' | 'fadeIn' | 'none'", default: "'slideUp'/'fadeIn'", description: 'Text animation' },
+        { name: 'delay', type: 'number', default: '50/100', description: 'Animation delay (ms)' },
+      ],
+    },
+    {
+      component: 'Onboarding.Dots',
+      props: [
+        { name: 'variant', type: "'dots' | 'pills' | 'numbers'", default: "'dots'", description: 'Indicator style' },
+        { name: 'activeColor', type: 'string', default: 'accent blue', description: 'Active indicator color' },
+        { name: 'inactiveColor', type: 'string', default: 'border default', description: 'Inactive indicator color' },
+        { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Indicator size' },
+      ],
+    },
+    {
+      component: 'Onboarding.Progress',
+      props: [
+        { name: 'variant', type: "'bar' | 'segmented'", default: "'bar'", description: 'Progress style' },
+        { name: 'color', type: 'string', default: 'accent blue', description: 'Progress fill color' },
+        { name: 'trackColor', type: 'string', default: 'border default', description: 'Track background color' },
+        { name: 'height', type: 'number', default: '4', description: 'Bar height (px)' },
+        { name: 'animated', type: 'boolean', default: 'true', description: 'Enable smooth transitions' },
+      ],
+    },
+    {
+      component: 'Onboarding.NextButton',
+      props: [
+        { name: 'labelNext', type: 'string', default: "'Next'", description: 'Label for non-final steps' },
+        { name: 'labelLast', type: 'string', default: "'Get Started'", description: 'Label for final step' },
+        { name: 'variant', type: "'solid' | 'outline' | 'ghost'", default: "'solid'", description: 'Button style' },
+      ],
+    },
+    {
+      component: 'Onboarding.BackButton',
+      props: [
+        { name: 'hideOnFirst', type: 'boolean', default: 'true', description: 'Hide on first step' },
+        { name: 'variant', type: "'solid' | 'outline' | 'ghost'", default: "'ghost'", description: 'Button style' },
+      ],
+    },
+    {
+      component: 'Onboarding.SkipButton',
+      props: [
+        { name: 'hideOnLast', type: 'boolean', default: 'true', description: 'Hide on last step' },
+        { name: 'variant', type: "'solid' | 'outline' | 'ghost'", default: "'ghost'", description: 'Button style' },
+      ],
+    },
+  ],
+};
+
+// ========================================
 
 export const componentRegistry: Record<string, ComponentData> = {
   'date-picker': datePickerData,
@@ -5558,6 +5899,7 @@ export const componentRegistry: Record<string, ComponentData> = {
   'cta': ctaData,
   'footer': footerData,
   'announcement': announcementData,
+  'onboarding': onboardingData,
 };
 
 // ========================================
