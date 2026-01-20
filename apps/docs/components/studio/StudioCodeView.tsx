@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useStudio } from '@/lib/studio/studio-context';
+import { StudioToolbar } from './StudioToolbar';
 import {
   generateCSSExport,
   generateThemeExport,
@@ -10,7 +11,7 @@ import {
 } from '@/lib/studio/export-utils';
 import { cn } from '@/lib/utils';
 
-function CopyIcon({ size = 14 }: { size?: number }) {
+function CopyIcon({ size = 12 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -28,7 +29,7 @@ function CopyIcon({ size = 14 }: { size?: number }) {
   );
 }
 
-function CheckIcon({ size = 14 }: { size?: number }) {
+function CheckIcon({ size = 12 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -46,8 +47,8 @@ function CheckIcon({ size = 14 }: { size?: number }) {
 }
 
 const formatTabs = [
-  { key: 'css' as const, label: 'CSS Variables' },
-  { key: 'theme' as const, label: 'r/ui Theme' },
+  { key: 'css' as const, label: 'CSS' },
+  { key: 'theme' as const, label: 'r/ui' },
   { key: 'tailwind' as const, label: 'Tailwind' },
   { key: 'json' as const, label: 'JSON' },
 ];
@@ -78,16 +79,19 @@ export function StudioCodeView() {
   };
 
   return (
-    <div className="rounded-lg border border-border/50 overflow-hidden">
+    <div className="h-full flex flex-col">
+      {/* Toolbar at TOP */}
+      <StudioToolbar />
+
       {/* Format Tabs */}
-      <div className="flex items-center justify-between p-2 bg-muted/30 border-b border-border/50">
+      <div className="h-10 border-b border-border/50 flex items-center justify-between px-4 bg-muted/20">
         <div className="flex items-center gap-1">
           {formatTabs.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setExportFormat(key)}
               className={cn(
-                'px-3 py-1.5 rounded-md text-sm transition-colors',
+                'px-2.5 py-1 rounded text-xs font-medium transition-colors',
                 state.exportFormat === key
                   ? 'bg-background text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
@@ -100,16 +104,16 @@ export function StudioCodeView() {
 
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="flex items-center gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
-          {copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
+          {copied ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
 
       {/* Code */}
-      <div className="bg-[#0a0a0a] p-4 max-h-[400px] overflow-auto">
-        <pre className="text-sm text-gray-300 font-mono">
+      <div className="flex-1 overflow-auto bg-[#0a0a0a] p-4">
+        <pre className="text-xs text-gray-300 font-mono leading-relaxed">
           <code>{code}</code>
         </pre>
       </div>

@@ -24,37 +24,35 @@ function CheckCircleIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-export function StudioTokens() {
+export function StudioControls() {
   const [reviewOpen, setReviewOpen] = useState(false);
 
   return (
     <>
-      <div className="rounded-lg border border-border/50 p-6 space-y-8 bg-card">
+      <div className="p-4 space-y-6">
         {/* Colors */}
         <ColorPalette />
 
-        {/* Divider */}
-        <div className="h-px bg-border" />
+        <div className="h-px bg-border/50" />
 
-        {/* Radius and Spacing */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <RadiusControl />
-          <SpacingControl />
-        </div>
+        {/* Radius */}
+        <RadiusControl />
 
-        {/* Divider */}
-        <div className="h-px bg-border" />
+        <div className="h-px bg-border/50" />
+
+        {/* Spacing */}
+        <SpacingControl />
+
+        <div className="h-px bg-border/50" />
 
         {/* Review Button */}
-        <div className="flex justify-center">
-          <button
-            onClick={() => setReviewOpen(true)}
-            className="flex items-center gap-2 px-6 py-2.5 text-sm font-medium bg-muted hover:bg-muted/80 rounded-lg transition-colors"
-          >
-            <CheckCircleIcon size={16} />
-            Review Theme
-          </button>
-        </div>
+        <button
+          onClick={() => setReviewOpen(true)}
+          className="w-full py-2.5 text-sm font-medium border border-border rounded-lg hover:bg-muted transition-colors flex items-center justify-center gap-2"
+        >
+          <CheckCircleIcon size={16} />
+          Review Theme
+        </button>
       </div>
 
       <ReviewModal open={reviewOpen} onOpenChange={setReviewOpen} />

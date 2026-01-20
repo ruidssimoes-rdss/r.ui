@@ -6,7 +6,7 @@ export { StudioHeader } from './StudioHeader';
 export { StudioToolbar } from './StudioToolbar';
 export { StudioPreview } from './StudioPreview';
 export { StudioCodeView } from './StudioCodeView';
-export { StudioTokens } from './StudioTokens';
+export { StudioControls } from './StudioControls';
 
 // Token controls
 export { ColorPalette } from './ColorPalette';

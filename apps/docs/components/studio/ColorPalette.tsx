@@ -59,16 +59,17 @@ export function ColorPalette() {
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      {/* Color Grid - More Compact */}
+      <div className="grid grid-cols-3 gap-2">
         {state.tokens.colors.map((color) => (
           <ColorSwatch key={color.id} color={color} />
         ))}
 
         {/* Add New Color */}
         {isAdding && (
-          <div className="flex flex-col gap-1">
-            <div className="w-16 h-16 rounded-lg border-2 border-dashed border-border flex items-center justify-center bg-muted/30">
-              <PlusIcon size={20} />
+          <div className="flex flex-col items-center gap-1">
+            <div className="w-full aspect-square rounded-lg border-2 border-dashed border-border flex items-center justify-center bg-muted/30">
+              <PlusIcon size={16} />
             </div>
             <input
               type="text"
@@ -81,7 +82,7 @@ export function ColorPalette() {
                 }
               }}
               placeholder="name"
-              className="w-16 text-xs text-center bg-transparent border-b border-border focus:border-foreground outline-none py-0.5"
+              className="w-full text-[10px] text-center bg-transparent border-b border-border focus:border-foreground outline-none"
               autoFocus
             />
           </div>

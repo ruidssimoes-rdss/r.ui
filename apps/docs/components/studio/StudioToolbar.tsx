@@ -3,7 +3,7 @@
 import { useStudio } from '@/lib/studio/studio-context';
 import { cn } from '@/lib/utils';
 
-function MonitorIcon({ size = 16 }: { size?: number }) {
+function MonitorIcon({ size = 14 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -22,7 +22,7 @@ function MonitorIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function TabletIcon({ size = 16 }: { size?: number }) {
+function TabletIcon({ size = 14 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -40,7 +40,7 @@ function TabletIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function SmartphoneIcon({ size = 16 }: { size?: number }) {
+function SmartphoneIcon({ size = 14 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -58,7 +58,7 @@ function SmartphoneIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function SunIcon({ size = 16 }: { size?: number }) {
+function SunIcon({ size = 14 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -83,7 +83,7 @@ function SunIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function MoonIcon({ size = 16 }: { size?: number }) {
+function MoonIcon({ size = 14 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -100,7 +100,7 @@ function MoonIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function EyeIcon({ size = 14 }: { size?: number }) {
+function EyeIcon({ size = 12 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -118,7 +118,7 @@ function EyeIcon({ size = 14 }: { size?: number }) {
   );
 }
 
-function CodeIcon({ size = 14 }: { size?: number }) {
+function CodeIcon({ size = 12 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -151,72 +151,74 @@ export function StudioToolbar() {
   ];
 
   return (
-    <div className="flex items-center justify-between py-2">
-      {/* Device & Theme Controls */}
-      <div className="flex items-center gap-4">
+    <div className="h-12 border-b border-border/50 flex items-center justify-between px-4 bg-muted/30">
+      {/* Left: Device & Theme */}
+      <div className="flex items-center gap-2">
         {/* Device */}
-        <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-1">
+        <div className="flex items-center gap-0.5 bg-background rounded-md p-0.5">
           {devices.map(({ key, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setPreviewDevice(key)}
               className={cn(
-                'p-2 rounded-md transition-colors',
+                'p-1.5 rounded transition-colors',
                 state.previewDevice === key
-                  ? 'bg-background text-foreground shadow-sm'
+                  ? 'bg-muted text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               )}
               aria-label={`Preview on ${key}`}
             >
-              <Icon size={16} />
+              <Icon size={14} />
             </button>
           ))}
         </div>
 
+        <div className="w-px h-5 bg-border/50" />
+
         {/* Theme */}
-        <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-1">
+        <div className="flex items-center gap-0.5 bg-background rounded-md p-0.5">
           {themes.map(({ key, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setPreviewMode(key)}
               className={cn(
-                'p-2 rounded-md transition-colors',
+                'p-1.5 rounded transition-colors',
                 state.previewMode === key
-                  ? 'bg-background text-foreground shadow-sm'
+                  ? 'bg-muted text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               )}
               aria-label={`${key} mode`}
             >
-              <Icon size={16} />
+              <Icon size={14} />
             </button>
           ))}
         </div>
       </div>
 
-      {/* View Toggle */}
-      <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-1">
+      {/* Right: View Toggle */}
+      <div className="flex items-center gap-0.5 bg-background rounded-md p-0.5">
         <button
           onClick={() => setViewMode('preview')}
           className={cn(
-            'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors',
+            'flex items-center gap-1 px-2 py-1 rounded text-xs font-medium transition-colors',
             state.viewMode === 'preview'
-              ? 'bg-background text-foreground shadow-sm'
+              ? 'bg-muted text-foreground'
               : 'text-muted-foreground hover:text-foreground'
           )}
         >
-          <EyeIcon size={14} />
+          <EyeIcon size={12} />
           Preview
         </button>
         <button
           onClick={() => setViewMode('code')}
           className={cn(
-            'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors',
+            'flex items-center gap-1 px-2 py-1 rounded text-xs font-medium transition-colors',
             state.viewMode === 'code'
-              ? 'bg-background text-foreground shadow-sm'
+              ? 'bg-muted text-foreground'
               : 'text-muted-foreground hover:text-foreground'
           )}
         >
-          <CodeIcon size={14} />
+          <CodeIcon size={12} />
           Code
         </button>
       </div>

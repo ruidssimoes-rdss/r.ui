@@ -1,6 +1,7 @@
 'use client';
 
 import { useStudio } from '@/lib/studio/studio-context';
+import { StudioToolbar } from './StudioToolbar';
 import { ComponentShowcase } from './ComponentShowcase';
 import { cn } from '@/lib/utils';
 
@@ -18,25 +19,30 @@ export function StudioPreview() {
   );
 
   cssVariables['--radius-base'] = `${tokens.radius.base}px`;
-  cssVariables['--spacing-base'] = `${tokens.spacing.base}px`;
 
   return (
-    <div
-      className={cn(
-        'rounded-lg border border-border/50 overflow-hidden transition-colors',
-        previewMode === 'light' ? 'bg-white' : 'bg-[#0a0a0a]'
-      )}
-      style={cssVariables as React.CSSProperties}
-    >
-      {/* Preview Container */}
+    <div className="h-full flex flex-col">
+      {/* Toolbar at TOP of preview */}
+      <StudioToolbar />
+
+      {/* Preview Area */}
       <div
         className={cn(
-          'min-h-[400px] p-8 flex items-center justify-center transition-all',
-          previewDevice === 'mobile' && 'max-w-[375px] mx-auto',
-          previewDevice === 'tablet' && 'max-w-[768px] mx-auto'
+          'flex-1 overflow-auto transition-colors',
+          previewMode === 'light' ? 'bg-white' : 'bg-[#0a0a0a]'
         )}
+        style={cssVariables as React.CSSProperties}
       >
-        <ComponentShowcase mode={previewMode} />
+        {/* Centered Container */}
+        <div
+          className={cn(
+            'min-h-full p-8 flex items-start justify-center',
+            previewDevice === 'mobile' && 'max-w-[375px] mx-auto',
+            previewDevice === 'tablet' && 'max-w-[768px] mx-auto'
+          )}
+        >
+          <ComponentShowcase mode={previewMode} />
+        </div>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { StudioColor } from '@/lib/studio/types';
 import { HexColorPicker } from 'react-colorful';
 import { getContrastText } from '@/lib/studio/color-utils';
 
-function XIcon({ size = 12 }: { size?: number }) {
+function XIcon({ size = 10 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -59,7 +59,9 @@ export function ColorSwatch({ color }: ColorSwatchProps) {
 
   const handleNameSubmit = () => {
     if (name.trim() && name !== color.name) {
-      updateColor(color.id, { name: name.trim().toLowerCase().replace(/\s+/g, '-') });
+      updateColor(color.id, {
+        name: name.trim().toLowerCase().replace(/\s+/g, '-'),
+      });
     } else {
       setName(color.name);
     }
@@ -80,7 +82,7 @@ export function ColorSwatch({ color }: ColorSwatchProps) {
       {/* Swatch */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-16 h-16 rounded-lg border border-border/50 flex items-center justify-center text-xs font-mono transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        className="w-full aspect-square rounded-lg border border-border/50 flex items-center justify-center text-[10px] font-mono transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         style={{ backgroundColor: color.value, color: textColor }}
       >
         {color.value.slice(0, 7)}
@@ -94,13 +96,13 @@ export function ColorSwatch({ color }: ColorSwatchProps) {
           onChange={(e) => setName(e.target.value)}
           onBlur={handleNameSubmit}
           onKeyDown={handleNameKeyDown}
-          className="w-16 text-xs text-center bg-transparent border-b border-border focus:border-foreground outline-none mt-1 py-0.5"
+          className="w-full text-[10px] text-center bg-transparent border-b border-border focus:border-foreground outline-none mt-1"
           autoFocus
         />
       ) : (
         <div
           onClick={() => setIsEditing(true)}
-          className="text-xs text-center text-muted-foreground truncate mt-1 cursor-text hover:text-foreground"
+          className="text-[10px] text-center text-muted-foreground truncate mt-1 cursor-text hover:text-foreground"
         >
           {color.name}
         </div>
@@ -113,10 +115,10 @@ export function ColorSwatch({ color }: ColorSwatchProps) {
             e.stopPropagation();
             removeColor(color.id);
           }}
-          className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-background border border-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
+          className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-background border border-border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted"
           aria-label={`Remove ${color.name} color`}
         >
-          <XIcon size={12} />
+          <XIcon size={10} />
         </button>
       )}
 

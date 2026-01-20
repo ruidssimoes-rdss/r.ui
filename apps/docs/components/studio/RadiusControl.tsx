@@ -12,21 +12,17 @@ export function RadiusControl() {
         Radius
       </h3>
 
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Base</span>
-          <input
-            type="number"
-            value={radius.base}
-            onChange={(e) => setRadiusBase(Number(e.target.value))}
-            className="w-16 px-2 py-1 text-sm bg-muted rounded border border-border text-center focus:outline-none focus:ring-2 focus:ring-ring"
-            min={0}
-            max={32}
-          />
-          <span className="text-sm text-muted-foreground">px</span>
-        </div>
-
-        {/* Slider */}
+      <div className="flex items-center gap-3">
+        <span className="text-xs text-muted-foreground">Base</span>
+        <input
+          type="number"
+          value={radius.base}
+          onChange={(e) => setRadiusBase(Number(e.target.value))}
+          className="w-14 px-2 py-1 text-xs bg-muted rounded border border-border text-center focus:outline-none focus:ring-2 focus:ring-ring"
+          min={0}
+          max={32}
+        />
+        <span className="text-xs text-muted-foreground">px</span>
         <input
           type="range"
           value={radius.base}
@@ -37,17 +33,17 @@ export function RadiusControl() {
         />
       </div>
 
-      {/* Scale Preview */}
-      <div className="flex items-center gap-3">
+      {/* Scale Preview - Compact */}
+      <div className="flex items-end gap-2">
         {radius.scale.map((multiplier, i) => {
           const value = Math.round(radius.base * multiplier);
           return (
             <div key={i} className="flex flex-col items-center gap-1">
               <div
-                className="w-8 h-8 bg-foreground"
+                className="w-6 h-6 bg-foreground"
                 style={{ borderRadius: value }}
               />
-              <span className="text-xs text-muted-foreground">{value}</span>
+              <span className="text-[10px] text-muted-foreground">{value}</span>
             </div>
           );
         })}
