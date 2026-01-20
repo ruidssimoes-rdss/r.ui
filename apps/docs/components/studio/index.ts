@@ -5,6 +5,7 @@ export { StudioPreview } from './StudioPreview';
 export { StudioControls } from './StudioControls';
 export { StudioExport } from './StudioExport';
 export { CategoryDropdown } from './CategoryDropdown';
+export { CategoryTabs } from './CategoryTabs';
 export { ExportDropdown } from './ExportDropdown';
 export { ExportModal } from './ExportModal';
 export { ValidationPanel } from './ValidationPanel';
@@ -30,7 +31,17 @@ export { RadiusTab } from './tabs/RadiusTab';
 export { ShadowsTab } from './tabs/ShadowsTab';
 export { AnimationsTab } from './tabs/AnimationsTab';
 
-// Shared components
+// Shared components - New shadcn-style
+export { ColorTokenRow } from './shared/ColorTokenRow';
+export { InlineColorRow } from './shared/InlineColorRow';
+export { NeutralScaleSelector } from './shared/NeutralScaleSelector';
+export { SectionLabel } from './shared/SectionLabel';
+export { SectionDivider } from './shared/SectionDivider';
+export { AddButton } from './shared/AddButton';
+export { TokenSelectRow } from './shared/TokenSelectRow';
+export { TokenSliderRow } from './shared/TokenSliderRow';
+
+// Shared components - Legacy (kept for compatibility)
 export { ColorSwatch } from './shared/ColorSwatch';
 export { ScaleBar } from './shared/ScaleBar';
 export { TokenRow } from './shared/TokenRow';

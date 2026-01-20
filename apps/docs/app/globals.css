@@ -470,3 +470,29 @@ body {
     transparent
   );
 }
+
+/* ========================================
+   Color Picker Styling (react-colorful)
+======================================== */
+
+.color-picker-wrapper .react-colorful {
+  width: 100% !important;
+  height: 150px !important;
+}
+
+.color-picker-wrapper .react-colorful__saturation {
+  border-radius: 8px 8px 0 0;
+}
+
+.color-picker-wrapper .react-colorful__hue {
+  height: 12px;
+  border-radius: 0 0 8px 8px;
+}
+
+.color-picker-wrapper .react-colorful__saturation-pointer,
+.color-picker-wrapper .react-colorful__hue-pointer {
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useTokens } from '@/lib/studio/context';
-import { CategoryDropdown } from './CategoryDropdown';
 import { ExportDropdown } from './ExportDropdown';
 import { cn } from '@/lib/utils';
 
@@ -10,8 +9,8 @@ import { cn } from '@/lib/utils';
 function MobileIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="15"
+      height="15"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -28,8 +27,8 @@ function MobileIcon() {
 function TabletIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="15"
+      height="15"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -46,8 +45,8 @@ function TabletIcon() {
 function DesktopIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="15"
+      height="15"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -65,8 +64,8 @@ function DesktopIcon() {
 function SunIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="15"
+      height="15"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -90,8 +89,8 @@ function SunIcon() {
 function MoonIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="15"
+      height="15"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -107,8 +106,8 @@ function MoonIcon() {
 function CopyIcon() {
   return (
     <svg
-      width="14"
-      height="14"
+      width="13"
+      height="13"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -125,8 +124,8 @@ function CopyIcon() {
 function CheckIcon() {
   return (
     <svg
-      width="14"
-      height="14"
+      width="13"
+      height="13"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -136,32 +135,6 @@ function CheckIcon() {
     >
       <polyline points="20 6 9 17 4 12" />
     </svg>
-  );
-}
-
-// Toolbar button component
-interface ToolbarButtonProps {
-  icon: React.ReactNode;
-  label: string;
-  active?: boolean;
-  onClick?: () => void;
-}
-
-function ToolbarButton({ icon, label, active, onClick }: ToolbarButtonProps) {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        'w-7 h-7 flex items-center justify-center rounded-md transition-colors',
-        active
-          ? 'bg-[#F3F4F6] text-[#111827]'
-          : 'text-[#9CA3AF] hover:text-[#6B7280] hover:bg-[#F3F4F6]'
-      )}
-      title={label}
-      aria-label={label}
-    >
-      {icon}
-    </button>
   );
 }
 
@@ -175,59 +148,72 @@ export function StudioToolbar() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const deviceModes = [
-    { key: 'mobile' as const, icon: <MobileIcon />, label: 'Mobile (375px)' },
-    { key: 'tablet' as const, icon: <TabletIcon />, label: 'Tablet (768px)' },
-    { key: 'desktop' as const, icon: <DesktopIcon />, label: 'Desktop (100%)' },
-  ];
-
   return (
-    <div className="h-12 border-b border-[#E5E7EB] flex items-center justify-between px-4 bg-white">
+    <div className="h-11 border-b border-[#E5E7EB] flex items-center justify-between px-3 bg-white">
       {/* Left: Device & Theme */}
       <div className="flex items-center">
         {/* Device Toggle */}
-        {deviceModes.map(({ key, icon, label }) => (
-          <ToolbarButton
-            key={key}
-            icon={icon}
-            label={label}
-            active={state.previewDevice === key}
-            onClick={() => setPreviewDevice(key)}
-          />
-        ))}
-
-        {/* Vertical divider */}
-        <div className="w-[9px] flex items-center justify-center">
-          <div className="w-px h-4 bg-[#E5E7EB]" />
+        <div className="flex items-center">
+          {[
+            { key: 'mobile' as const, icon: <MobileIcon />, label: 'Mobile (375px)' },
+            { key: 'tablet' as const, icon: <TabletIcon />, label: 'Tablet (768px)' },
+            { key: 'desktop' as const, icon: <DesktopIcon />, label: 'Desktop (100%)' },
+          ].map(({ key, icon, label }) => (
+            <button
+              key={key}
+              onClick={() => setPreviewDevice(key)}
+              className={cn(
+                'p-2 transition-colors',
+                state.previewDevice === key
+                  ? 'text-[#18181B]'
+                  : 'text-[#9CA3AF] hover:text-[#374151]'
+              )}
+              title={label}
+            >
+              {icon}
+            </button>
+          ))}
         </div>
 
+        <div className="w-px h-4 bg-[#E5E7EB] mx-1" />
+
         {/* Theme Toggle */}
-        <ToolbarButton
-          icon={state.previewMode === 'light' ? <SunIcon /> : <MoonIcon />}
-          label={`Theme: ${state.previewMode}`}
-          active={false}
-          onClick={() =>
-            setPreviewMode(state.previewMode === 'light' ? 'dark' : 'light')
-          }
-        />
+        <div className="flex items-center">
+          <button
+            onClick={() => setPreviewMode('light')}
+            className={cn(
+              'p-2 transition-colors',
+              state.previewMode === 'light'
+                ? 'text-[#18181B]'
+                : 'text-[#9CA3AF] hover:text-[#374151]'
+            )}
+            title="Light mode"
+          >
+            <SunIcon />
+          </button>
+          <button
+            onClick={() => setPreviewMode('dark')}
+            className={cn(
+              'p-2 transition-colors',
+              state.previewMode === 'dark'
+                ? 'text-[#18181B]'
+                : 'text-[#9CA3AF] hover:text-[#374151]'
+            )}
+            title="Dark mode"
+          >
+            <MoonIcon />
+          </button>
+        </div>
       </div>
 
-      {/* Center: Category Dropdown */}
-      <CategoryDropdown />
-
       {/* Right: Export Format & Copy */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         <ExportDropdown />
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-2 py-1.5 text-xs text-[#6B7280] hover:text-[#111827] transition-colors"
+          className="flex items-center gap-1 px-2 py-1.5 text-xs text-[#9CA3AF] hover:text-[#374151] transition-colors"
         >
-          {copied ? (
-            <CheckIcon />
-          ) : (
-            <CopyIcon />
-          )}
-          {copied ? 'Copied' : 'Copy'}
+          {copied ? <CheckIcon /> : <CopyIcon />}
         </button>
       </div>
     </div>

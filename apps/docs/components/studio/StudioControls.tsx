@@ -1,6 +1,7 @@
 'use client';
 
 import { useTokens } from '@/lib/studio/context';
+import { CategoryTabs } from './CategoryTabs';
 import { ColorsPanel } from './panels/ColorsPanel';
 import { TypographyPanel } from './panels/TypographyPanel';
 import { SpacingPanel } from './panels/SpacingPanel';
@@ -29,8 +30,12 @@ export function StudioControls() {
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-white">
-      {renderPanel()}
+    <div className="h-full flex flex-col bg-white">
+      {/* Category Tabs */}
+      <CategoryTabs />
+
+      {/* Panel Content */}
+      <div className="flex-1 overflow-hidden">{renderPanel()}</div>
     </div>
   );
 }

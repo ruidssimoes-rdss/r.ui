@@ -1,84 +1,85 @@
 'use client';
 
 import { useTokens } from '@/lib/studio/context';
+import { SectionLabel } from '../shared/SectionLabel';
+import { SectionDivider } from '../shared/SectionDivider';
 
 export function ShadowsPanel() {
   const { state, updateShadow } = useTokens();
   const { shadows } = state.tokens;
 
   return (
-    <div className="p-4 space-y-6">
-      {/* Shadow Scale */}
-      <section>
-        <h3 className="text-xs font-medium text-[#6B7280] uppercase tracking-wider mb-3">
-          Shadow Scale
-        </h3>
+    <div className="h-full overflow-y-auto">
+      <SectionLabel>Shadow Scale</SectionLabel>
 
-        <div className="border border-[#E5E7EB] rounded-lg divide-y divide-[#E5E7EB]">
-          {shadows.scale.map((shadow, index) => (
-            <div key={shadow.name} className="flex items-center gap-3 p-3">
-              <span className="text-xs font-medium text-[#374151] w-12">{shadow.name}</span>
-              <div
-                className="w-14 h-14 bg-white rounded-lg flex-shrink-0 border border-[#F3F4F6]"
-                style={{ boxShadow: shadow.value }}
-              />
+      <div className="px-3 py-2 space-y-2">
+        {shadows.scale.map((shadow, index) => (
+          <div
+            key={shadow.name}
+            className="flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-[#F9FAFB] transition-colors group"
+          >
+            <div
+              className="w-10 h-10 bg-white rounded-lg flex-shrink-0 border border-[#F3F4F6]"
+              style={{ boxShadow: shadow.value }}
+            />
+            <div className="flex-1 min-w-0">
+              <span className="text-xs font-medium text-[#374151] block">
+                {shadow.name}
+              </span>
               <input
                 type="text"
                 value={shadow.value}
                 onChange={(e) => updateShadow(index, e.target.value)}
-                className="flex-1 px-2 py-1.5 text-xs font-mono bg-[#F9FAFB] border border-[#E5E7EB] rounded-md focus:border-[#9CA3AF] focus:outline-none"
+                className="w-full text-[10px] font-mono text-[#9CA3AF] bg-transparent border-0 focus:outline-none focus:text-[#374151] truncate"
                 placeholder="none"
               />
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        ))}
+      </div>
 
-      {/* Preview */}
-      <section>
-        <h3 className="text-xs font-medium text-[#6B7280] uppercase tracking-wider mb-3">
-          Preview on Cards
-        </h3>
+      <SectionDivider />
 
-        <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-br from-[#F9FAFB] to-[#E5E7EB] rounded-lg border border-[#E5E7EB]">
+      <SectionLabel>Preview</SectionLabel>
+
+      <div className="px-3 py-4">
+        <div className="grid grid-cols-3 gap-3 p-3 bg-gradient-to-br from-[#F9FAFB] to-[#E5E7EB] rounded-lg">
           {shadows.scale.slice(1).map((shadow) => (
             <div
               key={shadow.name}
-              className="bg-white rounded-lg p-4 flex flex-col items-center justify-center h-20"
+              className="bg-white rounded-lg p-3 flex items-center justify-center h-14"
               style={{ boxShadow: shadow.value }}
             >
-              <span className="text-xs font-medium text-[#374151]">
+              <span className="text-[10px] font-medium text-[#374151]">
                 {shadow.name}
               </span>
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* Usage Guide */}
-      <section>
-        <h3 className="text-xs font-medium text-[#6B7280] uppercase tracking-wider mb-3">
-          Usage Guide
-        </h3>
+      <SectionDivider />
 
-        <div className="border border-[#E5E7EB] rounded-lg p-4 text-xs text-[#6B7280] space-y-2">
-          <p>
-            <span className="font-medium text-[#374151]">sm:</span> Subtle depth for buttons, inputs
-          </p>
-          <p>
-            <span className="font-medium text-[#374151]">md:</span> Cards, dropdowns, popovers
-          </p>
-          <p>
-            <span className="font-medium text-[#374151]">lg:</span> Modals, dialogs
-          </p>
-          <p>
-            <span className="font-medium text-[#374151]">xl:</span> Hero sections, large floating elements
-          </p>
-          <p>
-            <span className="font-medium text-[#374151]">2xl:</span> Maximum elevation, dramatic effect
-          </p>
+      <SectionLabel>Usage Guide</SectionLabel>
+
+      <div className="px-3 py-2 space-y-1.5">
+        <div className="flex items-center justify-between py-1">
+          <span className="text-xs text-[#6B7280]">sm</span>
+          <span className="text-[10px] text-[#9CA3AF]">Buttons, inputs</span>
         </div>
-      </section>
+        <div className="flex items-center justify-between py-1">
+          <span className="text-xs text-[#6B7280]">md</span>
+          <span className="text-[10px] text-[#9CA3AF]">Cards, dropdowns</span>
+        </div>
+        <div className="flex items-center justify-between py-1">
+          <span className="text-xs text-[#6B7280]">lg</span>
+          <span className="text-[10px] text-[#9CA3AF]">Modals, dialogs</span>
+        </div>
+        <div className="flex items-center justify-between py-1">
+          <span className="text-xs text-[#6B7280]">xl</span>
+          <span className="text-[10px] text-[#9CA3AF]">Hero sections</span>
+        </div>
+      </div>
     </div>
   );
 }

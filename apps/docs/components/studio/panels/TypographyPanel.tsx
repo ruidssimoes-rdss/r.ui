@@ -1,32 +1,16 @@
 'use client';
 
 import { useTokens } from '@/lib/studio/context';
-import { cn } from '@/lib/utils';
+import { SectionLabel } from '../shared/SectionLabel';
+import { SectionDivider } from '../shared/SectionDivider';
+import { TokenSelectRow } from '../shared/TokenSelectRow';
 
 // Icons
-function PlusIcon() {
+function XIcon({ size = 12 }: { size?: number }) {
   return (
     <svg
-      width="12"
-      height="12"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="12" x2="12" y1="5" y2="19" />
-      <line x1="5" x2="19" y1="12" y2="12" />
-    </svg>
-  );
-}
-
-function XIcon() {
-  return (
-    <svg
-      width="12"
-      height="12"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -40,125 +24,108 @@ function XIcon() {
   );
 }
 
+const fontOptions = {
+  sans: [
+    { value: 'Inter, system-ui, sans-serif', label: 'Inter' },
+    { value: 'system-ui, -apple-system, sans-serif', label: 'System UI' },
+    { value: '"SF Pro Display", system-ui, sans-serif', label: 'SF Pro' },
+    { value: 'Geist, system-ui, sans-serif', label: 'Geist' },
+    { value: '"Plus Jakarta Sans", system-ui, sans-serif', label: 'Plus Jakarta Sans' },
+  ],
+  mono: [
+    { value: '"JetBrains Mono", monospace', label: 'JetBrains Mono' },
+    { value: '"Fira Code", monospace', label: 'Fira Code' },
+    { value: '"SF Mono", monospace', label: 'SF Mono' },
+    { value: 'Consolas, monospace', label: 'Consolas' },
+    { value: '"Source Code Pro", monospace', label: 'Source Code Pro' },
+  ],
+};
+
 export function TypographyPanel() {
-  const { state, updateFontFamily, updateFontSize, addFontSize, removeFontSize } =
-    useTokens();
+  const { state, updateFontFamily, updateFontSize, removeFontSize } = useTokens();
   const { typography } = state.tokens;
 
+  const sansFamily = typography.families.find((f) => f.name === 'sans');
+  const monoFamily = typography.families.find((f) => f.name === 'mono');
+
   return (
-    <div className="p-4 space-y-6">
-      {/* Font Families */}
-      <section>
-        <h3 className="text-xs font-medium text-[#6B7280] uppercase tracking-wider mb-3">
-          Font Families
-        </h3>
+    <div className="h-full overflow-y-auto">
+      <SectionLabel>Font Family</SectionLabel>
 
-        <div className="border border-[#E5E7EB] rounded-lg divide-y divide-[#E5E7EB]">
-          {typography.families.map((family) => (
-            <div key={family.id} className="p-3 space-y-2">
-              <label className="text-xs text-[#6B7280]">{family.name}</label>
-              <input
-                type="text"
-                value={family.value}
-                onChange={(e) => updateFontFamily(family.id, e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-[#F9FAFB] rounded-md border border-[#E5E7EB] focus:border-[#9CA3AF] focus:outline-none transition-colors"
-                placeholder="Inter, system-ui, sans-serif"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="space-y-1 px-1">
+        {sansFamily && (
+          <TokenSelectRow
+            label="Sans"
+            value={sansFamily.value}
+            options={fontOptions.sans}
+            onChange={(value) => updateFontFamily(sansFamily.id, value)}
+          />
+        )}
+        {monoFamily && (
+          <TokenSelectRow
+            label="Mono"
+            value={monoFamily.value}
+            options={fontOptions.mono}
+            onChange={(value) => updateFontFamily(monoFamily.id, value)}
+          />
+        )}
+      </div>
 
-      {/* Font Sizes */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xs font-medium text-[#6B7280] uppercase tracking-wider">
-            Font Sizes
-          </h3>
-          <button
-            onClick={addFontSize}
-            className="text-xs text-[#6B7280] hover:text-[#111827] flex items-center gap-1 transition-colors"
+      <SectionDivider />
+
+      <SectionLabel>Type Scale</SectionLabel>
+
+      <div className="px-3 py-2 space-y-2">
+        {typography.sizes.map((size, index) => (
+          <div
+            key={size.name}
+            className="flex items-center justify-between py-1.5 group"
           >
-            <PlusIcon />
-            Add
-          </button>
-        </div>
-
-        <div className="border border-[#E5E7EB] rounded-lg divide-y divide-[#E5E7EB]">
-          {typography.sizes.map((size, index) => (
-            <div key={size.name} className="flex items-center gap-2 p-3">
-              <input
-                type="text"
-                value={size.name}
-                onChange={(e) =>
-                  updateFontSize(index, { ...size, name: e.target.value })
-                }
-                className="w-16 px-2 py-1.5 text-xs bg-[#F9FAFB] rounded-md border border-[#E5E7EB] focus:border-[#9CA3AF] focus:outline-none"
-              />
-              <input
-                type="number"
-                value={size.size}
-                onChange={(e) =>
-                  updateFontSize(index, {
-                    ...size,
-                    size: Number(e.target.value),
-                  })
-                }
-                className="w-14 px-2 py-1.5 text-xs bg-[#F9FAFB] rounded-md border border-[#E5E7EB] text-center focus:border-[#9CA3AF] focus:outline-none"
-              />
-              <span className="text-xs text-[#9CA3AF]">px</span>
-              <input
-                type="number"
-                value={size.lineHeight}
-                onChange={(e) =>
-                  updateFontSize(index, {
-                    ...size,
-                    lineHeight: Number(e.target.value),
-                  })
-                }
-                className="w-14 px-2 py-1.5 text-xs bg-[#F9FAFB] rounded-md border border-[#E5E7EB] text-center focus:border-[#9CA3AF] focus:outline-none"
-                step={0.1}
-                min={1}
-                max={3}
-              />
-              <span className="text-xs text-[#9CA3AF]">lh</span>
-              <div className="flex-1" />
+            <div className="flex items-center gap-3">
               <span
-                className="text-[#6B7280] truncate max-w-[60px]"
-                style={{ fontSize: size.size, lineHeight: size.lineHeight }}
+                className="text-[#374151] min-w-[60px]"
+                style={{ fontSize: Math.min(size.size, 24), lineHeight: size.lineHeight }}
               >
                 Aa
               </span>
-              <button
-                onClick={() => removeFontSize(index)}
-                className="p-1 text-[#9CA3AF] hover:text-[#111827] transition-colors"
-              >
-                <XIcon />
-              </button>
+              <span className="text-xs text-[#9CA3AF] w-8">{size.name}</span>
             </div>
-          ))}
-        </div>
-      </section>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono text-[#6B7280]">{size.size}px</span>
+              <span className="text-[10px] text-[#9CA3AF]">/ {size.lineHeight}</span>
+              {typography.sizes.length > 1 && (
+                <button
+                  onClick={() => removeFontSize(index)}
+                  className="p-1 opacity-0 group-hover:opacity-100 text-[#9CA3AF] hover:text-[#374151] transition-opacity"
+                >
+                  <XIcon size={10} />
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
 
-      {/* Font Weights */}
-      <section>
-        <h3 className="text-xs font-medium text-[#6B7280] uppercase tracking-wider mb-3">
-          Font Weights
-        </h3>
+      <SectionDivider />
 
-        <div className="flex flex-wrap gap-2">
-          {typography.weights.map((weight) => (
-            <div
-              key={weight.name}
-              className="px-3 py-2 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg"
+      <SectionLabel>Font Weights</SectionLabel>
+
+      <div className="px-3 py-2 flex flex-wrap gap-2">
+        {typography.weights.map((weight) => (
+          <div
+            key={weight.name}
+            className="px-3 py-1.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-md"
+          >
+            <span
+              className="text-xs text-[#374151]"
+              style={{ fontWeight: weight.value }}
             >
-              <span className="text-xs text-[#374151]" style={{ fontWeight: weight.value }}>
-                {weight.name} ({weight.value})
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
+              {weight.name}
+            </span>
+            <span className="text-[10px] text-[#9CA3AF] ml-1">{weight.value}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
