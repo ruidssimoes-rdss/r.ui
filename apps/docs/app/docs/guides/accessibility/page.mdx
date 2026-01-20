@@ -1,0 +1,393 @@
+<GuideLayout
+  title="Accessibility"
+  description="Accessibility features, ARIA attributes, and keyboard interactions in r/ui components."
+>
+
+## Overview
+
+r/ui components are built with accessibility in mind. This guide documents ARIA attributes, keyboard interactions, screen reader behavior, and focus management for key components.
+
+---
+
+## Form Components
+
+### Input
+
+**ARIA Attributes:**
+- `accessibilityRole="none"` (container) / `accessibilityRole` on TextInput
+- `accessibilityLabel` - Set via `label` prop
+- `accessibilityHint` - Set via `description` prop
+- `accessibilityState.disabled` - When `disabled` prop is true
+- `aria-invalid` - When `error` prop is provided
+- `aria-describedby` - Links to error/description elements
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `Tab` | Focus the input |
+| `Shift + Tab` | Focus previous element |
+| `Enter` | Submit form (if in form context) |
+
+**Focus Management:**
+- Clear focus ring on focus
+- Focus preserved during validation updates
+
+```tsx
+<Input
+  label="Email"
+  description="We'll never share your email"
+  error="Invalid email format"
+  accessibilityHint="Enter your email address"
+/>
+```
+
+---
+
+### Select
+
+**ARIA Attributes:**
+- `accessibilityRole="combobox"`
+- `accessibilityState.expanded` - When dropdown is open
+- `accessibilityState.disabled` - When disabled
+- `aria-haspopup="listbox"`
+- `aria-activedescendant` - ID of focused option
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `Space` / `Enter` | Open dropdown / Select option |
+| `Escape` | Close dropdown |
+| `ArrowUp` / `ArrowDown` | Navigate options |
+| `Home` | Jump to first option |
+| `End` | Jump to last option |
+| `Type character` | Jump to matching option |
+
+**Screen Reader Behavior:**
+- Announces selected value
+- Announces option count when opened
+- Announces focused option while navigating
+
+---
+
+### Checkbox
+
+**ARIA Attributes:**
+- `accessibilityRole="checkbox"`
+- `accessibilityState.checked` - true, false, or "mixed" (indeterminate)
+- `accessibilityState.disabled` - When disabled
+- `accessibilityLabel` - From label prop
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `Space` | Toggle checked state |
+| `Tab` | Move to next focusable element |
+
+**Screen Reader Behavior:**
+- Announces "checkbox, [label], [checked/unchecked]"
+- Announces state changes
+
+```tsx
+<Checkbox
+  label="Accept terms and conditions"
+  checked={checked}
+  onCheckedChange={setChecked}
+/>
+```
+
+---
+
+### RadioGroup
+
+**ARIA Attributes:**
+- `accessibilityRole="radiogroup"` (container)
+- `accessibilityRole="radio"` (items)
+- `accessibilityState.checked` - For selected item
+- `accessibilityState.disabled` - When disabled
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `ArrowUp` / `ArrowLeft` | Select previous option |
+| `ArrowDown` / `ArrowRight` | Select next option |
+| `Tab` | Exit group |
+| `Space` | Select focused option |
+
+**Focus Management:**
+- Only one radio in group is tabbable (roving tabindex)
+- Arrow keys move focus AND selection
+
+---
+
+### Switch
+
+**ARIA Attributes:**
+- `accessibilityRole="switch"`
+- `accessibilityState.checked` - Current state
+- `accessibilityState.disabled` - When disabled
+- `accessibilityLabel` - From label prop
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `Space` | Toggle on/off |
+| `Tab` | Move to next element |
+
+---
+
+## Navigation Components
+
+### Tabs
+
+**ARIA Attributes:**
+- `accessibilityRole="tablist"` (TabsList)
+- `accessibilityRole="tab"` (TabsTrigger)
+- `accessibilityRole="tabpanel"` (TabsContent)
+- `accessibilityState.selected` - For active tab
+- `accessibilityState.disabled` - For disabled tabs
+- `aria-controls` - Links tab to panel
+- `aria-labelledby` - Links panel to tab
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `ArrowLeft` | Focus previous tab |
+| `ArrowRight` | Focus next tab |
+| `Home` | Focus first tab |
+| `End` | Focus last tab |
+| `Space` / `Enter` | Activate focused tab |
+| `Tab` | Move to tab panel |
+
+**Focus Management:**
+- Only selected tab is in tab order (roving tabindex)
+- Arrow keys move focus, selection follows focus
+- Tab panel receives focus after activating tab
+
+```tsx
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+    <TabsTrigger value="settings" disabled>Settings</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account settings...</TabsContent>
+  <TabsContent value="password">Password settings...</TabsContent>
+</Tabs>
+```
+
+---
+
+### Menubar
+
+**ARIA Attributes:**
+- `accessibilityRole="menubar"` (container)
+- `accessibilityRole="button"` (triggers)
+- `accessibilityState.expanded` - When menu is open
+- `accessibilityRole="menuitem"` (items)
+- `accessibilityRole="checkbox"` (checkbox items)
+- `accessibilityRole="radio"` (radio items)
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `ArrowLeft` / `ArrowRight` | Navigate menu triggers |
+| `ArrowDown` | Open menu / Navigate items |
+| `ArrowUp` | Navigate items |
+| `Enter` / `Space` | Activate item |
+| `Escape` | Close menu |
+| `Home` | First trigger/item |
+| `End` | Last trigger/item |
+
+---
+
+## Overlay Components
+
+### Dialog / AlertDialog
+
+**ARIA Attributes:**
+- `accessibilityRole="dialog"` or `"alertdialog"`
+- `aria-modal="true"`
+- `aria-labelledby` - Links to title
+- `aria-describedby` - Links to description
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `Escape` | Close dialog |
+| `Tab` | Cycle through focusable elements |
+| `Shift + Tab` | Reverse cycle |
+
+**Focus Management:**
+- Focus trapped within dialog when open
+- Initial focus on first focusable element (or close button)
+- Focus returns to trigger when closed
+- Background content is inert (aria-hidden)
+
+```tsx
+<Dialog>
+  <DialogTrigger>
+    <Button>Open Dialog</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Dialog Title</DialogTitle>
+      <DialogDescription>Dialog description for context.</DialogDescription>
+    </DialogHeader>
+    {/* Content */}
+    <DialogFooter>
+      <DialogClose asChild>
+        <Button>Close</Button>
+      </DialogClose>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+---
+
+### Tooltip
+
+**ARIA Attributes:**
+- `accessibilityRole="tooltip"` (content)
+- `aria-describedby` - Links trigger to tooltip
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `Escape` | Close tooltip (when focused) |
+| Focus trigger | Show tooltip |
+| Blur trigger | Hide tooltip |
+
+**Screen Reader Behavior:**
+- Tooltip content announced when trigger receives focus
+- Long press on mobile reveals tooltip
+
+---
+
+### Popover
+
+**ARIA Attributes:**
+- `accessibilityRole="dialog"` (content)
+- `aria-haspopup="dialog"` (trigger)
+- `accessibilityState.expanded` - When open
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `Escape` | Close popover |
+| `Tab` | Navigate content |
+
+**Focus Management:**
+- Focus moves to content when opened
+- Focus returns to trigger when closed
+- Click outside closes popover
+
+---
+
+## Data Display
+
+### Carousel
+
+**ARIA Attributes:**
+- `accessibilityRole="region"`
+- `aria-roledescription="carousel"`
+- `aria-label` - Describes carousel content
+- `accessibilityRole="group"` (slides)
+- `aria-roledescription="slide"` (slides)
+- `aria-label="N of M"` (slide position)
+
+**Keyboard Interactions:**
+| Key | Action |
+|-----|--------|
+| `ArrowLeft` | Previous slide |
+| `ArrowRight` | Next slide |
+| `Tab` | Navigate controls |
+
+**Screen Reader Behavior:**
+- Announces current slide position
+- Announces slide content changes
+- Live region for auto-playing carousels
+
+```tsx
+<Carousel aria-label="Product images">
+  <CarouselContent>
+    <CarouselItem>Slide 1</CarouselItem>
+    <CarouselItem>Slide 2</CarouselItem>
+  </CarouselContent>
+  <CarouselPrevious aria-label="Previous slide" />
+  <CarouselNext aria-label="Next slide" />
+  <CarouselDots aria-label="Slide navigation" />
+</Carousel>
+```
+
+---
+
+## Progress & Loading
+
+### Progress
+
+**ARIA Attributes:**
+- `accessibilityRole="progressbar"`
+- `accessibilityValue.min` - 0
+- `accessibilityValue.max` - 100
+- `accessibilityValue.now` - Current value (determinate)
+- `accessibilityState.busy` - true (indeterminate)
+
+**Determinate:**
+```tsx
+<Progress value={75} />
+// Announces: "Progress, 75%"
+```
+
+**Indeterminate:**
+```tsx
+<Progress indeterminate />
+// Announces: "Progress, busy"
+```
+
+---
+
+## Best Practices
+
+### Labels and Descriptions
+
+Always provide meaningful labels:
+
+```tsx
+// Good - descriptive label
+<Button accessibilityLabel="Submit registration form">Submit</Button>
+
+// Bad - relies on visual context
+<Button>Submit</Button>
+```
+
+### Focus Indicators
+
+r/ui components include visible focus indicators. Never remove them:
+
+```tsx
+// Focus styles are applied automatically
+<Button>Click me</Button>
+```
+
+### Color and Contrast
+
+- Don't rely on color alone to convey information
+- All text meets WCAG AA contrast requirements
+- Error states include text labels, not just red color
+
+### Testing
+
+Test with:
+- **VoiceOver** (iOS/macOS)
+- **TalkBack** (Android)
+- **NVDA/JAWS** (Windows)
+- **Keyboard-only navigation**
+- **High contrast mode**
+
+```tsx
+// Enable accessibility inspector
+<View accessible accessibilityLabel="...">
+```
+
+</GuideLayout>

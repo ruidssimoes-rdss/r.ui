@@ -20,6 +20,7 @@ import {
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
+import { Arrow } from '../_internal/Arrow';
 
 export type TooltipSide = 'top' | 'bottom' | 'left' | 'right';
 
@@ -30,6 +31,7 @@ interface TooltipContextValue {
   setTriggerLayout: (layout: { x: number; y: number; width: number; height: number }) => void;
   side: TooltipSide;
   content: string;
+  showArrow: boolean;
 }
 
 const TooltipContext = createContext<TooltipContextValue | null>(null);
@@ -51,6 +53,8 @@ export interface TooltipProps {
   side?: TooltipSide;
   /** Delay before showing (ms) */
   delay?: number;
+  /** Show arrow indicator */
+  showArrow?: boolean;
 }
 
 export interface TooltipTriggerProps {
@@ -72,6 +76,7 @@ export function Tooltip({
   content,
   side = 'top',
   delay = 300,
+  showArrow = false,
 }: TooltipProps) {
   const [open, setOpen] = useState(false);
   const [triggerLayout, setTriggerLayout] = useState<{
@@ -107,7 +112,7 @@ export function Tooltip({
 
   return (
     <TooltipContext.Provider
-      value={{ open, onOpenChange: handleOpenChange, triggerLayout, setTriggerLayout, side, content }}
+      value={{ open, onOpenChange: handleOpenChange, triggerLayout, setTriggerLayout, side, content, showArrow }}
     >
       {children}
     </TooltipContext.Provider>
@@ -158,8 +163,16 @@ export function TooltipTrigger({ children, style }: TooltipTriggerProps) {
   );
 }
 
+// Map tooltip side to arrow side (arrow points opposite direction)
+const oppositeSide: Record<TooltipSide, TooltipSide> = {
+  top: 'bottom',
+  bottom: 'top',
+  left: 'right',
+  right: 'left',
+};
+
 export function TooltipContent({ style, textStyle }: TooltipContentProps) {
-  const { open, onOpenChange, triggerLayout, side, content } = useTooltipContext();
+  const { open, onOpenChange, triggerLayout, side, content, showArrow } = useTooltipContext();
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
 
@@ -179,7 +192,8 @@ export function TooltipContent({ style, textStyle }: TooltipContentProps) {
 
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
-  const gap = spacing[2];
+  const arrowSize = 6;
+  const gap = showArrow ? spacing[1] : spacing[2];
 
   let top = 0;
   let left = 0;
@@ -187,19 +201,19 @@ export function TooltipContent({ style, textStyle }: TooltipContentProps) {
   // Calculate position based on side
   switch (side) {
     case 'top':
-      top = triggerLayout.y - contentSize.height - gap;
+      top = triggerLayout.y - contentSize.height - gap - (showArrow ? arrowSize : 0);
       left = triggerLayout.x + triggerLayout.width / 2 - contentSize.width / 2;
       break;
     case 'bottom':
-      top = triggerLayout.y + triggerLayout.height + gap;
+      top = triggerLayout.y + triggerLayout.height + gap + (showArrow ? arrowSize : 0);
       left = triggerLayout.x + triggerLayout.width / 2 - contentSize.width / 2;
       break;
     case 'left':
-      left = triggerLayout.x - contentSize.width - gap;
+      left = triggerLayout.x - contentSize.width - gap - (showArrow ? arrowSize : 0);
       top = triggerLayout.y + triggerLayout.height / 2 - contentSize.height / 2;
       break;
     case 'right':
-      left = triggerLayout.x + triggerLayout.width + gap;
+      left = triggerLayout.x + triggerLayout.width + gap + (showArrow ? arrowSize : 0);
       top = triggerLayout.y + triggerLayout.height / 2 - contentSize.height / 2;
       break;
   }
@@ -207,6 +221,26 @@ export function TooltipContent({ style, textStyle }: TooltipContentProps) {
   // Keep within screen bounds
   left = Math.max(spacing[2], Math.min(left, screenWidth - contentSize.width - spacing[2]));
   top = Math.max(spacing[2], Math.min(top, screenHeight - contentSize.height - spacing[2]));
+
+  // Calculate arrow position
+  const arrowStyle: ViewStyle = {};
+  if (side === 'top' || side === 'bottom') {
+    arrowStyle.position = 'absolute';
+    arrowStyle.left = contentSize.width / 2 - arrowSize;
+    if (side === 'top') {
+      arrowStyle.bottom = -arrowSize;
+    } else {
+      arrowStyle.top = -arrowSize;
+    }
+  } else {
+    arrowStyle.position = 'absolute';
+    arrowStyle.top = contentSize.height / 2 - arrowSize;
+    if (side === 'left') {
+      arrowStyle.right = -arrowSize;
+    } else {
+      arrowStyle.left = -arrowSize;
+    }
+  }
 
   return (
     <Modal visible={open} transparent animationType="none" onRequestClose={() => onOpenChange(false)}>
@@ -228,6 +262,14 @@ export function TooltipContent({ style, textStyle }: TooltipContentProps) {
         ]}
       >
         <Text style={[styles.text, textStyle]}>{content}</Text>
+        {showArrow && (
+          <Arrow
+            side={oppositeSide[side]}
+            color={colors.text.primary}
+            size={arrowSize}
+            style={arrowStyle}
+          />
+        )}
       </Animated.View>
     </Modal>
   );

@@ -1,0 +1,284 @@
+<GuideLayout
+  title="Choosing Feedback Components"
+  description="Guide to selecting the right component for user notifications and feedback."
+>
+
+## Quick Decision Guide
+
+r/ui provides several components for displaying feedback and messages. Here's when to use each:
+
+| Use Case | Component | Persistence |
+|----------|-----------|-------------|
+| Inline, persistent message | Alert | Until dismissed or resolved |
+| Temporary notification | Toast | Auto-dismisses after a few seconds |
+| Contextual information block | Callout | Always visible (content block) |
+| Empty/error page state | EmptyState | Until state changes |
+| Site-wide announcement | Announcement | Until dismissed (can persist) |
+
+---
+
+## Alert
+
+**Use for messages that:**
+- Should remain visible until explicitly dismissed
+- Are directly related to nearby content
+- Require user acknowledgment or action
+- Communicate form validation states
+
+```tsx
+import { Alert, AlertTitle, AlertDescription } from '@r-ui/react-native'
+
+<Alert variant="error">
+  <AlertTitle>Payment Failed</AlertTitle>
+  <AlertDescription>
+    Your card was declined. Please try a different payment method.
+  </AlertDescription>
+</Alert>
+```
+
+### Alert Variants
+
+| Variant | Use Case |
+|---------|----------|
+| `default` | General information |
+| `info` | Helpful tips, neutral information |
+| `success` | Successful operations, confirmations |
+| `warning` | Caution, potential issues |
+| `error` | Errors, failures, critical issues |
+
+<InfoCard title="Best Practices">
+  - Place alerts near the relevant content or action
+  - Keep messages concise and actionable
+  - Include a clear resolution path when possible
+  - Use appropriate variants for message severity
+</InfoCard>
+
+---
+
+## Toast
+
+**Use for messages that:**
+- Can disappear after a few seconds
+- Confirm an action was completed
+- Don't require user interaction to proceed
+- Are non-critical notifications
+
+```tsx
+import { useToast, Button } from '@r-ui/react-native'
+
+function SaveButton() {
+  const toast = useToast()
+
+  const handleSave = async () => {
+    await saveData()
+    toast.show({
+      title: 'Changes saved',
+      variant: 'success',
+    })
+  }
+
+  return <Button onPress={handleSave}>Save</Button>
+}
+```
+
+### Toast Variants
+
+| Variant | Use Case |
+|---------|----------|
+| `default` | General notifications |
+| `success` | Successful operations |
+| `error` | Error notifications |
+| `warning` | Warning notifications |
+
+### Toast vs Alert
+
+<FeatureGrid>
+  <FeatureCard
+    title="Use Toast"
+    description="Action confirmations, background process updates, non-blocking feedback"
+  />
+  <FeatureCard
+    title="Use Alert"
+    description="Form validation, inline errors, messages requiring acknowledgment"
+  />
+</FeatureGrid>
+
+---
+
+## Callout
+
+**Use for messages that:**
+- Provide supplementary information
+- Highlight tips, warnings, or important notes
+- Are embedded within page content (documentation, articles)
+- Should always be visible (not dismissible)
+
+```tsx
+import {
+  Callout,
+  CalloutIcon,
+  CalloutTitle,
+  CalloutDescription,
+} from '@r-ui/react-native'
+
+<Callout variant="warning">
+  <CalloutIcon />
+  <CalloutTitle>Deprecation Notice</CalloutTitle>
+  <CalloutDescription>
+    This API will be removed in version 2.0. Please migrate to the new API.
+  </CalloutDescription>
+</Callout>
+```
+
+### Callout Variants
+
+| Variant | Use Case |
+|---------|----------|
+| `default` | General notes |
+| `info` | Additional context, tips |
+| `success` | Best practices, recommendations |
+| `warning` | Cautions, deprecations |
+| `error` | Critical information, breaking changes |
+
+### Callout vs Alert
+
+- **Callout**: Content documentation, static information blocks
+- **Alert**: Dynamic state messages, dismissible notifications
+
+---
+
+## EmptyState
+
+**Use when:**
+- A page or section has no content
+- Search returns no results
+- An error prevents content from loading
+- A user hasn't completed initial setup
+
+```tsx
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateTitle,
+  EmptyStateDescription,
+  EmptyStateAction,
+  Button,
+} from '@r-ui/react-native'
+
+<EmptyState>
+  <EmptyStateIcon type="inbox" />
+  <EmptyStateTitle>No messages</EmptyStateTitle>
+  <EmptyStateDescription>
+    Your inbox is empty. Messages you receive will appear here.
+  </EmptyStateDescription>
+  <EmptyStateAction>
+    <Button>Compose Message</Button>
+  </EmptyStateAction>
+</EmptyState>
+```
+
+### EmptyState Icon Types
+
+| Type | Use Case |
+|------|----------|
+| `inbox` | Empty lists, no items |
+| `search` | No search results |
+| `error` | Error states |
+| `folder` | Empty folders/categories |
+| `document` | No documents/files |
+
+---
+
+## Announcement
+
+**Use for:**
+- Site-wide promotional messages
+- System maintenance notices
+- New feature announcements
+- Time-limited offers with countdowns
+
+```tsx
+import {
+  Announcement,
+  AnnouncementContent,
+  AnnouncementAction,
+  AnnouncementCountdown,
+} from '@r-ui/react-native'
+
+<Announcement variant="promo" storageKey="black-friday-2024">
+  <AnnouncementContent>
+    Black Friday Sale: 50% off all plans!
+  </AnnouncementContent>
+  <AnnouncementCountdown targetDate={new Date('2024-11-30')} />
+  <AnnouncementAction onPress={() => navigate('/pricing')}>
+    View Offers
+  </AnnouncementAction>
+</Announcement>
+```
+
+### Announcement Variants
+
+| Variant | Use Case |
+|---------|----------|
+| `info` | System updates, general announcements |
+| `warning` | Maintenance notices, service disruptions |
+| `success` | Positive announcements |
+| `promo` | Promotional content (gradient styling) |
+
+### Persistence
+
+Use `storageKey` to remember dismissals across sessions:
+
+```tsx
+// User's dismissal will be remembered
+<Announcement storageKey="maintenance-jan-2024" dismissible>
+  <AnnouncementContent>
+    Scheduled maintenance on January 15th.
+  </AnnouncementContent>
+</Announcement>
+```
+
+---
+
+## Decision Flow
+
+```
+Is this a page-level empty/error state?
+├── Yes → EmptyState
+└── No ↓
+
+Is this site-wide or promotional?
+├── Yes → Announcement
+└── No ↓
+
+Should it disappear automatically?
+├── Yes → Toast
+└── No ↓
+
+Is it embedded documentation/content?
+├── Yes → Callout
+└── No → Alert
+```
+
+---
+
+## Accessibility Considerations
+
+All feedback components include appropriate ARIA attributes:
+
+| Component | ARIA Role | Live Region |
+|-----------|-----------|-------------|
+| Alert | `alert` | `aria-live="assertive"` (errors) or `aria-live="polite"` |
+| Toast | `status` | `aria-live="polite"` |
+| Callout | `note` | None (static content) |
+| EmptyState | None | None (page content) |
+| Announcement | `banner` | None (page content) |
+
+<InfoCard title="Screen Reader Best Practices">
+  - Use descriptive, actionable messages
+  - Avoid using color alone to convey meaning
+  - Ensure dismissible components have clear close buttons
+  - Test with VoiceOver/TalkBack to verify announcements
+</InfoCard>
+
+</GuideLayout>

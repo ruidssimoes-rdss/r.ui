@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,8 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  Easing,
+  LayoutChangeEvent,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
@@ -17,13 +19,15 @@ export type ProgressSize = 'sm' | 'md' | 'lg';
 
 export interface ProgressProps extends Omit<ViewProps, 'style'> {
   /** Progress value (0-100) */
-  value: number;
+  value?: number;
   /** Visual style variant */
   variant?: ProgressVariant;
   /** Progress bar size */
   size?: ProgressSize;
   /** Show value label */
   showValue?: boolean;
+  /** Indeterminate mode for unknown progress */
+  indeterminate?: boolean;
   /** Additional container styles */
   style?: ViewStyle;
 }
@@ -51,43 +55,107 @@ const variantColors: Record<ProgressVariant, string> = {
 };
 
 export function Progress({
-  value,
+  value = 0,
   variant = 'default',
   size = 'md',
   showValue = false,
+  indeterminate = false,
   style,
   ...props
 }: ProgressProps) {
   const clampedValue = Math.min(100, Math.max(0, value));
   const animatedWidth = useRef(new Animated.Value(0)).current;
+  const indeterminateAnim = useRef(new Animated.Value(0)).current;
+  const [trackWidth, setTrackWidth] = useState(0);
   const sizeStyle = sizeStyles[size];
   const fillColor = variantColors[variant];
 
+  // Determinate animation
   useEffect(() => {
-    Animated.timing(animatedWidth, {
-      toValue: clampedValue,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  }, [clampedValue, animatedWidth]);
+    if (!indeterminate) {
+      Animated.timing(animatedWidth, {
+        toValue: clampedValue,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [clampedValue, animatedWidth, indeterminate]);
+
+  // Indeterminate animation
+  useEffect(() => {
+    if (indeterminate) {
+      const animation = Animated.loop(
+        Animated.timing(indeterminateAnim, {
+          toValue: 1,
+          duration: 1500,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      );
+      animation.start();
+      return () => animation.stop();
+    } else {
+      indeterminateAnim.setValue(0);
+    }
+  }, [indeterminate, indeterminateAnim]);
 
   const widthInterpolation = animatedWidth.interpolate({
     inputRange: [0, 100],
     outputRange: ['0%', '100%'],
   });
 
+  const handleLayout = (event: LayoutChangeEvent) => {
+    setTrackWidth(event.nativeEvent.layout.width);
+  };
+
+  // Indeterminate bar slides from left to right
+  const translateX = indeterminateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-trackWidth * 0.4, trackWidth],
+  });
+
+  // Accessibility props
+  const accessibilityProps = indeterminate
+    ? {
+        accessibilityRole: 'progressbar' as const,
+        accessibilityState: { busy: true },
+      }
+    : {
+        accessibilityRole: 'progressbar' as const,
+        accessibilityValue: {
+          min: 0,
+          max: 100,
+          now: clampedValue,
+        },
+      };
+
   return (
-    <View style={[styles.container, style]} {...props}>
-      <View style={[styles.track, sizeStyle.track]}>
-        <Animated.View
-          style={[
-            styles.fill,
-            sizeStyle.track,
-            { backgroundColor: fillColor, width: widthInterpolation },
-          ]}
-        />
+    <View style={[styles.container, style]} {...props} {...accessibilityProps}>
+      <View style={[styles.track, sizeStyle.track]} onLayout={handleLayout}>
+        {indeterminate ? (
+          <Animated.View
+            style={[
+              styles.fill,
+              styles.indeterminateFill,
+              sizeStyle.track,
+              {
+                backgroundColor: fillColor,
+                width: '40%',
+                transform: [{ translateX }],
+              },
+            ]}
+          />
+        ) : (
+          <Animated.View
+            style={[
+              styles.fill,
+              sizeStyle.track,
+              { backgroundColor: fillColor, width: widthInterpolation },
+            ]}
+          />
+        )}
       </View>
-      {showValue && (
+      {showValue && !indeterminate && (
         <Text style={[styles.value, sizeStyle.text]}>{Math.round(clampedValue)}%</Text>
       )}
     </View>
@@ -108,6 +176,10 @@ const styles = StyleSheet.create({
   },
   fill: {
     borderRadius: radius.full,
+  },
+  indeterminateFill: {
+    position: 'absolute',
+    left: 0,
   },
   value: {
     color: colors.text.secondary,

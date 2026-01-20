@@ -13,6 +13,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontSizes, fontWeights } from '../../tokens/typography';
+import { storage } from '../../utils/storage';
 
 // ============================================================================
 // Types
@@ -131,39 +132,37 @@ export function Announcement({
   style,
 }: AnnouncementProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(!!storageKey);
   const [fadeAnim] = useState(new Animated.Value(1));
 
-  // Check storage for dismiss state
+  // Check storage for dismiss state (works on both web and native)
   useEffect(() => {
-    if (storageKey && Platform.OS === 'web') {
-      try {
-        const dismissed = localStorage.getItem(`announcement-${storageKey}`);
+    if (storageKey) {
+      storage.getItem(`announcement-${storageKey}`).then((dismissed) => {
         if (dismissed === 'true') {
           setIsVisible(false);
         }
-      } catch {
-        // localStorage not available
-      }
+        setIsLoading(false);
+      });
     }
   }, [storageKey]);
 
-  const dismiss = () => {
+  const dismiss = async () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 200,
       useNativeDriver: true,
-    }).start(() => {
+    }).start(async () => {
       setIsVisible(false);
-      if (storageKey && Platform.OS === 'web') {
-        try {
-          localStorage.setItem(`announcement-${storageKey}`, 'true');
-        } catch {
-          // localStorage not available
-        }
+      if (storageKey) {
+        await storage.setItem(`announcement-${storageKey}`, 'true');
       }
       onDismiss?.();
     });
   };
+
+  // Don't render while checking storage
+  if (isLoading) return null;
 
   if (!isVisible) return null;
 

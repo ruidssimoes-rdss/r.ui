@@ -19,6 +19,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
+import { Arrow } from '../_internal/Arrow';
 
 export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
 export type PopoverAlign = 'start' | 'center' | 'end';
@@ -30,6 +31,7 @@ interface PopoverContextValue {
   setTriggerLayout: (layout: { x: number; y: number; width: number; height: number }) => void;
   side: PopoverSide;
   align: PopoverAlign;
+  showArrow: boolean;
 }
 
 const PopoverContext = createContext<PopoverContextValue | null>(null);
@@ -53,6 +55,8 @@ export interface PopoverProps {
   side?: PopoverSide;
   /** Alignment relative to trigger */
   align?: PopoverAlign;
+  /** Show arrow indicator */
+  showArrow?: boolean;
 }
 
 export interface PopoverTriggerProps {
@@ -82,6 +86,7 @@ export function Popover({
   onOpenChange,
   side = 'bottom',
   align = 'center',
+  showArrow = false,
 }: PopoverProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [triggerLayout, setTriggerLayout] = useState<{
@@ -103,7 +108,7 @@ export function Popover({
 
   return (
     <PopoverContext.Provider
-      value={{ open, onOpenChange: handleOpenChange, triggerLayout, setTriggerLayout, side, align }}
+      value={{ open, onOpenChange: handleOpenChange, triggerLayout, setTriggerLayout, side, align, showArrow }}
     >
       {children}
     </PopoverContext.Provider>
@@ -128,8 +133,16 @@ export function PopoverTrigger({ children, style }: PopoverTriggerProps) {
   );
 }
 
+// Map popover side to arrow side (arrow points opposite direction)
+const oppositeSide: Record<PopoverSide, PopoverSide> = {
+  top: 'bottom',
+  bottom: 'top',
+  left: 'right',
+  right: 'left',
+};
+
 export function PopoverContent({ children, style }: PopoverContentProps) {
-  const { open, onOpenChange, triggerLayout, side, align } = usePopoverContext();
+  const { open, onOpenChange, triggerLayout, side, align, showArrow } = usePopoverContext();
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
@@ -164,7 +177,8 @@ export function PopoverContent({ children, style }: PopoverContentProps) {
 
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
-  const gap = spacing[2];
+  const arrowSize = 8;
+  const gap = showArrow ? spacing[1] : spacing[2];
 
   let top = 0;
   let left = 0;
@@ -172,17 +186,17 @@ export function PopoverContent({ children, style }: PopoverContentProps) {
   // Calculate position based on side
   switch (side) {
     case 'top':
-      top = triggerLayout.y - contentSize.height - gap;
+      top = triggerLayout.y - contentSize.height - gap - (showArrow ? arrowSize : 0);
       break;
     case 'bottom':
-      top = triggerLayout.y + triggerLayout.height + gap;
+      top = triggerLayout.y + triggerLayout.height + gap + (showArrow ? arrowSize : 0);
       break;
     case 'left':
-      left = triggerLayout.x - contentSize.width - gap;
+      left = triggerLayout.x - contentSize.width - gap - (showArrow ? arrowSize : 0);
       top = triggerLayout.y;
       break;
     case 'right':
-      left = triggerLayout.x + triggerLayout.width + gap;
+      left = triggerLayout.x + triggerLayout.width + gap + (showArrow ? arrowSize : 0);
       top = triggerLayout.y;
       break;
   }
@@ -218,6 +232,48 @@ export function PopoverContent({ children, style }: PopoverContentProps) {
   left = Math.max(spacing[2], Math.min(left, screenWidth - contentSize.width - spacing[2]));
   top = Math.max(spacing[2], Math.min(top, screenHeight - contentSize.height - spacing[2]));
 
+  // Calculate arrow position based on alignment
+  const arrowStyle: ViewStyle = {};
+  if (side === 'top' || side === 'bottom') {
+    arrowStyle.position = 'absolute';
+    // Position arrow based on alignment
+    switch (align) {
+      case 'start':
+        arrowStyle.left = Math.min(triggerLayout.width / 2 - arrowSize, contentSize.width - arrowSize * 3);
+        break;
+      case 'center':
+        arrowStyle.left = contentSize.width / 2 - arrowSize;
+        break;
+      case 'end':
+        arrowStyle.right = Math.min(triggerLayout.width / 2 - arrowSize, contentSize.width - arrowSize * 3);
+        break;
+    }
+    if (side === 'top') {
+      arrowStyle.bottom = -arrowSize;
+    } else {
+      arrowStyle.top = -arrowSize;
+    }
+  } else {
+    arrowStyle.position = 'absolute';
+    // Position arrow based on alignment
+    switch (align) {
+      case 'start':
+        arrowStyle.top = Math.min(triggerLayout.height / 2 - arrowSize, contentSize.height - arrowSize * 3);
+        break;
+      case 'center':
+        arrowStyle.top = contentSize.height / 2 - arrowSize;
+        break;
+      case 'end':
+        arrowStyle.bottom = Math.min(triggerLayout.height / 2 - arrowSize, contentSize.height - arrowSize * 3);
+        break;
+    }
+    if (side === 'left') {
+      arrowStyle.right = -arrowSize;
+    } else {
+      arrowStyle.left = -arrowSize;
+    }
+  }
+
   return (
     <Modal visible={open} transparent animationType="none" onRequestClose={() => onOpenChange(false)}>
       <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} accessibilityRole="button" accessibilityLabel="Close popover" />
@@ -236,6 +292,14 @@ export function PopoverContent({ children, style }: PopoverContentProps) {
         ]}
       >
         {children}
+        {showArrow && (
+          <Arrow
+            side={oppositeSide[side]}
+            color={colors.bg.elevated}
+            size={arrowSize}
+            style={arrowStyle}
+          />
+        )}
       </Animated.View>
     </Modal>
   );

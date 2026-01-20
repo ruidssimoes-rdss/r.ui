@@ -1,9 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, ViewStyle, TextStyle, Animated } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
+import { Skeleton } from '../Skeleton';
 
 // ============================================================================
 // Types
@@ -16,6 +17,8 @@ export interface StatsCardProps {
   variant?: StatsCardVariant;
   /** Children components */
   children: React.ReactNode;
+  /** Show loading skeleton state */
+  loading?: boolean;
   /** Additional container styles */
   style?: ViewStyle;
 }
@@ -37,8 +40,14 @@ export interface StatsCardTitleProps {
 }
 
 export interface StatsCardValueProps {
-  /** The main value to display */
+  /** The main value to display (number for animation, string for static) */
   children: React.ReactNode;
+  /** Animate the value counting up */
+  animate?: boolean;
+  /** Animation duration in ms */
+  animationDuration?: number;
+  /** Format function for the number */
+  formatValue?: (value: number) => string;
   /** Additional styles */
   style?: TextStyle;
 }
@@ -63,7 +72,18 @@ export interface StatsCardDescriptionProps {
 // Root Component
 // ============================================================================
 
-export function StatsCard({ variant = 'default', children, style }: StatsCardProps) {
+export function StatsCard({ variant = 'default', children, loading = false, style }: StatsCardProps) {
+  if (loading) {
+    return (
+      <View style={[styles.container, variant === 'compact' && styles.containerCompact, style]}>
+        <Skeleton variant="rectangular" width={40} height={40} style={{ borderRadius: radius.md, marginBottom: spacing[3] }} />
+        <Skeleton variant="text" width={80} height={14} style={{ marginBottom: spacing[1] }} />
+        <Skeleton variant="text" width={120} height={32} style={{ marginBottom: spacing[2] }} />
+        <Skeleton variant="text" width={100} height={14} />
+      </View>
+    );
+  }
+
   return (
     <View style={[styles.container, variant === 'compact' && styles.containerCompact, style]}>
       {children}
@@ -100,12 +120,85 @@ export function StatsCardTitle({ children, style }: StatsCardTitleProps) {
 }
 
 // ============================================================================
+// Animated Number Hook
+// ============================================================================
+
+function useAnimatedNumber(
+  target: number,
+  duration: number,
+  enabled: boolean
+): number {
+  const [current, setCurrent] = useState(enabled ? 0 : target);
+  const animationRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number>(0);
+  const startValueRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (!enabled) {
+      setCurrent(target);
+      return;
+    }
+
+    // Reset animation
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+
+    startTimeRef.current = Date.now();
+    startValueRef.current = current;
+
+    const animate = () => {
+      const elapsed = Date.now() - startTimeRef.current;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutCubic for smooth deceleration
+      const eased = 1 - Math.pow(1 - progress, 3);
+
+      const newValue = Math.round(
+        startValueRef.current + (target - startValueRef.current) * eased
+      );
+      setCurrent(newValue);
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [target, duration, enabled]);
+
+  return current;
+}
+
+// ============================================================================
 // Value Component
 // ============================================================================
 
-export function StatsCardValue({ children, style }: StatsCardValueProps) {
+export function StatsCardValue({
+  children,
+  animate = false,
+  animationDuration = 1000,
+  formatValue,
+  style,
+}: StatsCardValueProps) {
+  const numericValue = typeof children === 'number' ? children : 0;
+  const animatedValue = useAnimatedNumber(numericValue, animationDuration, animate && typeof children === 'number');
+
+  // Determine what to display
+  let displayValue: React.ReactNode;
+  if (animate && typeof children === 'number') {
+    displayValue = formatValue ? formatValue(animatedValue) : animatedValue;
+  } else {
+    displayValue = children;
+  }
+
   return (
-    <Text style={[styles.value, style]}>{children}</Text>
+    <Text style={[styles.value, style]}>{displayValue}</Text>
   );
 }
 
@@ -114,18 +207,30 @@ export function StatsCardValue({ children, style }: StatsCardValueProps) {
 // ============================================================================
 
 export function StatsCardTrend({ value, suffix = '%', style }: StatsCardTrendProps) {
-  const isPositive = value >= 0;
+  const isPositive = value > 0;
+  const isNegative = value < 0;
+  const isNeutral = value === 0;
   const displayValue = Math.abs(value);
+
+  const trendColor = isPositive
+    ? colors.accent.green.DEFAULT
+    : isNegative
+    ? colors.accent.red.DEFAULT
+    : colors.text.muted;
 
   return (
     <View style={[styles.trendContainer, style]}>
       <View style={styles.trendIconContainer}>
-        {isPositive ? <TrendUpIcon /> : <TrendDownIcon />}
+        {isPositive && <TrendUpIcon color={trendColor} size={16} />}
+        {isNegative && <TrendDownIcon color={trendColor} size={16} />}
+        {isNeutral && <TrendNeutralIcon color={trendColor} size={16} />}
       </View>
       <Text
         style={[
           styles.trendText,
-          isPositive ? styles.trendTextPositive : styles.trendTextNegative,
+          isPositive && styles.trendTextPositive,
+          isNegative && styles.trendTextNegative,
+          isNeutral && styles.trendTextNeutral,
         ]}
       >
         {displayValue}{suffix}
@@ -145,23 +250,133 @@ export function StatsCardDescription({ children, style }: StatsCardDescriptionPr
 }
 
 // ============================================================================
-// Icons
+// Trend Icons (SVG-style implementation)
 // ============================================================================
 
-function TrendUpIcon() {
+interface TrendIconProps {
+  color: string;
+  size?: number;
+}
+
+function TrendUpIcon({ color, size = 16 }: TrendIconProps) {
+  // Proper trending up icon using Views positioned to look like an arrow
   return (
-    <View style={iconStyles.trendUp}>
-      <View style={iconStyles.trendUpArrow} />
-      <View style={iconStyles.trendUpLine} />
+    <View style={[iconStyles.trendIcon, { width: size, height: size }]}>
+      {/* Arrow pointing up-right */}
+      <View
+        style={[
+          iconStyles.trendLine,
+          {
+            backgroundColor: color,
+            width: size * 0.65,
+            height: 2,
+            transform: [{ rotate: '-45deg' }],
+            position: 'absolute',
+            left: size * 0.1,
+            top: size * 0.45,
+          },
+        ]}
+      />
+      {/* Arrow head - horizontal part */}
+      <View
+        style={[
+          iconStyles.trendLine,
+          {
+            backgroundColor: color,
+            width: size * 0.35,
+            height: 2,
+            position: 'absolute',
+            right: size * 0.1,
+            top: size * 0.25,
+          },
+        ]}
+      />
+      {/* Arrow head - vertical part */}
+      <View
+        style={[
+          iconStyles.trendLine,
+          {
+            backgroundColor: color,
+            width: 2,
+            height: size * 0.35,
+            position: 'absolute',
+            right: size * 0.1,
+            top: size * 0.25,
+          },
+        ]}
+      />
     </View>
   );
 }
 
-function TrendDownIcon() {
+function TrendDownIcon({ color, size = 16 }: TrendIconProps) {
+  // Proper trending down icon using Views positioned to look like an arrow
   return (
-    <View style={iconStyles.trendDown}>
-      <View style={iconStyles.trendDownArrow} />
-      <View style={iconStyles.trendDownLine} />
+    <View style={[iconStyles.trendIcon, { width: size, height: size }]}>
+      {/* Arrow pointing down-right */}
+      <View
+        style={[
+          iconStyles.trendLine,
+          {
+            backgroundColor: color,
+            width: size * 0.65,
+            height: 2,
+            transform: [{ rotate: '45deg' }],
+            position: 'absolute',
+            left: size * 0.1,
+            top: size * 0.45,
+          },
+        ]}
+      />
+      {/* Arrow head - horizontal part */}
+      <View
+        style={[
+          iconStyles.trendLine,
+          {
+            backgroundColor: color,
+            width: size * 0.35,
+            height: 2,
+            position: 'absolute',
+            right: size * 0.1,
+            bottom: size * 0.25,
+          },
+        ]}
+      />
+      {/* Arrow head - vertical part */}
+      <View
+        style={[
+          iconStyles.trendLine,
+          {
+            backgroundColor: color,
+            width: 2,
+            height: size * 0.35,
+            position: 'absolute',
+            right: size * 0.1,
+            bottom: size * 0.25,
+          },
+        ]}
+      />
+    </View>
+  );
+}
+
+function TrendNeutralIcon({ color, size = 16 }: TrendIconProps) {
+  // Horizontal line for neutral trend
+  return (
+    <View style={[iconStyles.trendIcon, { width: size, height: size }]}>
+      <View
+        style={[
+          iconStyles.trendLine,
+          {
+            backgroundColor: color,
+            width: size * 0.7,
+            height: 2,
+            position: 'absolute',
+            left: size * 0.15,
+            top: size * 0.5 - 1,
+          },
+        ]}
+      />
     </View>
   );
 }
@@ -222,6 +437,9 @@ const styles = StyleSheet.create({
   trendTextNegative: {
     color: colors.accent.red.DEFAULT,
   },
+  trendTextNeutral: {
+    color: colors.text.muted,
+  },
   description: {
     fontFamily: fontFamilies.sans,
     fontSize: fontSizes.xs,
@@ -231,48 +449,10 @@ const styles = StyleSheet.create({
 });
 
 const iconStyles = StyleSheet.create({
-  trendUp: {
-    width: 12,
-    height: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+  trendIcon: {
+    position: 'relative',
   },
-  trendUpArrow: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 4,
-    borderRightWidth: 4,
-    borderBottomWidth: 5,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: colors.accent.green.DEFAULT,
-    marginBottom: -1,
-  },
-  trendUpLine: {
-    width: 2,
-    height: 5,
-    backgroundColor: colors.accent.green.DEFAULT,
-  },
-  trendDown: {
-    width: 12,
-    height: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  trendDownLine: {
-    width: 2,
-    height: 5,
-    backgroundColor: colors.accent.red.DEFAULT,
-  },
-  trendDownArrow: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 4,
-    borderRightWidth: 4,
-    borderTopWidth: 5,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderTopColor: colors.accent.red.DEFAULT,
-    marginTop: -1,
+  trendLine: {
+    borderRadius: 1,
   },
 });

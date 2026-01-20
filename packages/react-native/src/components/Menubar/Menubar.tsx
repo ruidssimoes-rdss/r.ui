@@ -5,6 +5,7 @@ import React, {
   useRef,
   useCallback,
   ReactNode,
+  useEffect,
 } from 'react';
 import {
   View,
@@ -15,6 +16,7 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  Platform,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
@@ -79,10 +81,22 @@ export interface MenubarRadioItemProps {
   style?: ViewStyle;
 }
 
+// Menu ref tracking
+interface MenuRef {
+  ref: View | null;
+  menuId: string;
+}
+
 // Contexts
 interface MenubarContextValue {
   activeMenu: string | null;
   setActiveMenu: (id: string | null) => void;
+  orientation: MenubarOrientation;
+  registerMenuRef: (menuId: string, ref: View | null) => void;
+  unregisterMenuRef: (menuId: string) => void;
+  menuRefs: React.MutableRefObject<Map<string, MenuRef>>;
+  menuOrder: React.MutableRefObject<string[]>;
+  focusMenu: (menuId: string) => void;
 }
 
 const MenubarContext = createContext<MenubarContextValue | undefined>(undefined);
@@ -109,13 +123,25 @@ const generateMenuId = () => `menubar-menu-${++menuIdCounter}`;
 
 // MenubarTrigger
 export function MenubarTrigger({ children, style }: MenubarTriggerProps) {
-  const context = useContext(MenubarMenuContext);
+  const menubarContext = useContext(MenubarContext);
+  const menuContext = useContext(MenubarMenuContext);
+  const triggerRef = useRef<View>(null);
 
-  if (!context) {
+  if (!menuContext) {
     throw new Error('MenubarTrigger must be used within MenubarMenu');
   }
+  if (!menubarContext) {
+    throw new Error('MenubarTrigger must be used within Menubar');
+  }
 
-  const { isOpen, open, close } = context;
+  const { isOpen, open, close, menuId } = menuContext;
+  const { orientation, registerMenuRef, unregisterMenuRef, menuOrder, menuRefs, focusMenu } = menubarContext;
+
+  // Register this trigger for keyboard navigation
+  useEffect(() => {
+    registerMenuRef(menuId, triggerRef.current);
+    return () => unregisterMenuRef(menuId);
+  }, [menuId, registerMenuRef, unregisterMenuRef]);
 
   const handlePress = useCallback(() => {
     if (isOpen) {
@@ -125,8 +151,64 @@ export function MenubarTrigger({ children, style }: MenubarTriggerProps) {
     }
   }, [isOpen, open, close]);
 
+  // Get adjacent menu
+  const getAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
+    const order = menuOrder.current;
+    const currentIndex = order.indexOf(menuId);
+    if (currentIndex === -1) return null;
+
+    const step = direction === 'next' ? 1 : -1;
+    const length = order.length;
+    const nextIndex = (currentIndex + step + length) % length;
+    return order[nextIndex];
+  }, [menuId, menuOrder]);
+
+  // Web-only keyboard handler
+  const handleKeyDown = Platform.select({
+    web: (event: React.KeyboardEvent) => {
+      const isHorizontal = orientation === 'horizontal';
+      const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
+      const nextKey = isHorizontal ? 'ArrowRight' : 'ArrowDown';
+
+      switch (event.key) {
+        case prevKey:
+          event.preventDefault();
+          const prevMenuId = getAdjacentMenu('prev');
+          if (prevMenuId) focusMenu(prevMenuId);
+          break;
+        case nextKey:
+          event.preventDefault();
+          const nextMenuId = getAdjacentMenu('next');
+          if (nextMenuId) focusMenu(nextMenuId);
+          break;
+        case 'Home':
+          event.preventDefault();
+          if (menuOrder.current.length > 0) {
+            focusMenu(menuOrder.current[0]);
+          }
+          break;
+        case 'End':
+          event.preventDefault();
+          if (menuOrder.current.length > 0) {
+            focusMenu(menuOrder.current[menuOrder.current.length - 1]);
+          }
+          break;
+      }
+    },
+    default: undefined,
+  });
+
+  const webProps = Platform.select({
+    web: {
+      onKeyDown: handleKeyDown,
+      tabIndex: 0,
+    },
+    default: {},
+  });
+
   return (
     <Pressable
+      ref={triggerRef}
       onPress={handlePress}
       style={({ pressed }) => [
         styles.trigger,
@@ -136,6 +218,7 @@ export function MenubarTrigger({ children, style }: MenubarTriggerProps) {
       ]}
       accessibilityRole="button"
       accessibilityState={{ expanded: isOpen }}
+      {...webProps}
     >
       {typeof children === 'string' ? (
         <Text style={styles.triggerText}>{children}</Text>
@@ -423,9 +506,42 @@ export function Menubar({
   style,
 }: MenubarProps) {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const menuRefs = useRef<Map<string, MenuRef>>(new Map());
+  const menuOrder = useRef<string[]>([]);
+
+  const registerMenuRef = useCallback((menuId: string, ref: View | null) => {
+    menuRefs.current.set(menuId, { ref, menuId });
+    if (!menuOrder.current.includes(menuId)) {
+      menuOrder.current.push(menuId);
+    }
+  }, []);
+
+  const unregisterMenuRef = useCallback((menuId: string) => {
+    menuRefs.current.delete(menuId);
+    menuOrder.current = menuOrder.current.filter((id) => id !== menuId);
+  }, []);
+
+  const focusMenu = useCallback((menuId: string) => {
+    const menuRef = menuRefs.current.get(menuId);
+    if (menuRef?.ref && Platform.OS === 'web') {
+      // @ts-ignore - focus exists on web
+      menuRef.ref.focus?.();
+    }
+  }, []);
 
   return (
-    <MenubarContext.Provider value={{ activeMenu, setActiveMenu }}>
+    <MenubarContext.Provider
+      value={{
+        activeMenu,
+        setActiveMenu,
+        orientation,
+        registerMenuRef,
+        unregisterMenuRef,
+        menuRefs,
+        menuOrder,
+        focusMenu,
+      }}
+    >
       <View
         style={[
           styles.menubar,

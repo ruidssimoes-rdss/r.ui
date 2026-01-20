@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,9 @@ import {
   ViewStyle,
   TextStyle,
   LayoutChangeEvent,
+  Platform,
+  NativeSyntheticEvent,
+  TargetedEvent,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
@@ -65,12 +68,22 @@ interface TabLayout {
   width: number;
 }
 
+interface TabRef {
+  ref: View | null;
+  value: string;
+  disabled: boolean;
+}
+
 interface TabsContextValue {
   value: string;
   onValueChange: (value: string) => void;
   variant: TabsVariant;
   registerTab: (value: string, layout: TabLayout) => void;
   tabLayouts: Record<string, TabLayout>;
+  registerTabRef: (value: string, ref: View | null, disabled: boolean) => void;
+  unregisterTabRef: (value: string) => void;
+  tabRefs: React.MutableRefObject<Map<string, TabRef>>;
+  tabOrder: React.MutableRefObject<string[]>;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -93,6 +106,8 @@ export function Tabs({
 }: TabsProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [tabLayouts, setTabLayouts] = useState<Record<string, TabLayout>>({});
+  const tabRefs = useRef<Map<string, TabRef>>(new Map());
+  const tabOrder = useRef<string[]>([]);
 
   const isControlled = controlledValue !== undefined;
   const value = isControlled ? controlledValue : internalValue;
@@ -111,6 +126,19 @@ export function Tabs({
     }));
   };
 
+  const registerTabRef = useCallback((tabValue: string, ref: View | null, disabled: boolean) => {
+    tabRefs.current.set(tabValue, { ref, value: tabValue, disabled });
+    // Maintain tab order based on registration
+    if (!tabOrder.current.includes(tabValue)) {
+      tabOrder.current.push(tabValue);
+    }
+  }, []);
+
+  const unregisterTabRef = useCallback((tabValue: string) => {
+    tabRefs.current.delete(tabValue);
+    tabOrder.current = tabOrder.current.filter((v) => v !== tabValue);
+  }, []);
+
   return (
     <TabsContext.Provider
       value={{
@@ -119,6 +147,10 @@ export function Tabs({
         variant,
         registerTab,
         tabLayouts,
+        registerTabRef,
+        unregisterTabRef,
+        tabRefs,
+        tabOrder,
       }}
     >
       <View style={[styles.container, style]}>{children}</View>
@@ -181,8 +213,24 @@ export function TabsTrigger({
   style,
   textStyle,
 }: TabsTriggerProps) {
-  const { value: selectedValue, onValueChange, variant, registerTab } = useTabsContext();
+  const {
+    value: selectedValue,
+    onValueChange,
+    variant,
+    registerTab,
+    registerTabRef,
+    unregisterTabRef,
+    tabRefs,
+    tabOrder,
+  } = useTabsContext();
   const isSelected = value === selectedValue;
+  const triggerRef = useRef<View>(null);
+
+  // Register/unregister tab ref for keyboard navigation
+  useEffect(() => {
+    registerTabRef(value, triggerRef.current, disabled);
+    return () => unregisterTabRef(value);
+  }, [value, disabled, registerTabRef, unregisterTabRef]);
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const { x, width } = event.nativeEvent.layout;
@@ -194,6 +242,86 @@ export function TabsTrigger({
       onValueChange(value);
     }
   };
+
+  // Get next/previous non-disabled tab
+  const getAdjacentTab = useCallback((direction: 'next' | 'prev') => {
+    const order = tabOrder.current;
+    const currentIndex = order.indexOf(value);
+    if (currentIndex === -1) return null;
+
+    const step = direction === 'next' ? 1 : -1;
+    const length = order.length;
+
+    // Loop through tabs to find next non-disabled one
+    for (let i = 1; i <= length; i++) {
+      const nextIndex = (currentIndex + i * step + length) % length;
+      const nextValue = order[nextIndex];
+      const tabRef = tabRefs.current.get(nextValue);
+      if (tabRef && !tabRef.disabled) {
+        return tabRef;
+      }
+    }
+    return null;
+  }, [value, tabRefs, tabOrder]);
+
+  // Focus a tab and select it
+  const focusTab = useCallback((tabRef: TabRef | null) => {
+    if (tabRef?.ref && Platform.OS === 'web') {
+      // @ts-ignore - focus exists on web
+      tabRef.ref.focus?.();
+      onValueChange(tabRef.value);
+    }
+  }, [onValueChange]);
+
+  // Web-only keyboard handler
+  const handleKeyDown = Platform.select({
+    web: (event: React.KeyboardEvent) => {
+      switch (event.key) {
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          event.preventDefault();
+          focusTab(getAdjacentTab('prev'));
+          break;
+        case 'ArrowRight':
+        case 'ArrowDown':
+          event.preventDefault();
+          focusTab(getAdjacentTab('next'));
+          break;
+        case 'Home':
+          event.preventDefault();
+          // Focus first non-disabled tab
+          for (const tabValue of tabOrder.current) {
+            const tabRef = tabRefs.current.get(tabValue);
+            if (tabRef && !tabRef.disabled) {
+              focusTab(tabRef);
+              break;
+            }
+          }
+          break;
+        case 'End':
+          event.preventDefault();
+          // Focus last non-disabled tab
+          for (let i = tabOrder.current.length - 1; i >= 0; i--) {
+            const tabValue = tabOrder.current[i];
+            const tabRef = tabRefs.current.get(tabValue);
+            if (tabRef && !tabRef.disabled) {
+              focusTab(tabRef);
+              break;
+            }
+          }
+          break;
+      }
+    },
+    default: undefined,
+  });
+
+  const webProps = Platform.select({
+    web: {
+      onKeyDown: handleKeyDown,
+      tabIndex: isSelected ? 0 : -1,
+    },
+    default: {},
+  });
 
   const triggerStyle =
     variant === 'pills'
@@ -219,12 +347,14 @@ export function TabsTrigger({
 
   return (
     <Pressable
+      ref={triggerRef}
       onPress={handlePress}
       onLayout={handleLayout}
       disabled={disabled}
       style={triggerStyle}
       accessibilityRole="tab"
       accessibilityState={{ selected: isSelected, disabled }}
+      {...webProps}
     >
       <Text style={triggerTextStyle}>{children}</Text>
     </Pressable>

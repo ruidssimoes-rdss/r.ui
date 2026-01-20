@@ -568,7 +568,7 @@ export { Grid, GridItem } from './components/Grid';
 export type { GridProps, GridItemProps, GridColumns, GridGap } from './components/Grid';
 
 export { Separator } from './components/Separator';
-export type { SeparatorProps, SeparatorOrientation } from './components/Separator';
+export type { SeparatorProps, SeparatorOrientation, SeparatorLabelPosition } from './components/Separator';
 
 export { Spacer } from './components/Spacer';
 export type { SpacerProps, SpacerSize, SpacerAxis } from './components/Spacer';

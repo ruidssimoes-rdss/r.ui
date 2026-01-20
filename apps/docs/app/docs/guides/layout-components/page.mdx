@@ -1,0 +1,363 @@
+<GuideLayout
+  title="Choosing Layout Components"
+  description="Guide to selecting between Flex, Grid, and other layout components."
+>
+
+## Quick Decision Guide
+
+r/ui provides several layout components. Here's when to use each:
+
+| Layout Need | Component |
+|-------------|-----------|
+| Items in a line (row or column) | Flex |
+| Two-dimensional grid layout | Grid |
+| Horizontal/vertical divider | Separator |
+| Empty space between elements | Spacer |
+| Constrained content width | Container |
+| Maintain aspect ratio | AspectRatio |
+| Scrollable content area | ScrollArea |
+
+---
+
+## Flex
+
+**Best for:**
+- One-dimensional layouts (row OR column)
+- Distributing space between items
+- Aligning items along an axis
+- Navigation bars, button groups, simple forms
+
+```tsx
+import { Flex, Button } from '@r-ui/react-native'
+
+// Horizontal row
+<Flex direction="row" gap="md" align="center">
+  <Button>Cancel</Button>
+  <Button variant="primary">Save</Button>
+</Flex>
+
+// Vertical column
+<Flex direction="column" gap="lg">
+  <Input label="Name" />
+  <Input label="Email" />
+  <Input label="Password" />
+</Flex>
+```
+
+### Flex Props
+
+| Prop | Values | Description |
+|------|--------|-------------|
+| `direction` | `row`, `column`, `row-reverse`, `column-reverse` | Main axis direction |
+| `justify` | `start`, `center`, `end`, `between`, `around`, `evenly` | Main axis alignment |
+| `align` | `start`, `center`, `end`, `stretch`, `baseline` | Cross axis alignment |
+| `wrap` | `wrap`, `nowrap`, `wrap-reverse` | Line wrapping behavior |
+| `gap` | `xs`, `sm`, `md`, `lg`, `xl` or number | Space between items |
+
+### Common Flex Patterns
+
+```tsx
+// Centered content
+<Flex justify="center" align="center" style={{ height: 200 }}>
+  <Text>Centered</Text>
+</Flex>
+
+// Space between (header layout)
+<Flex direction="row" justify="between" align="center">
+  <Logo />
+  <Navigation />
+  <UserMenu />
+</Flex>
+
+// Equal width columns
+<Flex direction="row" gap="md">
+  <Card style={{ flex: 1 }}>Column 1</Card>
+  <Card style={{ flex: 1 }}>Column 2</Card>
+  <Card style={{ flex: 1 }}>Column 3</Card>
+</Flex>
+```
+
+---
+
+## Grid
+
+**Best for:**
+- Two-dimensional layouts (rows AND columns)
+- Card layouts, galleries, dashboards
+- Complex form layouts
+- Responsive multi-column content
+
+```tsx
+import { Grid, GridItem, Card } from '@r-ui/react-native'
+
+// Basic 3-column grid
+<Grid columns={3} gap="md">
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+  <Card>Item 3</Card>
+  <Card>Item 4</Card>
+  <Card>Item 5</Card>
+  <Card>Item 6</Card>
+</Grid>
+
+// Responsive columns
+<Grid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} gap="lg">
+  {products.map(product => (
+    <ProductCard key={product.id} {...product} />
+  ))}
+</Grid>
+```
+
+### Grid Props
+
+| Prop | Values | Description |
+|------|--------|-------------|
+| `columns` | number or responsive object | Number of columns |
+| `gap` | `xs`, `sm`, `md`, `lg`, `xl` or number | Space between items |
+
+### GridItem Spanning
+
+```tsx
+<Grid columns={4} gap="md">
+  <GridItem colSpan={2}>
+    <Card>Wide card (2 columns)</Card>
+  </GridItem>
+  <Card>Regular</Card>
+  <Card>Regular</Card>
+  <GridItem colSpan={4}>
+    <Card>Full width (4 columns)</Card>
+  </GridItem>
+</Grid>
+```
+
+---
+
+## Flex vs Grid: Quick Rule
+
+<FeatureGrid>
+  <FeatureCard
+    title="Use Flex"
+    description="Items in a single line. Think: rows of buttons, form fields stacked vertically, navigation items."
+  />
+  <FeatureCard
+    title="Use Grid"
+    description="Items in a grid pattern. Think: card galleries, dashboard widgets, product listings."
+  />
+</FeatureGrid>
+
+### Visual Comparison
+
+```
+Flex (one-dimensional):
+┌─────┐ ┌─────┐ ┌─────┐
+│  1  │ │  2  │ │  3  │
+└─────┘ └─────┘ └─────┘
+
+Grid (two-dimensional):
+┌─────┬─────┬─────┐
+│  1  │  2  │  3  │
+├─────┼─────┼─────┤
+│  4  │  5  │  6  │
+└─────┴─────┴─────┘
+```
+
+---
+
+## Separator
+
+**Use for:**
+- Visual dividers between content sections
+- Breaking up lists or menus
+- Adding horizontal or vertical lines
+
+```tsx
+import { Separator, Flex, Text } from '@r-ui/react-native'
+
+// Horizontal divider
+<Text>Section 1</Text>
+<Separator />
+<Text>Section 2</Text>
+
+// Vertical divider
+<Flex direction="row" align="center" gap="md">
+  <Text>Home</Text>
+  <Separator orientation="vertical" style={{ height: 20 }} />
+  <Text>About</Text>
+  <Separator orientation="vertical" style={{ height: 20 }} />
+  <Text>Contact</Text>
+</Flex>
+
+// With label
+<Separator label="OR" labelPosition="center" />
+```
+
+---
+
+## Spacer
+
+**Use for:**
+- Adding consistent spacing between elements
+- Pushing elements apart (flex: 1 behavior)
+
+```tsx
+import { Spacer, Flex, Text } from '@r-ui/react-native'
+
+// Fixed spacing
+<Flex direction="column">
+  <Text>Item 1</Text>
+  <Spacer size="lg" />
+  <Text>Item 2</Text>
+</Flex>
+
+// Push element to end
+<Flex direction="row" align="center">
+  <Text>Logo</Text>
+  <Spacer />
+  <Button>Sign In</Button>
+</Flex>
+```
+
+### Spacer Sizes
+
+| Size | Pixels |
+|------|--------|
+| `xs` | 4px |
+| `sm` | 8px |
+| `md` | 16px |
+| `lg` | 24px |
+| `xl` | 32px |
+
+---
+
+## Container
+
+**Use for:**
+- Constraining content width
+- Centering page content
+- Consistent horizontal padding
+
+```tsx
+import { Container, Text } from '@r-ui/react-native'
+
+// Default centered container
+<Container>
+  <Text>Content is constrained and centered</Text>
+</Container>
+
+// Size variants
+<Container size="sm">Narrow content (max 640px)</Container>
+<Container size="md">Medium content (max 768px)</Container>
+<Container size="lg">Wide content (max 1024px)</Container>
+<Container size="xl">Extra wide content (max 1280px)</Container>
+<Container size="full">Full width with padding</Container>
+```
+
+---
+
+## AspectRatio
+
+**Use for:**
+- Maintaining image aspect ratios
+- Video containers
+- Consistent card thumbnails
+
+```tsx
+import { AspectRatio, Image } from '@r-ui/react-native'
+
+// 16:9 video container
+<AspectRatio ratio={16/9}>
+  <Image source={{ uri: '...' }} style={{ width: '100%', height: '100%' }} />
+</AspectRatio>
+
+// Square thumbnail
+<AspectRatio ratio={1}>
+  <Image source={{ uri: '...' }} style={{ width: '100%', height: '100%' }} />
+</AspectRatio>
+
+// Common ratios: 16/9, 4/3, 1, 3/2, 2/3
+```
+
+---
+
+## ScrollArea
+
+**Use for:**
+- Custom styled scrollbars
+- Horizontal scrolling content
+- Scrollable containers with fixed dimensions
+
+```tsx
+import {
+  ScrollArea,
+  ScrollAreaViewport,
+  ScrollAreaScrollbar,
+  ScrollAreaThumb,
+} from '@r-ui/react-native'
+
+<ScrollArea style={{ height: 300 }}>
+  <ScrollAreaViewport>
+    {/* Long content here */}
+  </ScrollAreaViewport>
+  <ScrollAreaScrollbar orientation="vertical">
+    <ScrollAreaThumb />
+  </ScrollAreaScrollbar>
+</ScrollArea>
+```
+
+---
+
+## Layout Patterns
+
+### Page Layout
+
+```tsx
+<Container size="lg" padding="lg">
+  <Flex direction="column" gap="xl">
+    <Header />
+    <Grid columns={{ base: 1, md: 3 }} gap="lg">
+      <GridItem colSpan={{ base: 1, md: 2 }}>
+        <MainContent />
+      </GridItem>
+      <Sidebar />
+    </Grid>
+    <Footer />
+  </Flex>
+</Container>
+```
+
+### Card Grid
+
+```tsx
+<Grid columns={{ base: 1, sm: 2, lg: 3, xl: 4 }} gap="md">
+  {items.map(item => (
+    <Card key={item.id}>
+      <AspectRatio ratio={16/9}>
+        <Image source={{ uri: item.image }} />
+      </AspectRatio>
+      <CardContent>
+        <Text>{item.title}</Text>
+      </CardContent>
+    </Card>
+  ))}
+</Grid>
+```
+
+### Form Layout
+
+```tsx
+<Flex direction="column" gap="lg">
+  <Grid columns={2} gap="md">
+    <Input label="First Name" />
+    <Input label="Last Name" />
+  </Grid>
+  <Input label="Email" />
+  <Textarea label="Message" />
+  <Separator />
+  <Flex direction="row" justify="end" gap="sm">
+    <Button variant="ghost">Cancel</Button>
+    <Button variant="primary">Submit</Button>
+  </Flex>
+</Flex>
+```
+
+</GuideLayout>
