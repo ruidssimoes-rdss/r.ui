@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import type { LintIssue } from '@/lib/linter/types';
+import { ruleExplanations } from '@/lib/linter/rule-explanations';
 
 interface LintResultsProps {
   issues: LintIssue[];
@@ -30,12 +31,8 @@ export function LintResults({ issues, score }: LintResultsProps) {
               {warnings.length} warning{warnings.length !== 1 ? 's' : ''}
             </span>
           )}
-          {infos.length > 0 && (
-            <span className="text-gray-500">{infos.length} info</span>
-          )}
-          {issues.length === 0 && (
-            <span className="text-gray-500">No issues found</span>
-          )}
+          {infos.length > 0 && <span className="text-gray-500">{infos.length} info</span>}
+          {issues.length === 0 && <span className="text-gray-500">No issues found</span>}
         </div>
         <span className={`text-sm font-medium ${scoreColor}`}>{score}/100</span>
       </div>
@@ -57,28 +54,28 @@ export function LintResults({ issues, score }: LintResultsProps) {
 }
 
 function LintIssueRow({ issue }: { issue: LintIssue }) {
+  const [expanded, setExpanded] = React.useState(false);
+
   const severityStyles = {
     error: {
       label: 'ERROR',
       textColor: 'text-red-600 dark:text-red-500',
-      borderColor: 'border-red-500',
     },
     warning: {
       label: 'WARN',
       textColor: 'text-amber-600 dark:text-amber-500',
-      borderColor: 'border-amber-500',
     },
     info: {
       label: 'INFO',
       textColor: 'text-gray-500',
-      borderColor: 'border-gray-400',
     },
   };
 
   const style = severityStyles[issue.severity];
+  const explanation = ruleExplanations[issue.rule];
 
   return (
-    <div className={`py-3 border-b border-gray-200 dark:border-gray-800 last:border-b-0`}>
+    <div className="py-3 border-b border-gray-200 dark:border-gray-800 last:border-b-0">
       <div className="flex items-center gap-2 text-sm mb-1">
         <span className={`font-medium ${style.textColor}`}>{style.label}</span>
         <span className="text-gray-500 dark:text-gray-400">{issue.rule}</span>
@@ -94,11 +91,43 @@ function LintIssueRow({ issue }: { issue: LintIssue }) {
       )}
 
       {(issue.fix || issue.docs) && (
-        <p className="text-xs text-gray-500 dark:text-gray-400">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
           {issue.fix && <>Fix: {issue.fix}</>}
           {issue.fix && issue.docs && <> · </>}
           {issue.docs && <>{issue.docs}</>}
         </p>
+      )}
+
+      {explanation && (
+        <>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+          >
+            {expanded ? 'Hide explanation' : 'Why this matters?'}
+          </button>
+
+          {expanded && (
+            <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-800 text-sm space-y-1">
+              <p>
+                <span className="text-gray-500 dark:text-gray-400">Why: </span>
+                <span className="text-gray-700 dark:text-gray-300">{explanation.why}</span>
+              </p>
+              <p>
+                <span className="text-gray-500 dark:text-gray-400">Impact: </span>
+                <span className="text-gray-700 dark:text-gray-300">{explanation.impact}</span>
+              </p>
+              <a
+                href={explanation.learnMore}
+                target={explanation.learnMore.startsWith('http') ? '_blank' : undefined}
+                rel={explanation.learnMore.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="inline-block text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:underline"
+              >
+                Learn more →
+              </a>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
