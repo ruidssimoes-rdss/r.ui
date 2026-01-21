@@ -5,6 +5,7 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
 import { useSidebar } from './SidebarContext';
+import { TOUCH_TARGET, isNative } from '../../utils/platform';
 
 // ============================================================================
 // Types
@@ -87,10 +88,12 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: spacing[2],
+    paddingVertical: spacing[3],
     paddingHorizontal: spacing[3],
     borderRadius: radius.md,
     marginVertical: spacing[0.5] || 2,
+    // Ensure minimum touch target on native platforms
+    minHeight: isNative ? TOUCH_TARGET : undefined,
   },
   itemActive: {
     backgroundColor: colors.bg.elevated,

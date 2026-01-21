@@ -14,6 +14,19 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
+import { TOUCH_TARGET, getHitSlop, isNative, interactiveSize } from '../../utils/platform';
+
+// Checkbox visual size for hitSlop calculation
+const CHECKBOX_SIZE = 18;
+const checkboxHitSlop = getHitSlop(CHECKBOX_SIZE);
+
+// Pagination button size (visual)
+const PAGINATION_BUTTON_SIZE = 28;
+const paginationHitSlop = getHitSlop(PAGINATION_BUTTON_SIZE);
+
+// Search clear button size
+const SEARCH_CLEAR_SIZE = 24;
+const searchClearHitSlop = getHitSlop(SEARCH_CLEAR_SIZE);
 
 // ============================================================================
 // Types
@@ -402,6 +415,7 @@ export function DataTableHeader({ style }: DataTableHeaderProps) {
         <Pressable
           onPress={toggleAllRows}
           style={styles.checkboxCell}
+          hitSlop={checkboxHitSlop}
           accessibilityRole="checkbox"
           accessibilityState={{ checked: allSelected }}
           accessibilityLabel="Select all rows"
@@ -444,6 +458,7 @@ export function DataTableHeaderCell({ column, style }: DataTableHeaderCellProps)
       onPress={column.sortable ? handlePress : undefined}
       style={[
         styles.headerCell,
+        column.sortable && styles.headerCellSortable,
         column.width ? { width: column.width } : styles.flexCell,
         style,
       ]}
@@ -493,6 +508,7 @@ export function DataTableRow<T>({ row, index, style }: DataTableRowProps<T>) {
         <Pressable
           onPress={() => toggleRowSelection(rowKey)}
           style={styles.checkboxCell}
+          hitSlop={checkboxHitSlop}
           accessibilityRole="checkbox"
           accessibilityState={{ checked: isSelected }}
           accessibilityLabel="Select row"
@@ -562,6 +578,7 @@ export function DataTablePagination({ pageSizeOptions = [10, 25, 50], style }: D
           onPress={() => setCurrentPage(0)}
           disabled={currentPage === 0}
           style={[styles.paginationButton, currentPage === 0 && styles.paginationButtonDisabled]}
+          hitSlop={paginationHitSlop}
           accessibilityRole="button"
           accessibilityLabel="First page"
         >
@@ -573,6 +590,7 @@ export function DataTablePagination({ pageSizeOptions = [10, 25, 50], style }: D
           onPress={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 0}
           style={[styles.paginationButton, currentPage === 0 && styles.paginationButtonDisabled]}
+          hitSlop={paginationHitSlop}
           accessibilityRole="button"
           accessibilityLabel="Previous page"
         >
@@ -587,6 +605,7 @@ export function DataTablePagination({ pageSizeOptions = [10, 25, 50], style }: D
           onPress={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage >= totalPages - 1}
           style={[styles.paginationButton, currentPage >= totalPages - 1 && styles.paginationButtonDisabled]}
+          hitSlop={paginationHitSlop}
           accessibilityRole="button"
           accessibilityLabel="Next page"
         >
@@ -598,6 +617,7 @@ export function DataTablePagination({ pageSizeOptions = [10, 25, 50], style }: D
           onPress={() => setCurrentPage(totalPages - 1)}
           disabled={currentPage >= totalPages - 1}
           style={[styles.paginationButton, currentPage >= totalPages - 1 && styles.paginationButtonDisabled]}
+          hitSlop={paginationHitSlop}
           accessibilityRole="button"
           accessibilityLabel="Last page"
         >
@@ -630,6 +650,7 @@ export function DataTableSearch({ placeholder = 'Search...', style }: DataTableS
         <Pressable
           onPress={() => setSearchQuery('')}
           style={styles.searchClear}
+          hitSlop={searchClearHitSlop}
           accessibilityRole="button"
           accessibilityLabel="Clear search"
         >
@@ -700,6 +721,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: spacing[3],
     paddingHorizontal: spacing[4],
+  },
+  headerCellSortable: {
+    // Ensure sortable headers meet touch target on native
+    minHeight: isNative ? TOUCH_TARGET : undefined,
   },
   headerText: {
     fontFamily: fontFamilies.sans,
@@ -793,10 +818,15 @@ const styles = StyleSheet.create({
     gap: spacing[1],
   },
   paginationButton: {
-    paddingVertical: spacing[1],
-    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[2],
+    paddingHorizontal: spacing[3],
     borderRadius: radius.sm,
     backgroundColor: colors.bg.surface,
+    // Improved touch area with better padding
+    minWidth: isNative ? interactiveSize.sm : 32,
+    minHeight: isNative ? interactiveSize.sm : 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   paginationButtonDisabled: {
     opacity: 0.4,
@@ -836,7 +866,12 @@ const styles = StyleSheet.create({
   },
   searchClear: {
     marginLeft: spacing[2],
-    padding: spacing[1],
+    padding: spacing[2],
+    // Minimum touch target for clear button
+    minWidth: isNative ? interactiveSize.sm : 32,
+    minHeight: isNative ? interactiveSize.sm : 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   searchClearText: {
     fontSize: fontSizes.lg,

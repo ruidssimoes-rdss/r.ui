@@ -5,6 +5,7 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
 import { useSidebar } from './SidebarContext';
+import { TOUCH_TARGET, isNative } from '../../utils/platform';
 
 // ============================================================================
 // Types
@@ -121,9 +122,11 @@ const styles = StyleSheet.create({
   trigger: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: spacing[2],
+    paddingVertical: spacing[3],
     paddingHorizontal: spacing[3],
     borderRadius: radius.md,
+    // Ensure minimum touch target on native platforms
+    minHeight: isNative ? TOUCH_TARGET : undefined,
   },
   triggerPressed: {
     backgroundColor: colors.bg.elevated,
@@ -133,6 +136,9 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
+    // Ensure minimum touch target when collapsed
+    minWidth: isNative ? TOUCH_TARGET : undefined,
+    minHeight: isNative ? TOUCH_TARGET : undefined,
   },
   icon: {
     marginRight: spacing[3],

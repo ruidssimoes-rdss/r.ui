@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { animations } from '../../tokens/animations';
+import { TOUCH_TARGET, isNative } from '../../utils/platform';
 
 // Types
 export interface CollapsibleProps {
@@ -180,6 +181,9 @@ const styles = StyleSheet.create({
   collapsible: {},
   trigger: {
     backgroundColor: 'transparent',
+    // Ensure minimum touch target on native platforms
+    minHeight: isNative ? TOUCH_TARGET : undefined,
+    justifyContent: 'center',
   },
   triggerPressed: {
     opacity: 0.7,

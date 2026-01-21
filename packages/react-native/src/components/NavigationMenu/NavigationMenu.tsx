@@ -21,6 +21,7 @@ import {
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
+import { TOUCH_TARGET, isNative } from '../../utils/platform';
 
 // Types
 export type NavigationMenuOrientation = 'horizontal' | 'vertical';
@@ -434,9 +435,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing[4],
-    paddingVertical: spacing[2],
+    paddingVertical: spacing[3],
     borderRadius: radius.md,
     gap: spacing[1],
+    // Ensure minimum touch target on native platforms
+    minHeight: isNative ? TOUCH_TARGET : undefined,
   },
   triggerActive: {
     backgroundColor: colors.bg.elevated,
@@ -486,8 +489,10 @@ const styles = StyleSheet.create({
   },
   link: {
     paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
+    paddingVertical: spacing[3],
     borderRadius: radius.sm,
+    // Ensure minimum touch target on native platforms
+    minHeight: isNative ? TOUCH_TARGET : undefined,
   },
   linkActive: {
     backgroundColor: colors.bg.surface,

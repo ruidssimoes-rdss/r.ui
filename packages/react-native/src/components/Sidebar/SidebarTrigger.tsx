@@ -4,6 +4,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { useSidebar } from './SidebarContext';
+import { TOUCH_TARGET, isNative } from '../../utils/platform';
 
 // ============================================================================
 // Types
@@ -60,8 +61,9 @@ function HamburgerIcon({ open }: { open: boolean }) {
 
 const styles = StyleSheet.create({
   trigger: {
-    width: 40,
-    height: 40,
+    // Use platform-aware touch target size
+    width: isNative ? TOUCH_TARGET : 40,
+    height: isNative ? TOUCH_TARGET : 40,
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',

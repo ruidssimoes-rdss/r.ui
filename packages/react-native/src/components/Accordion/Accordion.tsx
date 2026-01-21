@@ -18,6 +18,7 @@ import {
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { animations } from '../../tokens/animations';
+import { TOUCH_TARGET, isNative } from '../../utils/platform';
 
 // Types
 export type AccordionType = 'single' | 'multiple';
@@ -302,6 +303,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[4],
     backgroundColor: colors.bg.surface,
+    // Ensure minimum touch target height on native platforms
+    minHeight: isNative ? TOUCH_TARGET : undefined,
   },
   triggerPressed: {
     backgroundColor: colors.bg.elevated,
