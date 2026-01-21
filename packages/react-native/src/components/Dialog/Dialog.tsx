@@ -18,12 +18,14 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Line } from 'react-native-svg';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { TOUCH_TARGET, getHitSlop, isNative } from '../../utils/platform';
 
 // Built-in X icon for close button
 function CloseIcon({ size = 20, color = colors.text.secondary }: { size?: number; color?: string }) {
@@ -77,6 +79,8 @@ export interface DialogContentProps {
   style?: ViewStyle;
   /** Show a built-in close button (X) in the top-right corner */
   showCloseButton?: boolean;
+  /** Display as fullscreen dialog (uses SafeArea on native) */
+  fullscreen?: boolean;
 }
 
 export interface DialogHeaderProps {
@@ -172,7 +176,11 @@ export function DialogTrigger({ children, style, asChild = false }: DialogTrigge
   );
 }
 
-export function DialogContent({ children, style, showCloseButton = false }: DialogContentProps) {
+// Close button size meets platform touch targets (iOS: 44pt, Android: 48dp)
+const CLOSE_BUTTON_SIZE = TOUCH_TARGET;
+const CLOSE_ICON_SIZE = 20;
+
+export function DialogContent({ children, style, showCloseButton = false, fullscreen = false }: DialogContentProps) {
   const { open, onOpenChange } = useDialogContext();
   const reducedMotion = useReducedMotion();
   const scaleAnim = useRef(new Animated.Value(reducedMotion ? 1 : 0.9)).current;
@@ -205,6 +213,18 @@ export function DialogContent({ children, style, showCloseButton = false }: Dial
     }
   }, [open, reducedMotion]);
 
+  // Wrap content with SafeAreaView for fullscreen dialogs on native
+  const contentWrapper = (content: React.ReactNode) => {
+    if (fullscreen && isNative) {
+      return (
+        <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+          {content}
+        </SafeAreaView>
+      );
+    }
+    return content;
+  };
+
   return (
     <Modal
       visible={open}
@@ -225,32 +245,37 @@ export function DialogContent({ children, style, showCloseButton = false }: Dial
           ]}
         />
       </Pressable>
-      <View style={styles.centeredView} pointerEvents="box-none">
+      <View style={[styles.centeredView, fullscreen && styles.fullscreenView]} pointerEvents="box-none">
         <Animated.View
           style={[
             styles.content,
+            fullscreen && styles.fullscreenContent,
             {
-              transform: [{ scale: scaleAnim }],
+              transform: fullscreen ? [] : [{ scale: scaleAnim }],
               opacity: opacityAnim,
             },
             style,
           ]}
         >
-          {showCloseButton && (
-            <Pressable
-              onPress={() => onOpenChange(false)}
-              style={({ pressed }) => [
-                styles.closeButton,
-                pressed && styles.closeButtonPressed,
-              ]}
-              accessibilityRole="button"
-              accessibilityLabel="Close dialog"
-              hitSlop={8}
-            >
-              <CloseIcon size={20} color={colors.text.secondary} />
-            </Pressable>
+          {contentWrapper(
+            <>
+              {showCloseButton && (
+                <Pressable
+                  onPress={() => onOpenChange(false)}
+                  style={({ pressed }) => [
+                    styles.closeButton,
+                    pressed && styles.closeButtonPressed,
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Close dialog"
+                  hitSlop={getHitSlop(CLOSE_BUTTON_SIZE)}
+                >
+                  <CloseIcon size={CLOSE_ICON_SIZE} color={colors.text.secondary} />
+                </Pressable>
+              )}
+              {children}
+            </>
           )}
-          {children}
         </Animated.View>
       </View>
     </Modal>
@@ -346,6 +371,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: spacing[4],
   },
+  fullscreenView: {
+    padding: 0,
+  },
   content: {
     backgroundColor: colors.bg.elevated,
     borderRadius: radius.xl,
@@ -353,6 +381,14 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
     ...shadows.xl,
+  },
+  fullscreenContent: {
+    flex: 1,
+    maxWidth: '100%',
+    borderRadius: 0,
+  },
+  safeArea: {
+    flex: 1,
   },
   header: {
     gap: spacing[2],
@@ -376,10 +412,10 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 12,
-    right: 12,
-    width: 32,
-    height: 32,
+    top: spacing[2],
+    right: spacing[2],
+    width: CLOSE_BUTTON_SIZE,
+    height: CLOSE_BUTTON_SIZE,
     borderRadius: radius.sm,
     alignItems: 'center',
     justifyContent: 'center',

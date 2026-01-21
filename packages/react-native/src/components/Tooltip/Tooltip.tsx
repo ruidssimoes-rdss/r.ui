@@ -16,11 +16,13 @@ import {
   TextStyle,
   Dimensions,
   Platform,
+  LayoutChangeEvent,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { Arrow } from '../_internal/Arrow';
+import { TOUCH_TARGET, getHitSlopRect, isNative } from '../../utils/platform';
 
 export type TooltipSide = 'top' | 'bottom' | 'left' | 'right';
 
@@ -122,6 +124,7 @@ export function Tooltip({
 export function TooltipTrigger({ children, style }: TooltipTriggerProps) {
   const { onOpenChange, setTriggerLayout } = useTooltipContext();
   const triggerRef = useRef<View>(null);
+  const [triggerSize, setTriggerSize] = useState({ width: 0, height: 0 });
 
   const measureAndOpen = () => {
     triggerRef.current?.measureInWindow((x, y, width, height) => {
@@ -130,13 +133,23 @@ export function TooltipTrigger({ children, style }: TooltipTriggerProps) {
     });
   };
 
-  // On mobile, use long press; on web, could use hover
-  const handleLongPress = () => {
-    measureAndOpen();
+  // On mobile, use tap-to-show (more reliable than long press for info icons)
+  // On web, use hover
+  const handlePress = () => {
+    if (isNative) {
+      measureAndOpen();
+    }
   };
 
   const handlePressOut = () => {
-    onOpenChange(false);
+    if (isNative) {
+      onOpenChange(false);
+    }
+  };
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout;
+    setTriggerSize({ width, height });
   };
 
   // For web hover support
@@ -151,11 +164,13 @@ export function TooltipTrigger({ children, style }: TooltipTriggerProps) {
   return (
     <Pressable
       ref={triggerRef}
-      onLongPress={handleLongPress}
+      onPress={handlePress}
       onPressOut={handlePressOut}
-      delayLongPress={300}
-      style={style}
+      onLayout={handleLayout}
+      style={[styles.trigger, style]}
       accessibilityRole="button"
+      accessibilityHint="Tap to show tooltip"
+      hitSlop={getHitSlopRect(triggerSize.width, triggerSize.height)}
       {...webProps}
     >
       {children}
@@ -276,6 +291,12 @@ export function TooltipContent({ style, textStyle }: TooltipContentProps) {
 }
 
 const styles = StyleSheet.create({
+  trigger: {
+    minWidth: TOUCH_TARGET,
+    minHeight: TOUCH_TARGET,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
   },

@@ -20,6 +20,7 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
 import { Arrow } from '../_internal/Arrow';
+import { TOUCH_TARGET, getHitSlopRect } from '../../utils/platform';
 
 export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
 export type PopoverAlign = 'start' | 'center' | 'end';
@@ -118,6 +119,7 @@ export function Popover({
 export function PopoverTrigger({ children, style }: PopoverTriggerProps) {
   const { onOpenChange, setTriggerLayout } = usePopoverContext();
   const triggerRef = useRef<View>(null);
+  const [triggerSize, setTriggerSize] = useState({ width: 0, height: 0 });
 
   const handlePress = () => {
     triggerRef.current?.measureInWindow((x, y, width, height) => {
@@ -126,8 +128,20 @@ export function PopoverTrigger({ children, style }: PopoverTriggerProps) {
     });
   };
 
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout;
+    setTriggerSize({ width, height });
+  };
+
   return (
-    <Pressable ref={triggerRef} onPress={handlePress} accessibilityRole="button" style={style}>
+    <Pressable
+      ref={triggerRef}
+      onPress={handlePress}
+      onLayout={handleLayout}
+      accessibilityRole="button"
+      style={[styles.trigger, style]}
+      hitSlop={getHitSlopRect(triggerSize.width, triggerSize.height)}
+    >
       {children}
     </Pressable>
   );
@@ -316,6 +330,12 @@ export function PopoverClose({ children, style }: PopoverCloseProps) {
 }
 
 const styles = StyleSheet.create({
+  trigger: {
+    minWidth: TOUCH_TARGET,
+    minHeight: TOUCH_TARGET,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
   },

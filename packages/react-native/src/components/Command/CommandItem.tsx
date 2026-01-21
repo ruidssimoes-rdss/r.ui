@@ -5,6 +5,7 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes } from '../../tokens/typography';
 import { useCommand } from './CommandContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 export interface CommandItemProps {
   /** Unique value for the item */
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    minHeight: TOUCH_TARGET,
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[3],
     marginHorizontal: spacing[2],

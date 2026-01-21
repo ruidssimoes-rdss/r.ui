@@ -12,6 +12,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { fontFamilies, fontSizes } from '../../tokens/typography';
 import { useCommand } from './CommandContext';
+import { TOUCH_TARGET, getHitSlop, platformSpacing } from '../../utils/platform';
 
 export interface CommandInputProps extends Omit<TextInputProps, 'value' | 'onChangeText' | 'style'> {
   /** Placeholder text */
@@ -70,6 +71,7 @@ export function CommandInput({
           style={styles.clearButton}
           accessibilityRole="button"
           accessibilityLabel="Clear search"
+          hitSlop={getHitSlop(TOUCH_TARGET)}
         >
           <Text style={styles.clearIcon}>×</Text>
         </Pressable>
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing[3],
-    paddingVertical: spacing[3],
+    minHeight: TOUCH_TARGET,
     borderBottomWidth: 1,
     borderBottomColor: colors.border.default,
   },
@@ -97,11 +99,14 @@ const styles = StyleSheet.create({
     fontFamily: fontFamilies.sans,
     fontSize: fontSizes.base,
     color: colors.text.primary,
-    padding: 0,
+    paddingVertical: platformSpacing.inputPaddingVertical,
   },
   clearButton: {
-    padding: spacing[1],
-    marginLeft: spacing[2],
+    width: TOUCH_TARGET,
+    height: TOUCH_TARGET,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: spacing[1],
   },
   clearIcon: {
     fontSize: fontSizes.lg,

@@ -11,6 +11,7 @@ import {
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
+import { TOUCH_TARGET, getHitSlop } from '../../utils/platform';
 
 export type AlertVariant = 'default' | 'info' | 'success' | 'warning' | 'error';
 
@@ -95,6 +96,10 @@ const variantStyles: Record<
   },
 };
 
+// Close button dimensions
+const CLOSE_ICON_SIZE = 16;
+const CLOSE_BUTTON_SIZE = TOUCH_TARGET;
+
 function CloseIcon() {
   return (
     <View style={iconStyles.closeIcon}>
@@ -106,8 +111,8 @@ function CloseIcon() {
 
 const iconStyles = StyleSheet.create({
   closeIcon: {
-    width: 16,
-    height: 16,
+    width: CLOSE_ICON_SIZE,
+    height: CLOSE_ICON_SIZE,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -165,6 +170,7 @@ export function Alert({
           style={styles.closeButton}
           accessibilityLabel="Dismiss alert"
           accessibilityRole="button"
+          hitSlop={getHitSlop(CLOSE_BUTTON_SIZE)}
         >
           <CloseIcon />
         </Pressable>
@@ -207,8 +213,11 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   closeButton: {
-    padding: spacing[1],
-    marginTop: -spacing[1],
-    marginRight: -spacing[1],
+    width: CLOSE_BUTTON_SIZE,
+    height: CLOSE_BUTTON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -spacing[2],
+    marginRight: -spacing[2],
   },
 });

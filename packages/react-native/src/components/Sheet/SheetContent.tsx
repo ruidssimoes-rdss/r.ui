@@ -8,12 +8,14 @@ import {
   ViewStyle,
   Dimensions,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { useSheet, SheetContentProps, SheetSide } from './SheetContext';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { SheetOverlay } from './SheetOverlay';
+import { TOUCH_TARGET, isNative } from '../../utils/platform';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -43,12 +45,19 @@ function getContentStyle(side: SheetSide): ViewStyle {
   }
 }
 
+// Drag handle dimensions - expanded touch area for accessibility
+const HANDLE_VISUAL_WIDTH = 36;
+const HANDLE_VISUAL_HEIGHT = 4;
+const HANDLE_TOUCH_HEIGHT = TOUCH_TARGET; // Platform-specific minimum (iOS: 44pt, Android: 48dp)
+
 /**
  * SheetContent - The sliding panel with gesture-based dismissal.
+ * Includes SafeArea support for notched devices on bottom sheets.
  */
 export function SheetContent({ children, style }: SheetContentProps) {
   const { open, onOpenChange, side } = useSheet();
   const reducedMotion = useReducedMotion();
+  const insets = useSafeAreaInsets();
   const translateAnim = useRef(new Animated.Value(getInitialTranslate(side))).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -130,12 +139,24 @@ export function SheetContent({ children, style }: SheetContentProps) {
     ? { transform: [{ translateY: translateAnim }] }
     : { transform: [{ translateX: translateAnim }] };
 
+  // Calculate SafeArea padding for edge-positioned sheets on native
+  const safeAreaStyle: ViewStyle = isNative ? {
+    paddingBottom: side === 'bottom' ? insets.bottom : 0,
+    paddingTop: side === 'top' ? insets.top : 0,
+    paddingLeft: side === 'left' ? insets.left : 0,
+    paddingRight: side === 'right' ? insets.right : 0,
+  } : {};
+
   return (
     <Modal visible={open} transparent animationType="none" onRequestClose={closeSheet}>
       <View style={styles.container}>
         <SheetOverlay opacity={backdropOpacity} onPress={closeSheet} />
-        <Animated.View {...panResponder.panHandlers} style={[getContentStyle(side), transformStyle, style]}>
-          {side === 'bottom' && <View style={styles.handle} />}
+        <Animated.View {...panResponder.panHandlers} style={[getContentStyle(side), transformStyle, safeAreaStyle, style]}>
+          {side === 'bottom' && (
+            <View style={styles.handleContainer}>
+              <View style={styles.handle} />
+            </View>
+          )}
           <View style={styles.contentInner}>{children}</View>
         </Animated.View>
       </View>
@@ -145,14 +166,17 @@ export function SheetContent({ children, style }: SheetContentProps) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  handleContainer: {
+    width: '100%',
+    height: HANDLE_TOUCH_HEIGHT,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   handle: {
-    width: 36,
-    height: 4,
+    width: HANDLE_VISUAL_WIDTH,
+    height: HANDLE_VISUAL_HEIGHT,
     backgroundColor: colors.border.strong,
     borderRadius: 2,
-    alignSelf: 'center',
-    marginTop: spacing[2],
-    marginBottom: spacing[2],
   },
   contentInner: { padding: spacing[4] },
 });

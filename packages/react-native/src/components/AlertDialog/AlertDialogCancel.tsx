@@ -4,6 +4,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { useAlertDialog } from './AlertDialogContext';
+import { TOUCH_TARGET, platformSpacing } from '../../utils/platform';
 
 export interface AlertDialogCancelProps {
   /** Button content */
@@ -46,10 +47,11 @@ export function AlertDialogCancel({
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: spacing[2],
+    paddingVertical: platformSpacing.buttonPaddingVertical,
     paddingHorizontal: spacing[4],
     borderRadius: radius.md,
     minWidth: 80,
+    minHeight: TOUCH_TARGET,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',

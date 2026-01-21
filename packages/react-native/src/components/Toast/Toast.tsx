@@ -11,16 +11,19 @@ import {
   Text,
   Pressable,
   Animated,
+  PanResponder,
   StyleSheet,
   ViewStyle,
   TextStyle,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
 import { animations } from '../../tokens/animations';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { TOUCH_TARGET, getHitSlop, isNative, platformSpacing } from '../../utils/platform';
 
 export type ToastVariant = 'default' | 'success' | 'warning' | 'error';
 
@@ -101,6 +104,12 @@ const variantStyles: Record<ToastVariant, { container: ViewStyle; title: TextSty
   },
 };
 
+// Close button visual/touch dimensions
+const CLOSE_ICON_SIZE = 16;
+const CLOSE_BUTTON_SIZE = TOUCH_TARGET;
+// Swipe-to-dismiss threshold
+const SWIPE_THRESHOLD = 50;
+
 interface ToastItemComponentProps {
   item: ToastItem;
   onDismiss: (id: string) => void;
@@ -109,8 +118,68 @@ interface ToastItemComponentProps {
 function ToastItemComponent({ item, onDismiss }: ToastItemComponentProps) {
   const reducedMotion = useReducedMotion();
   const translateY = useRef(new Animated.Value(reducedMotion ? 0 : -100)).current;
+  const translateX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(reducedMotion ? 1 : 0)).current;
   const variantStyle = variantStyles[item.variant || 'default'];
+
+  const dismissWithAnimation = useCallback(() => {
+    // Call the user's onDismiss callback if provided
+    item.onDismiss?.();
+
+    if (reducedMotion) {
+      // Instant dismissal for reduced motion
+      onDismiss(item.id);
+      return;
+    }
+
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: -100,
+        duration: animations.duration.fast,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: animations.duration.fast,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      onDismiss(item.id);
+    });
+  }, [item.id, item.onDismiss, onDismiss, reducedMotion, translateY, opacity]);
+
+  // Swipe-to-dismiss gesture handler
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (_, { dx }) => Math.abs(dx) > 10,
+      onPanResponderMove: (_, { dx }) => {
+        translateX.setValue(dx);
+      },
+      onPanResponderRelease: (_, { dx, vx }) => {
+        // Dismiss if swiped far enough or fast enough
+        if (Math.abs(dx) > SWIPE_THRESHOLD || Math.abs(vx) > 0.5) {
+          const direction = dx > 0 ? 1 : -1;
+          Animated.timing(translateX, {
+            toValue: direction * 400,
+            duration: animations.duration.fast,
+            useNativeDriver: true,
+          }).start(() => {
+            item.onDismiss?.();
+            onDismiss(item.id);
+          });
+        } else {
+          // Snap back
+          Animated.spring(translateX, {
+            toValue: 0,
+            useNativeDriver: true,
+            tension: 100,
+            friction: 10,
+          }).start();
+        }
+      },
+    })
+  ).current;
 
   useEffect(() => {
     if (reducedMotion) {
@@ -138,40 +207,15 @@ function ToastItemComponent({ item, onDismiss }: ToastItemComponentProps) {
       }, item.duration || 4000);
       return () => clearTimeout(timeout);
     }
-  }, [reducedMotion]);
-
-  const dismissWithAnimation = () => {
-    // Call the user's onDismiss callback if provided
-    item.onDismiss?.();
-
-    if (reducedMotion) {
-      // Instant dismissal for reduced motion
-      onDismiss(item.id);
-      return;
-    }
-
-    Animated.parallel([
-      Animated.timing(translateY, {
-        toValue: -100,
-        duration: animations.duration.fast,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: animations.duration.fast,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      onDismiss(item.id);
-    });
-  };
+  }, [reducedMotion, dismissWithAnimation, item.duration]);
 
   return (
     <Animated.View
+      {...panResponder.panHandlers}
       style={[
         styles.toast,
         variantStyle.container,
-        { transform: [{ translateY }], opacity },
+        { transform: [{ translateY }, { translateX }], opacity },
       ]}
     >
       <View style={styles.toastContent}>
@@ -195,7 +239,7 @@ function ToastItemComponent({ item, onDismiss }: ToastItemComponentProps) {
       <Pressable
         onPress={dismissWithAnimation}
         style={styles.closeButton}
-        hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        hitSlop={getHitSlop(CLOSE_BUTTON_SIZE)}
         accessibilityRole="button"
         accessibilityLabel="Dismiss"
       >
@@ -211,6 +255,7 @@ function ToastItemComponent({ item, onDismiss }: ToastItemComponentProps) {
 export function ToastProvider({ children }: ToastProviderProps) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idCounter = useRef(0);
+  const insets = useSafeAreaInsets();
 
   const toast = useCallback((options: ToastOptions): string => {
     const id = `toast-${++idCounter.current}`;
@@ -226,10 +271,13 @@ export function ToastProvider({ children }: ToastProviderProps) {
     setToasts([]);
   }, []);
 
+  // Calculate SafeArea-aware top padding for native devices
+  const safeAreaTop = isNative ? Math.max(insets.top, spacing[4]) : spacing[16];
+
   return (
     <ToastContext.Provider value={{ toast, dismiss, dismissAll }}>
       {children}
-      <View style={styles.container} pointerEvents="box-none">
+      <View style={[styles.container, { paddingTop: safeAreaTop }]} pointerEvents="box-none">
         {toasts.map((item) => (
           <ToastItemComponent key={item.id} item={item} onDismiss={dismiss} />
         ))}
@@ -244,7 +292,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    paddingTop: spacing[16],
     paddingHorizontal: spacing[4],
     alignItems: 'center',
     gap: spacing[2],
@@ -274,8 +321,10 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
   },
   actionButton: {
-    paddingVertical: spacing[1],
-    paddingHorizontal: spacing[2],
+    paddingVertical: platformSpacing.buttonPaddingVertical,
+    paddingHorizontal: spacing[3],
+    minHeight: TOUCH_TARGET,
+    justifyContent: 'center',
   },
   actionText: {
     fontSize: 13,
@@ -283,11 +332,14 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
   },
   closeButton: {
-    padding: spacing[1],
+    width: CLOSE_BUTTON_SIZE,
+    height: CLOSE_BUTTON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeIcon: {
-    width: 16,
-    height: 16,
+    width: CLOSE_ICON_SIZE,
+    height: CLOSE_ICON_SIZE,
     justifyContent: 'center',
     alignItems: 'center',
   },
