@@ -117,6 +117,15 @@ const viewportWidths: Record<DeviceMode, string> = {
 };
 
 // ========================================
+// Glass Background Images
+// ========================================
+
+const glassBackgrounds = {
+  desktop: '/images/glass/cca8661f7dae563de41c7ba6ae4916cc.jpg',
+  mobile: '/images/glass/4280d1847721e441b1a08013199fc347.jpg',
+};
+
+// ========================================
 // Main Component
 // ========================================
 
@@ -127,11 +136,25 @@ interface PlaygroundPreviewProps {
 export function PlaygroundPreview({ children }: PlaygroundPreviewProps) {
   const { deviceMode, previewTheme, glassMode } = usePlayground();
 
-  // Background: #E8E4DF for glass mode, #F9FAFB for light mode, zinc-900 for dark
+  // Background: image for glass mode, #F9FAFB for light mode, zinc-900 for dark
   const getBackgroundClass = () => {
-    if (glassMode) return 'bg-[#E8E4DF]';
+    if (glassMode) return '';
     if (previewTheme === 'dark') return 'bg-zinc-900 preview-dark';
     return 'bg-[#F9FAFB]';
+  };
+
+  // Get glass background image based on device mode
+  const getGlassBackgroundStyle = () => {
+    if (!glassMode) return {};
+    const bgImage = deviceMode === 'desktop'
+      ? glassBackgrounds.desktop
+      : glassBackgrounds.mobile;
+    return {
+      backgroundImage: `url(${bgImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundColor: '#E8E4DF', // Fallback color
+    };
   };
 
   return (
@@ -140,6 +163,7 @@ export function PlaygroundPreview({ children }: PlaygroundPreviewProps) {
         relative h-full overflow-hidden rounded-lg
         ${getBackgroundClass()}
       `}
+      style={getGlassBackgroundStyle()}
       data-glass={glassMode ? 'true' : 'false'}
     >
       {/* Preview container - centered with 32px padding inside */}
