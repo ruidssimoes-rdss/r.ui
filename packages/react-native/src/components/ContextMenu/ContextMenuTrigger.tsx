@@ -8,6 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { useContextMenu } from './ContextMenuContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 // Try to import haptics if available
 let triggerHaptic: (() => void) | null = null;
@@ -78,5 +79,7 @@ export function ContextMenuTrigger({
 const styles = StyleSheet.create({
   trigger: {
     alignSelf: 'flex-start',
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
+    justifyContent: 'center',
   },
 });

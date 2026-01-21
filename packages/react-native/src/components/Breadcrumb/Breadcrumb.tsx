@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, Pressable, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
+import { TOUCH_TARGET, getHitSlopRect, platformSpacing } from '../../utils/platform';
 
 export interface BreadcrumbProps {
   /** Breadcrumb children (BreadcrumbList) */
@@ -108,10 +109,15 @@ export function BreadcrumbItem({ children, style }: BreadcrumbItemProps) {
 }
 
 export function BreadcrumbLink({ onPress, children, style, textStyle }: BreadcrumbLinkProps) {
+  // Calculate hitSlop for touch target compliance
+  // Links are typically ~24px tall with current padding, need hitSlop to reach 44/48pt
+  const hitSlop = useMemo(() => getHitSlopRect(80, 24), []);
+
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [styles.link, pressed && styles.linkPressed, style]}
+      hitSlop={hitSlop}
       accessibilityRole="link"
     >
       <Text style={[styles.linkText, textStyle]}>{children}</Text>
@@ -150,7 +156,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   link: {
-    paddingVertical: spacing[1],
+    paddingVertical: platformSpacing.buttonPaddingVertical, // Platform-aware padding for comfortable tapping
+    paddingHorizontal: spacing[1],
   },
   linkPressed: {
     opacity: 0.7,
@@ -189,7 +196,8 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '-45deg' }, { translateY: 2 }],
   },
   page: {
-    paddingVertical: spacing[1],
+    paddingVertical: platformSpacing.buttonPaddingVertical, // Platform-aware padding consistent with links
+    paddingHorizontal: spacing[1],
   },
   pageText: {
     fontFamily: fontFamilies.sans,

@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet, ViewStyle, TextStyle } from 'react-n
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { useContextMenu } from './ContextMenuContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 export interface ContextMenuItemProps {
   /** Item content */
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[3],
     gap: spacing[2],

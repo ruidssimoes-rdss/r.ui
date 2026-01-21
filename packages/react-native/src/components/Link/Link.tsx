@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text, Pressable, Linking, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
+import { platformSpacing, getHitSlopRect } from '../../utils/platform';
 
 export type LinkVariant = 'default' | 'muted' | 'destructive';
 export type LinkUnderline = 'always' | 'hover' | 'none';
@@ -83,11 +84,16 @@ export function Link({
     }
   };
 
+  // Calculate hitSlop for touch target compliance
+  // Text links are typically ~20-24px tall, need hitSlop to reach 44/48pt
+  const hitSlop = useMemo(() => getHitSlopRect(100, 24), []);
+
   return (
     <Pressable
       onPress={handlePress}
       disabled={disabled}
-      style={({ pressed }) => [pressed && !disabled && styles.pressed, style]}
+      style={({ pressed }) => [styles.container, pressed && !disabled && styles.pressed, style]}
+      hitSlop={hitSlop}
       accessibilityRole="link"
       accessibilityState={{ disabled }}
       accessibilityHint={external ? 'Opens in browser' : undefined}
@@ -111,6 +117,9 @@ export function Link({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: platformSpacing.buttonPaddingVertical, // Platform-aware padding for comfortable tapping
+  },
   pressed: {
     opacity: 0.8,
   },

@@ -1,6 +1,7 @@
 import React, { cloneElement, isValidElement } from 'react';
-import { Pressable, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, ViewStyle } from 'react-native';
 import { useActionSheet } from './ActionSheetContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 export interface ActionSheetTriggerProps {
   /** Trigger element */
@@ -29,8 +30,15 @@ export function ActionSheetTrigger({
   }
 
   return (
-    <Pressable onPress={handlePress} style={style} accessibilityRole="button">
+    <Pressable onPress={handlePress} style={[styles.trigger, style]} accessibilityRole="button">
       {children}
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  trigger: {
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
+    justifyContent: 'center',
+  },
+});

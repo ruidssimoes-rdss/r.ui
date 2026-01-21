@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet, ViewStyle, TextStyle } from 'react-n
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { useActionSheet } from './ActionSheetContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 export interface ActionSheetItemProps {
   /** Item content */
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
     paddingVertical: spacing[4],
     paddingHorizontal: spacing[4],
     borderBottomWidth: 1,

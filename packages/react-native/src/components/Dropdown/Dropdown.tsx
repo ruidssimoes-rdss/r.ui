@@ -21,6 +21,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 export type DropdownAlign = 'start' | 'center' | 'end';
 
@@ -134,7 +135,7 @@ export function DropdownTrigger({ children, style }: DropdownTriggerProps) {
   };
 
   return (
-    <Pressable ref={triggerRef} onPress={handlePress} style={style} accessibilityRole="button">
+    <Pressable ref={triggerRef} onPress={handlePress} style={[styles.trigger, style]} accessibilityRole="button">
       {children}
     </Pressable>
   );
@@ -266,6 +267,10 @@ export function DropdownSeparator({ style }: DropdownSeparatorProps) {
 }
 
 const styles = StyleSheet.create({
+  trigger: {
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
+    justifyContent: 'center',
+  },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
   },
@@ -281,6 +286,7 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[3],
     gap: spacing[2],

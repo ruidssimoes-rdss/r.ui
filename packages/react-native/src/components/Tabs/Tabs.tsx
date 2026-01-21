@@ -16,6 +16,7 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 export type TabsVariant = 'default' | 'pills' | 'underline';
 
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   },
   trigger: {
     flex: 1,
-    minHeight: 44,
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[3],
     alignItems: 'center',
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   triggerPill: {
-    minHeight: 44,
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[4],
     alignItems: 'center',
@@ -411,7 +412,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   triggerUnderline: {
-    minHeight: 44,
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
     paddingVertical: spacing[3],
     paddingHorizontal: spacing[4],
     alignItems: 'center',

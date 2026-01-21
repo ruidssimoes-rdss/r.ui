@@ -5,6 +5,7 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
 import { PaginationPreviousProps, PaginationNextProps } from './PaginationContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 function ChevronIcon({ direction }: { direction: 'left' | 'right' }) {
   const isLeft = direction === 'left';
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 44,
+    minHeight: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
     paddingHorizontal: spacing[2],
     borderRadius: radius.md,
     gap: spacing[1],

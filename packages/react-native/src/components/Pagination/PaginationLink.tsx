@@ -5,6 +5,7 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
 import { PaginationLinkProps } from './PaginationContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 /**
  * PaginationLink - Clickable page number button.
@@ -48,8 +49,8 @@ export function PaginationLink({
 
 const styles = StyleSheet.create({
   link: {
-    minWidth: 44,
-    height: 44,
+    minWidth: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
+    height: TOUCH_TARGET, // Platform-aware: 44pt iOS, 48dp Android, 36px Web
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.md,
