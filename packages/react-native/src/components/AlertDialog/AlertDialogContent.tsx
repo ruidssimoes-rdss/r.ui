@@ -4,9 +4,20 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
 import { useAlertDialog } from './AlertDialogContext';
 import { AlertDialogPortal } from './AlertDialogPortal';
 import { AlertDialogOverlay } from './AlertDialogOverlay';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 export interface AlertDialogContentProps {
   /** Content */
@@ -17,6 +28,8 @@ export interface AlertDialogContentProps {
 
 export function AlertDialogContent({ children, style }: AlertDialogContentProps) {
   const { open } = useAlertDialog();
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -41,6 +54,35 @@ export function AlertDialogContent({ children, style }: AlertDialogContentProps)
     }
   }, [open, scaleAnim, opacityAnim]);
 
+  // Glass mode rendering
+  if (isGlass) {
+    return (
+      <AlertDialogPortal>
+        <AlertDialogOverlay />
+        <View style={styles.centeredView} pointerEvents="box-none">
+          <Animated.View
+            style={{
+              transform: [{ scale: scaleAnim }],
+              opacity: opacityAnim,
+              width: '100%',
+              maxWidth: 400,
+            }}
+          >
+            <GlassSurface
+              borderRadius={radius.xl}
+              shadow="lg"
+              bordered
+              style={[styles.glassContent, style as ViewStyle]}
+            >
+              {children}
+            </GlassSurface>
+          </Animated.View>
+        </View>
+      </AlertDialogPortal>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
@@ -76,5 +118,8 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
     ...shadows.xl,
+  },
+  glassContent: {
+    padding: spacing[6],
   },
 });

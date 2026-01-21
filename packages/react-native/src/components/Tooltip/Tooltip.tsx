@@ -21,8 +21,19 @@ import {
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
 import { Arrow } from '../_internal/Arrow';
 import { TOUCH_TARGET, getHitSlopRect, isNative } from '../../utils/platform';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 export type TooltipSide = 'top' | 'bottom' | 'left' | 'right';
 
@@ -188,6 +199,8 @@ const oppositeSide: Record<TooltipSide, TooltipSide> = {
 
 export function TooltipContent({ style, textStyle }: TooltipContentProps) {
   const { open, onOpenChange, triggerLayout, side, content, showArrow } = useTooltipContext();
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
 
@@ -257,6 +270,49 @@ export function TooltipContent({ style, textStyle }: TooltipContentProps) {
     }
   }
 
+  // Glass mode arrow color (darker for visibility on translucent surface)
+  const arrowColor = isGlass ? 'rgba(255, 255, 255, 0.85)' : colors.text.primary;
+
+  // Glass mode rendering
+  if (isGlass) {
+    return (
+      <Modal visible={open} transparent animationType="none" onRequestClose={() => onOpenChange(false)}>
+        <View style={styles.backdrop} pointerEvents="none" />
+        <Animated.View
+          onLayout={(e) => {
+            const { width, height } = e.nativeEvent.layout;
+            setContentSize({ width, height });
+          }}
+          style={{
+            position: 'absolute',
+            top,
+            left,
+            opacity: opacityAnim,
+          }}
+        >
+          <GlassSurface
+            intensity={12}
+            borderRadius={radius.sm}
+            shadow="sm"
+            bordered
+            style={[styles.glassContent, style as ViewStyle]}
+          >
+            <Text style={[styles.glassText, textStyle]}>{content}</Text>
+            {showArrow && (
+              <Arrow
+                side={oppositeSide[side]}
+                color={arrowColor}
+                size={arrowSize}
+                style={arrowStyle}
+              />
+            )}
+          </GlassSurface>
+        </Animated.View>
+      </Modal>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <Modal visible={open} transparent animationType="none" onRequestClose={() => onOpenChange(false)}>
       <View style={styles.backdrop} pointerEvents="none" />
@@ -280,7 +336,7 @@ export function TooltipContent({ style, textStyle }: TooltipContentProps) {
         {showArrow && (
           <Arrow
             side={oppositeSide[side]}
-            color={colors.text.primary}
+            color={arrowColor}
             size={arrowSize}
             style={arrowStyle}
           />
@@ -310,6 +366,16 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12,
     color: colors.text.inverse,
+    textAlign: 'center',
+  },
+  glassContent: {
+    paddingVertical: spacing[1],
+    paddingHorizontal: spacing[2],
+    maxWidth: 200,
+  },
+  glassText: {
+    fontSize: 12,
+    color: colors.text.primary,
     textAlign: 'center',
   },
 });

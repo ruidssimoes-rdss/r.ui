@@ -17,8 +17,20 @@ import {
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
+import { radius } from '../../tokens/radius';
 import { animations } from '../../tokens/animations';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
 import { TOUCH_TARGET, isNative } from '../../utils/platform';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 // Types
 export type AccordionType = 'single' | 'multiple';
@@ -56,6 +68,7 @@ interface AccordionContextValue {
   expandedItems: string[];
   toggleItem: (value: string) => void;
   collapsible: boolean;
+  isGlass: boolean;
 }
 
 const AccordionContext = createContext<AccordionContextValue | undefined>(undefined);
@@ -95,7 +108,7 @@ export function AccordionTrigger({ children, style }: AccordionTriggerProps) {
     throw new Error('AccordionTrigger must be used within AccordionItem');
   }
 
-  const { toggleItem } = accordionContext;
+  const { toggleItem, isGlass } = accordionContext;
   const { value, isExpanded, disabled } = itemContext;
 
   const rotateAnim = useRef(new Animated.Value(isExpanded ? 1 : 0)).current;
@@ -119,8 +132,8 @@ export function AccordionTrigger({ children, style }: AccordionTriggerProps) {
       onPress={handlePress}
       disabled={disabled}
       style={({ pressed }) => [
-        styles.trigger,
-        pressed && !disabled && styles.triggerPressed,
+        isGlass ? styles.glassTrigger : styles.trigger,
+        pressed && !disabled && (isGlass ? styles.glassTriggerPressed : styles.triggerPressed),
         disabled && styles.triggerDisabled,
         style,
       ]}
@@ -143,12 +156,14 @@ export function AccordionTrigger({ children, style }: AccordionTriggerProps) {
 
 // AccordionContent
 export function AccordionContent({ children, style }: AccordionContentProps) {
+  const accordionContext = useContext(AccordionContext);
   const itemContext = useContext(AccordionItemContext);
 
-  if (!itemContext) {
+  if (!itemContext || !accordionContext) {
     throw new Error('AccordionContent must be used within AccordionItem');
   }
 
+  const { isGlass } = accordionContext;
   const { isExpanded } = itemContext;
   const [contentHeight, setContentHeight] = useState(0);
   const heightAnim = useRef(new Animated.Value(isExpanded ? 1 : 0)).current;
@@ -191,7 +206,7 @@ export function AccordionContent({ children, style }: AccordionContentProps) {
         },
       ]}
     >
-      <View onLayout={onLayout} style={[styles.content, style]}>
+      <View onLayout={onLayout} style={[isGlass ? styles.glassContent : styles.content, style]}>
         {typeof children === 'string' ? (
           <Text style={styles.contentText}>{children}</Text>
         ) : (
@@ -236,6 +251,8 @@ export function Accordion({
   children,
   style,
 }: AccordionProps) {
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
   const [internalValue, setInternalValue] = useState<string[]>(() => {
     if (defaultValue) {
       return Array.isArray(defaultValue) ? defaultValue : [defaultValue];
@@ -274,9 +291,29 @@ export function Accordion({
     [type, expandedItems, collapsible, value, onValueChange]
   );
 
+  // Glass mode rendering
+  if (isGlass) {
+    return (
+      <AccordionContext.Provider
+        value={{ type, expandedItems, toggleItem, collapsible, isGlass }}
+      >
+        <GlassSurface
+          intensity={16}
+          borderRadius={radius.md}
+          shadow="sm"
+          bordered
+          style={style as ViewStyle}
+        >
+          {children}
+        </GlassSurface>
+      </AccordionContext.Provider>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <AccordionContext.Provider
-      value={{ type, expandedItems, toggleItem, collapsible }}
+      value={{ type, expandedItems, toggleItem, collapsible, isGlass }}
     >
       <View style={[styles.accordion, style]}>
         {children}
@@ -357,5 +394,23 @@ const styles = StyleSheet.create({
     backgroundColor: colors.text.secondary,
     borderRadius: 1,
     transform: [{ rotate: '-45deg' }, { translateX: 2 }],
+  },
+  // Glass mode styles
+  glassTrigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[4],
+    backgroundColor: 'transparent',
+    minHeight: isNative ? TOUCH_TARGET : undefined,
+  },
+  glassTriggerPressed: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  glassContent: {
+    paddingHorizontal: spacing[4],
+    paddingBottom: spacing[4],
+    backgroundColor: 'transparent',
   },
 });

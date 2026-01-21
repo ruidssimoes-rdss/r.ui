@@ -15,8 +15,21 @@ import {
   LayoutChangeEvent,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
+import { spacing } from '../../tokens/spacing';
+import { radius } from '../../tokens/radius';
 import { animations } from '../../tokens/animations';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
 import { TOUCH_TARGET, isNative } from '../../utils/platform';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 // Types
 export interface CollapsibleProps {
@@ -42,6 +55,7 @@ export interface CollapsibleContentProps {
 interface CollapsibleContextValue {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  isGlass: boolean;
 }
 
 const CollapsibleContext = createContext<CollapsibleContextValue | undefined>(undefined);
@@ -96,7 +110,7 @@ export function CollapsibleContent({ children, style }: CollapsibleContentProps)
     throw new Error('CollapsibleContent must be used within Collapsible');
   }
 
-  const { open } = context;
+  const { open, isGlass } = context;
   const [contentHeight, setContentHeight] = useState(0);
   const heightAnim = useRef(new Animated.Value(open ? 1 : 0)).current;
   const opacityAnim = useRef(new Animated.Value(open ? 1 : 0)).current;
@@ -128,6 +142,35 @@ export function CollapsibleContent({ children, style }: CollapsibleContentProps)
     outputRange: [0, contentHeight || 1000],
   });
 
+  // Glass mode rendering
+  if (isGlass) {
+    return (
+      <Animated.View
+        style={[
+          styles.contentContainer,
+          {
+            height: contentHeight ? animatedHeight : 'auto',
+            opacity: opacityAnim,
+          },
+        ]}
+      >
+        <View onLayout={onLayout}>
+          <GlassSurface
+            intensity={12}
+            opacity={0.5}
+            borderRadius={radius.md}
+            shadow="sm"
+            bordered
+            style={[styles.glassContent, style as ViewStyle]}
+          >
+            {children}
+          </GlassSurface>
+        </View>
+      </Animated.View>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <Animated.View
       style={[
@@ -153,6 +196,8 @@ export function Collapsible({
   children,
   style,
 }: CollapsibleProps) {
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
 
   const isControlled = open !== undefined;
@@ -169,7 +214,7 @@ export function Collapsible({
   );
 
   return (
-    <CollapsibleContext.Provider value={{ open: isOpen, onOpenChange: handleOpenChange }}>
+    <CollapsibleContext.Provider value={{ open: isOpen, onOpenChange: handleOpenChange, isGlass }}>
       <View style={[styles.collapsible, style]}>
         {children}
       </View>
@@ -192,4 +237,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   content: {},
+  glassContent: {
+    padding: spacing[3],
+    marginTop: spacing[2],
+  },
 });

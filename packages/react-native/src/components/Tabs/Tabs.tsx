@@ -16,7 +16,18 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
 import { TOUCH_TARGET } from '../../utils/platform';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 export type TabsVariant = 'default' | 'pills' | 'underline';
 
@@ -85,6 +96,7 @@ interface TabsContextValue {
   unregisterTabRef: (value: string) => void;
   tabRefs: React.MutableRefObject<Map<string, TabRef>>;
   tabOrder: React.MutableRefObject<string[]>;
+  isGlass: boolean;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -105,6 +117,8 @@ export function Tabs({
   variant = 'default',
   style,
 }: TabsProps) {
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [tabLayouts, setTabLayouts] = useState<Record<string, TabLayout>>({});
   const tabRefs = useRef<Map<string, TabRef>>(new Map());
@@ -152,6 +166,7 @@ export function Tabs({
         unregisterTabRef,
         tabRefs,
         tabOrder,
+        isGlass,
       }}
     >
       <View style={[styles.container, style]}>{children}</View>
@@ -160,7 +175,7 @@ export function Tabs({
 }
 
 export function TabsList({ children, style }: TabsListProps) {
-  const { value, tabLayouts, variant } = useTabsContext();
+  const { value, tabLayouts, variant, isGlass } = useTabsContext();
   const indicatorX = useRef(new Animated.Value(0)).current;
   const indicatorWidth = useRef(new Animated.Value(0)).current;
   const [isInitialized, setIsInitialized] = useState(false);
@@ -192,13 +207,33 @@ export function TabsList({ children, style }: TabsListProps) {
   }, [value, tabLayouts, isInitialized]);
 
   const listStyle = variant === 'pills' ? styles.listPills : styles.list;
+  const glassListStyle = variant === 'pills' ? styles.glassListPills : styles.glassList;
+
   const indicatorStyle =
     variant === 'underline'
       ? [styles.indicatorUnderline, { left: indicatorX, width: indicatorWidth }]
       : variant === 'pills'
-        ? [styles.indicatorPill, { left: indicatorX, width: indicatorWidth }]
-        : [styles.indicator, { left: indicatorX, width: indicatorWidth }];
+        ? [isGlass ? styles.glassIndicatorPill : styles.indicatorPill, { left: indicatorX, width: indicatorWidth }]
+        : [isGlass ? styles.glassIndicator : styles.indicator, { left: indicatorX, width: indicatorWidth }];
 
+  // Glass mode rendering
+  if (isGlass && variant !== 'underline') {
+    return (
+      <GlassSurface
+        intensity={16}
+        opacity={0.5}
+        borderRadius={variant === 'pills' ? 0 : radius.md}
+        shadow="none"
+        bordered={variant !== 'pills'}
+        style={[glassListStyle, style as ViewStyle]}
+      >
+        {children}
+        {isInitialized && <Animated.View style={indicatorStyle} />}
+      </GlassSurface>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <View style={[listStyle, style]}>
       {children}
@@ -465,5 +500,32 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingTop: spacing[4],
+  },
+  // Glass mode styles
+  glassList: {
+    flexDirection: 'row',
+    padding: spacing[1],
+    position: 'relative',
+  },
+  glassListPills: {
+    flexDirection: 'row',
+    gap: spacing[1],
+    position: 'relative',
+  },
+  glassIndicator: {
+    position: 'absolute',
+    top: spacing[1],
+    bottom: spacing[1],
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: radius.sm,
+  },
+  glassIndicatorPill: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: radius.full,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
   },
 });

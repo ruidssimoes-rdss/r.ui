@@ -14,7 +14,18 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
 import { useHoverCard } from './HoverCardContext';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 export interface HoverCardContentProps {
   /** Content */
@@ -25,6 +36,8 @@ export interface HoverCardContentProps {
 
 export function HoverCardContent({ children, style }: HoverCardContentProps) {
   const { open, onOpenChange, triggerLayout, side, align, sideOffset } = useHoverCard();
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
@@ -123,6 +136,43 @@ export function HoverCardContent({ children, style }: HoverCardContentProps) {
   left = Math.max(spacing[2], Math.min(left, screenWidth - contentSize.width - spacing[2]));
   top = Math.max(spacing[2], Math.min(top, screenHeight - contentSize.height - spacing[2]));
 
+  // Glass mode rendering
+  if (isGlass) {
+    return (
+      <Modal
+        visible={open}
+        transparent
+        animationType="none"
+        onRequestClose={() => onOpenChange(false)}
+      >
+        <Pressable accessibilityRole="button" accessibilityLabel="Close" style={styles.backdrop} onPress={() => onOpenChange(false)} />
+        <Animated.View
+          onLayout={handleLayout}
+          style={{
+            position: 'absolute',
+            top,
+            left,
+            transform: [{ scale: scaleAnim }],
+            opacity: opacityAnim,
+            minWidth: 200,
+            maxWidth: 320,
+          }}
+          {...webProps}
+        >
+          <GlassSurface
+            borderRadius={radius.lg}
+            shadow="md"
+            bordered
+            style={[styles.glassContent, style as ViewStyle]}
+          >
+            {children}
+          </GlassSurface>
+        </Animated.View>
+      </Modal>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <Modal
       visible={open}
@@ -165,5 +215,8 @@ const styles = StyleSheet.create({
     minWidth: 200,
     maxWidth: 320,
     ...shadows.lg,
+  },
+  glassContent: {
+    padding: spacing[4],
   },
 });
