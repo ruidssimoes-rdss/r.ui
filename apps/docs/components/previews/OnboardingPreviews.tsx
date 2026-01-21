@@ -3,10 +3,11 @@
 /**
  * Onboarding Previews for Docs
  *
- * Premium, dark-mode-first onboarding previews inspired by Linear.
+ * White frosted glass onboarding previews with warm neutral background.
  * Features:
- * - Bold typography with intentional hierarchy
- * - Vibrant gradient accents and depth
+ * - Glassmorphic card: rgba(255, 255, 255, 0.65) + backdrop blur
+ * - Warm oatmeal background: #E8E4DF
+ * - Clean typography with Pixelify Sans logo
  * - Smooth animations and micro-interactions
  * - Drag/swipe gesture support
  * - Keyboard navigation (arrow keys)
@@ -15,75 +16,196 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
 // ============================================================================
-// Design Tokens
+// Design Tokens - White Frosted Glass Theme
 // ============================================================================
 
 const theme = {
-  // Dark backgrounds with depth
+  // Background
   bg: {
-    primary: '#0A0A0B',
-    secondary: '#111113',
-    elevated: '#18181B',
-    card: 'rgba(24, 24, 27, 0.8)',
+    page: '#E8E4DF',
+    glass: 'rgba(255, 255, 255, 0.65)',
+    glassBorder: 'rgba(255, 255, 255, 0.8)',
+    feature: 'rgba(0, 0, 0, 0.03)',
+    featureHover: 'rgba(0, 0, 0, 0.05)',
+    iconBox: '#ffffff',
+    iconBoxBorder: 'rgba(0, 0, 0, 0.06)',
   },
-  // Text colors
+  // Text
   text: {
-    primary: '#FAFAFA',
-    secondary: '#A1A1AA',
-    muted: '#71717A',
+    primary: '#1a1a1a',
+    secondary: '#666666',
+    muted: '#888888',
+    label: '#999999',
+    link: '#aaaaaa',
   },
-  // Accent gradients
-  gradients: {
-    blue: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
-    purple: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
-    green: 'linear-gradient(135deg, #10B981 0%, #3B82F6 100%)',
-    orange: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
-    cyan: 'linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%)',
+  // Buttons
+  button: {
+    primary: '#1a1a1a',
+    primaryHover: '#333333',
+    secondary: 'rgba(0, 0, 0, 0.04)',
+    secondaryHover: 'rgba(0, 0, 0, 0.08)',
   },
-  // Glow effects
-  glow: {
-    blue: '0 0 60px rgba(59, 130, 246, 0.3)',
-    purple: '0 0 60px rgba(139, 92, 246, 0.3)',
-    green: '0 0 60px rgba(16, 185, 129, 0.3)',
+  // Dots/Progress
+  dots: {
+    inactive: 'rgba(0, 0, 0, 0.15)',
+    active: '#1a1a1a',
+  },
+  // Shadow
+  shadow: {
+    card: '0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)',
   },
 };
 
 // ============================================================================
-// Premium Content - Compelling, not generic
+// Content for r/ui Onboarding
 // ============================================================================
 
-const premiumSteps = [
+const steps = [
   {
     id: 'welcome',
-    headline: 'Your workspace,',
-    headlineAccent: 'reimagined.',
-    description: 'Everything you need, nothing you don\'t. Build something extraordinary.',
-    gradient: theme.gradients.blue,
-    glow: theme.glow.blue,
-    accentColor: '#3B82F6',
-    visualType: 'orbs' as const,
+    label: 'Welcome',
+    title: 'Build once,',
+    titleAccent: 'ship everywhere',
+    description: 'Production-ready React Native components for iOS, Android, and web.',
+    features: [
+      {
+        icon: 'phone',
+        title: 'Cross-platform',
+        desc: 'iOS, Android, Web',
+      },
+      {
+        icon: 'layers',
+        title: '73+ Components',
+        desc: 'Ready to use',
+      },
+    ],
   },
   {
-    id: 'speed',
-    headline: 'Work at the',
-    headlineAccent: 'speed of thought.',
-    description: 'Keyboard-first. AI-powered. Zero friction between idea and execution.',
-    gradient: theme.gradients.purple,
-    glow: theme.glow.purple,
-    accentColor: '#8B5CF6',
-    visualType: 'waves' as const,
+    id: 'design',
+    label: 'Design',
+    title: 'Accessible',
+    titleAccent: 'by default',
+    description: 'Every component follows WCAG guidelines and platform conventions.',
+    features: [
+      {
+        icon: 'clock',
+        title: 'Ship faster',
+        desc: 'Pre-built and tested',
+      },
+      {
+        icon: 'eye',
+        title: 'WCAG compliant',
+        desc: 'AA standard',
+      },
+    ],
   },
   {
-    id: 'ready',
-    headline: 'Ready when',
-    headlineAccent: 'you are.',
-    description: 'Your setup is complete. Let\'s build something great together.',
-    gradient: theme.gradients.green,
-    glow: theme.glow.green,
-    accentColor: '#10B981',
-    visualType: 'rings' as const,
+    id: 'install',
+    label: 'Install',
+    title: 'One command',
+    titleAccent: 'to get started',
+    description: 'Add components individually or set up the full library.',
+    features: [
+      {
+        icon: 'terminal',
+        title: 'npx r-ui init',
+        desc: 'Quick setup',
+      },
+      {
+        icon: 'file',
+        title: 'Documentation',
+        desc: 'Guides & examples',
+      },
+    ],
   },
 ];
+
+// ============================================================================
+// Icons
+// ============================================================================
+
+function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+      <rect x="5" y="2" width="14" height="20" rx="2" />
+      <line x1="12" y1="18" x2="12" y2="18.01" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function LayersIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+      <path d="M2 17l10 5 10-5" />
+      <path d="M2 12l10 5 10-5" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 6v6l4 2" />
+    </svg>
+  );
+}
+
+function EyeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function TerminalIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+      <polyline points="4 17 10 11 4 5" />
+      <line x1="12" y1="19" x2="20" y2="19" />
+    </svg>
+  );
+}
+
+function FileIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  );
+}
+
+function getIcon(name: string) {
+  switch (name) {
+    case 'phone': return <PhoneIcon />;
+    case 'layers': return <LayersIcon />;
+    case 'clock': return <ClockIcon />;
+    case 'eye': return <EyeIcon />;
+    case 'terminal': return <TerminalIcon />;
+    case 'file': return <FileIcon />;
+    default: return <LayersIcon />;
+  }
+}
 
 // ============================================================================
 // Hook for swipe/drag gestures and keyboard navigation
@@ -199,164 +321,53 @@ function useSwipeNavigation(
 }
 
 // ============================================================================
-// Visual Elements - Premium abstract graphics
+// CSS Keyframes
 // ============================================================================
 
-function OrbsVisual({ color, glow }: { color: string; glow: string }) {
-  return (
-    <div className="relative w-full h-48 flex items-center justify-center">
-      {/* Main orb */}
-      <div
-        className="absolute w-32 h-32 rounded-full blur-sm animate-pulse"
-        style={{
-          background: `radial-gradient(circle at 30% 30%, ${color}60, ${color}20)`,
-          boxShadow: glow,
-        }}
-      />
-      {/* Floating orbs */}
-      <div
-        className="absolute w-16 h-16 rounded-full blur-sm"
-        style={{
-          background: `radial-gradient(circle, ${color}40, transparent)`,
-          top: '15%',
-          right: '20%',
-          animation: 'float 4s ease-in-out infinite',
-        }}
-      />
-      <div
-        className="absolute w-10 h-10 rounded-full blur-sm"
-        style={{
-          background: `radial-gradient(circle, ${color}30, transparent)`,
-          bottom: '20%',
-          left: '25%',
-          animation: 'float 5s ease-in-out infinite reverse',
-        }}
-      />
-      {/* Grid lines */}
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `
-            linear-gradient(${color}15 1px, transparent 1px),
-            linear-gradient(90deg, ${color}15 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px',
-          maskImage: 'radial-gradient(circle, black 30%, transparent 70%)',
-          WebkitMaskImage: 'radial-gradient(circle, black 30%, transparent 70%)',
-        }}
-      />
-    </div>
-  );
-}
-
-function WavesVisual({ color, glow }: { color: string; glow: string }) {
-  return (
-    <div className="relative w-full h-48 flex items-center justify-center overflow-hidden">
-      {/* Wave layers */}
-      {[0, 1, 2].map((i) => (
-        <div
-          key={i}
-          className="absolute inset-x-0"
-          style={{
-            height: '120px',
-            bottom: `${i * 20}px`,
-            background: `linear-gradient(180deg, transparent 0%, ${color}${30 - i * 8} 100%)`,
-            borderRadius: '50% 50% 0 0',
-            transform: `scaleX(${1.2 - i * 0.1})`,
-            animation: `wave ${3 + i}s ease-in-out infinite`,
-            animationDelay: `${i * 0.3}s`,
-          }}
-        />
-      ))}
-      {/* Glow center */}
-      <div
-        className="absolute w-24 h-24 rounded-full blur-xl"
-        style={{
-          background: color,
-          opacity: 0.3,
-          boxShadow: glow,
-        }}
-      />
-    </div>
-  );
-}
-
-function RingsVisual({ color, glow }: { color: string; glow: string }) {
-  return (
-    <div className="relative w-full h-48 flex items-center justify-center">
-      {/* Concentric rings */}
-      {[0, 1, 2, 3].map((i) => (
-        <div
-          key={i}
-          className="absolute rounded-full border"
-          style={{
-            width: `${80 + i * 40}px`,
-            height: `${80 + i * 40}px`,
-            borderColor: `${color}${40 - i * 10}`,
-            animation: `pulse-ring ${2 + i * 0.5}s ease-out infinite`,
-            animationDelay: `${i * 0.2}s`,
-          }}
-        />
-      ))}
-      {/* Center dot */}
-      <div
-        className="w-4 h-4 rounded-full"
-        style={{
-          background: color,
-          boxShadow: glow,
-        }}
-      />
-      {/* Checkmark */}
-      <svg
-        className="absolute w-12 h-12"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        style={{ opacity: 0.8 }}
-      >
-        <polyline points="20 6 9 17 4 12" />
-      </svg>
-    </div>
-  );
-}
+const keyframesCSS = `
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
 
 // ============================================================================
-// Premium Dots Indicator
+// Progress Dots Component
 // ============================================================================
 
-function PremiumDots({
+function ProgressDots({
   current,
   total,
-  variant = 'dots',
-  accentColor,
+  variant = 'pills',
   onDotClick,
 }: {
   current: number;
   total: number;
   variant?: 'dots' | 'pills' | 'numbers' | 'line';
-  accentColor: string;
   onDotClick?: (index: number) => void;
 }) {
   if (variant === 'line') {
     return (
-      <div className="flex items-center gap-3 py-4">
+      <div className="flex items-center gap-2 py-5 px-7">
         {Array.from({ length: total }, (_, i) => (
           <button
             key={i}
             onClick={() => onDotClick?.(i)}
             className="relative h-1 flex-1 rounded-full overflow-hidden transition-all duration-300"
-            style={{ backgroundColor: `${accentColor}20` }}
+            style={{ backgroundColor: theme.dots.inactive }}
             aria-label={`Go to step ${i + 1}`}
           >
             <div
               className="absolute inset-y-0 left-0 rounded-full transition-all duration-500 ease-out"
               style={{
-                width: i < current ? '100%' : i === current ? '100%' : '0%',
-                background: i <= current ? accentColor : 'transparent',
-                boxShadow: i === current ? `0 0 8px ${accentColor}` : 'none',
+                width: i <= current ? '100%' : '0%',
+                background: theme.dots.active,
               }}
             />
           </button>
@@ -367,7 +378,7 @@ function PremiumDots({
 
   if (variant === 'numbers') {
     return (
-      <div className="flex items-center justify-center gap-3 py-4">
+      <div className="flex items-center justify-center gap-3 py-5">
         {Array.from({ length: total }, (_, i) => {
           const isActive = i === current;
           const isPast = i < current;
@@ -375,18 +386,16 @@ function PremiumDots({
             <button
               key={i}
               onClick={() => onDotClick?.(i)}
-              className="relative w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300"
+              className="relative w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300"
               style={{
-                background: isActive ? accentColor : isPast ? `${accentColor}30` : 'transparent',
-                border: `2px solid ${isActive || isPast ? accentColor : `${accentColor}40`}`,
-                color: isActive ? '#fff' : isPast ? accentColor : theme.text.muted,
-                boxShadow: isActive ? `0 0 20px ${accentColor}50` : 'none',
-                transform: isActive ? 'scale(1.1)' : 'scale(1)',
+                background: isActive ? theme.dots.active : 'transparent',
+                border: `1px solid ${isActive || isPast ? theme.dots.active : theme.dots.inactive}`,
+                color: isActive ? '#ffffff' : theme.text.secondary,
               }}
               aria-label={`Go to step ${i + 1}`}
             >
               {isPast ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               ) : (
@@ -399,20 +408,20 @@ function PremiumDots({
     );
   }
 
-  if (variant === 'pills') {
+  if (variant === 'dots') {
     return (
-      <div className="flex items-center justify-center gap-2 py-4">
+      <div className="flex items-center justify-center gap-1.5 py-5">
         {Array.from({ length: total }, (_, i) => {
           const isActive = i === current;
           return (
             <button
               key={i}
               onClick={() => onDotClick?.(i)}
-              className="h-2 rounded-full transition-all duration-500 ease-out"
+              className="rounded-full transition-all duration-300"
               style={{
-                width: isActive ? '32px' : '8px',
-                background: isActive ? accentColor : `${accentColor}30`,
-                boxShadow: isActive ? `0 0 12px ${accentColor}60` : 'none',
+                width: '6px',
+                height: '6px',
+                background: isActive ? theme.dots.active : theme.dots.inactive,
               }}
               aria-label={`Go to step ${i + 1}`}
             />
@@ -422,20 +431,19 @@ function PremiumDots({
     );
   }
 
-  // Default dots
+  // Default: pills
   return (
-    <div className="flex items-center justify-center gap-3 py-4">
+    <div className="flex items-center justify-center gap-1.5 py-5">
       {Array.from({ length: total }, (_, i) => {
         const isActive = i === current;
         return (
           <button
             key={i}
             onClick={() => onDotClick?.(i)}
-            className="w-3 h-3 rounded-full transition-all duration-300"
+            className="h-1.5 rounded-full transition-all duration-300"
             style={{
-              background: isActive ? accentColor : `${accentColor}30`,
-              boxShadow: isActive ? `0 0 12px ${accentColor}60` : 'none',
-              transform: isActive ? 'scale(1.3)' : 'scale(1)',
+              width: isActive ? '20px' : '6px',
+              background: isActive ? theme.dots.active : theme.dots.inactive,
             }}
             aria-label={`Go to step ${i + 1}`}
           />
@@ -446,128 +454,56 @@ function PremiumDots({
 }
 
 // ============================================================================
-// Progress Bar Variants
+// Feature Row Component
 // ============================================================================
 
-function PremiumProgressBar({
-  current,
-  total,
-  variant = 'bar',
-  accentColor,
-}: {
-  current: number;
-  total: number;
-  variant?: 'bar' | 'segmented';
-  accentColor: string;
-}) {
-  const progress = ((current + 1) / total) * 100;
-
-  if (variant === 'segmented') {
-    return (
-      <div className="flex gap-2 px-6 py-4">
-        {Array.from({ length: total }, (_, i) => (
-          <div
-            key={i}
-            className="flex-1 h-1.5 rounded-full overflow-hidden transition-all duration-500"
-            style={{ backgroundColor: `${accentColor}20` }}
-          >
-            <div
-              className="h-full rounded-full transition-all duration-500 ease-out"
-              style={{
-                width: i <= current ? '100%' : '0%',
-                background: accentColor,
-                boxShadow: i === current ? `0 0 8px ${accentColor}` : 'none',
-              }}
-            />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
+function FeatureRow({ icon, title, desc }: { icon: string; title: string; desc: string }) {
   return (
-    <div className="px-6 py-4">
+    <div
+      className="flex items-center gap-3 p-3 rounded-xl transition-colors duration-200"
+      style={{ background: theme.bg.feature }}
+    >
       <div
-        className="h-1 rounded-full overflow-hidden"
-        style={{ backgroundColor: `${accentColor}20` }}
+        className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+        style={{
+          background: theme.bg.iconBox,
+          border: `1px solid ${theme.bg.iconBoxBorder}`,
+          color: theme.text.primary,
+        }}
       >
-        <div
-          className="h-full rounded-full transition-all duration-700 ease-out"
-          style={{
-            width: `${progress}%`,
-            background: accentColor,
-            boxShadow: `0 0 12px ${accentColor}60`,
-          }}
-        />
+        {getIcon(icon)}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-[13px] font-medium" style={{ color: theme.text.primary }}>
+          {title}
+        </p>
+        <p className="text-xs" style={{ color: theme.text.muted }}>
+          {desc}
+        </p>
       </div>
     </div>
   );
 }
 
 // ============================================================================
-// Arrow Icons
+// Main Preview Component - White Frosted Glass
 // ============================================================================
 
-function ArrowRightIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
-  );
-}
-
-function ArrowLeftIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M19 12H5" />
-      <path d="m12 19-7-7 7-7" />
-    </svg>
-  );
-}
-
-// ============================================================================
-// CSS Keyframes (injected via style tag)
-// ============================================================================
-
-const keyframesCSS = `
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-  @keyframes wave {
-    0%, 100% { transform: scaleX(1) translateY(0); }
-    50% { transform: scaleX(1.05) translateY(-5px); }
-  }
-  @keyframes pulse-ring {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.3); opacity: 0; }
-  }
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-`;
-
-// ============================================================================
-// Main Preview Component - Premium Dark Theme
-// ============================================================================
-
-function PremiumOnboardingPreview({
-  indicatorVariant = 'dots',
-  showProgress = false,
-  progressVariant = 'bar',
+function GlassOnboardingPreview({
+  dotsVariant = 'pills',
+  showHeader = true,
+  showSkip = true,
 }: {
-  indicatorVariant?: 'dots' | 'pills' | 'numbers' | 'line';
-  showProgress?: boolean;
-  progressVariant?: 'bar' | 'segmented';
+  dotsVariant?: 'dots' | 'pills' | 'numbers' | 'line';
+  showHeader?: boolean;
+  showSkip?: boolean;
 }) {
   const [step, setStep] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
-  const currentStep = premiumSteps[step];
+  const currentStep = steps[step];
 
   const { containerRef, dragOffset, isDragging, handlers } = useSwipeNavigation(
-    premiumSteps.length,
+    steps.length,
     step,
     (newStep) => {
       if (typeof newStep === 'function') {
@@ -584,7 +520,7 @@ function PremiumOnboardingPreview({
   );
 
   const handleNext = () => {
-    if (step < premiumSteps.length - 1) {
+    if (step < steps.length - 1) {
       setStep(step + 1);
       setAnimationKey((k) => k + 1);
     }
@@ -597,170 +533,174 @@ function PremiumOnboardingPreview({
     }
   };
 
-  const handleSkip = () => {
-    setStep(premiumSteps.length - 1);
-    setAnimationKey((k) => k + 1);
-  };
-
   const handleDotClick = (i: number) => {
-    setStep(i);
-    setAnimationKey((k) => k + 1);
-  };
-
-  // Render visual based on step
-  const renderVisual = () => {
-    const props = { color: currentStep.accentColor, glow: currentStep.glow };
-    switch (currentStep.visualType) {
-      case 'waves':
-        return <WavesVisual {...props} />;
-      case 'rings':
-        return <RingsVisual {...props} />;
-      default:
-        return <OrbsVisual {...props} />;
+    if (i !== step) {
+      setStep(i);
+      setAnimationKey((k) => k + 1);
     }
   };
+
+  const handleSkip = () => {
+    setStep(steps.length - 1);
+    setAnimationKey((k) => k + 1);
+  };
+
+  const isLastStep = step === steps.length - 1;
 
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: keyframesCSS }} />
+
+      {/* Warm neutral background */}
       <div
         ref={containerRef}
-        className="flex flex-col rounded-2xl overflow-hidden select-none"
+        className="relative flex items-center justify-center p-6 rounded-2xl select-none overflow-hidden"
         style={{
           height: 520,
-          background: theme.bg.primary,
-          border: `1px solid ${theme.bg.elevated}`,
+          background: `
+            radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(200, 190, 180, 0.3) 0%, transparent 50%),
+            ${theme.bg.page}
+          `,
         }}
         tabIndex={0}
         {...handlers}
       >
-        {/* Progress bar at top (if enabled) */}
-        {showProgress && (
-          <PremiumProgressBar
-            current={step}
-            total={premiumSteps.length}
-            variant={progressVariant}
-            accentColor={currentStep.accentColor}
-          />
-        )}
-
-        {/* Main content area */}
+        {/* White Frosted Glass Card */}
         <div
-          className="flex-1 flex flex-col items-center justify-center px-8 relative overflow-hidden"
-          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+          className="relative w-full max-w-[400px] rounded-[20px] overflow-hidden"
+          style={{
+            background: theme.bg.glass,
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            border: `1px solid ${theme.bg.glassBorder}`,
+            boxShadow: theme.shadow.card,
+            transform: `translateX(${dragOffset}px)`,
+            transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)',
+            cursor: isDragging ? 'grabbing' : 'grab',
+          }}
         >
-          {/* Background gradient glow */}
-          <div
-            className="absolute inset-0 transition-all duration-700"
-            style={{
-              background: `radial-gradient(ellipse at 50% 0%, ${currentStep.accentColor}15 0%, transparent 60%)`,
-            }}
-          />
-
-          {/* Content with drag offset */}
-          <div
-            className="relative z-10 flex flex-col items-center w-full max-w-sm"
-            style={{
-              transform: `translateX(${dragOffset}px)`,
-              transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)',
-            }}
-          >
-            {/* Visual element */}
-            <div
-              key={`visual-${animationKey}`}
-              className="animate-in fade-in zoom-in-95 duration-700"
-              style={{ animationFillMode: 'both' }}
-            >
-              {renderVisual()}
-            </div>
-
-            {/* Typography */}
-            <div className="text-center mt-4">
-              <h2
-                key={`headline-${animationKey}`}
-                className="text-3xl font-bold leading-tight animate-in fade-in slide-in-from-bottom-4 duration-500"
-                style={{
-                  color: theme.text.primary,
-                  animationDelay: '150ms',
-                  animationFillMode: 'both',
-                }}
-              >
-                {currentStep.headline}
-                <br />
+          {/* Header */}
+          {showHeader && (
+            <header className="flex items-center justify-between px-7 pt-7">
+              <div className="flex items-center gap-1.5">
                 <span
-                  className="bg-clip-text text-transparent"
-                  style={{ backgroundImage: currentStep.gradient }}
+                  className="text-lg font-semibold tracking-tight"
+                  style={{
+                    fontFamily: "'Pixelify Sans', monospace",
+                    color: theme.text.primary,
+                    letterSpacing: '-0.3px',
+                  }}
                 >
-                  {currentStep.headlineAccent}
+                  r/ui
                 </span>
-              </h2>
+              </div>
+              <button
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-200"
+                style={{ background: 'rgba(0, 0, 0, 0.05)' }}
+                aria-label="Close"
+              >
+                <span style={{ color: '#666666' }}>
+                  <CloseIcon />
+                </span>
+              </button>
+            </header>
+          )}
+
+          {/* Content */}
+          <main className="px-7 pt-10 pb-8">
+            <div
+              key={`content-${animationKey}`}
+              style={{
+                animation: 'fadeIn 0.3s ease',
+              }}
+            >
+              {/* Step label */}
               <p
-                key={`desc-${animationKey}`}
-                className="mt-4 text-base leading-relaxed animate-in fade-in slide-in-from-bottom-2 duration-500"
-                style={{
-                  color: theme.text.secondary,
-                  animationDelay: '300ms',
-                  animationFillMode: 'both',
-                  maxWidth: '280px',
-                }}
+                className="text-[11px] font-semibold uppercase tracking-wider mb-3"
+                style={{ color: theme.text.label, letterSpacing: '1px' }}
+              >
+                {currentStep.label}
+              </p>
+
+              {/* Title */}
+              <h2
+                className="text-2xl font-semibold leading-tight mb-3"
+                style={{ color: theme.text.primary, letterSpacing: '-0.3px' }}
+              >
+                {currentStep.title}
+                <br />
+                <span style={{ color: theme.text.muted }}>{currentStep.titleAccent}</span>
+              </h2>
+
+              {/* Description */}
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: theme.text.secondary }}
               >
                 {currentStep.description}
               </p>
+
+              {/* Features */}
+              <div className="mt-7 flex flex-col gap-3">
+                {currentStep.features.map((feature, i) => (
+                  <FeatureRow
+                    key={i}
+                    icon={feature.icon}
+                    title={feature.title}
+                    desc={feature.desc}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        </div>
+          </main>
 
-        {/* Indicator */}
-        {!showProgress && (
-          <div className="px-6">
-            <PremiumDots
-              current={step}
-              total={premiumSteps.length}
-              variant={indicatorVariant}
-              accentColor={currentStep.accentColor}
-              onDotClick={handleDotClick}
-            />
-          </div>
-        )}
+          {/* Progress Dots */}
+          <ProgressDots
+            current={step}
+            total={steps.length}
+            variant={dotsVariant}
+            onDotClick={handleDotClick}
+          />
 
-        {/* Actions */}
-        <div
-          className="flex items-center justify-between px-6 py-5"
-          style={{ borderTop: `1px solid ${theme.bg.elevated}` }}
-        >
-          {step > 0 ? (
+          {/* Navigation Buttons */}
+          <footer className="flex gap-2.5 px-5 pb-5">
             <button
               onClick={handleBack}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-white/5"
-              style={{ color: theme.text.secondary }}
+              disabled={step === 0}
+              className="flex-1 px-5 py-3 rounded-[10px] text-[13px] font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{
+                background: theme.button.secondary,
+                color: theme.text.secondary,
+              }}
             >
-              <ArrowLeftIcon size={14} />
               Back
             </button>
-          ) : step < premiumSteps.length - 1 ? (
             <button
-              onClick={handleSkip}
-              className="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-white/5"
-              style={{ color: theme.text.muted }}
+              onClick={handleNext}
+              className="flex-1 px-5 py-3 rounded-[10px] text-[13px] font-medium transition-all duration-200 flex items-center justify-center gap-1.5"
+              style={{
+                background: theme.button.primary,
+                color: '#ffffff',
+              }}
             >
-              Skip
+              {isLastStep ? 'Get Started' : 'Continue'}
+              {!isLastStep && <ArrowRightIcon />}
             </button>
-          ) : (
-            <div />
-          )}
+          </footer>
 
-          <button
-            onClick={handleNext}
-            className="flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-            style={{
-              background: currentStep.gradient,
-              color: '#fff',
-              boxShadow: `0 4px 20px ${currentStep.accentColor}40`,
-            }}
-          >
-            {step === premiumSteps.length - 1 ? 'Get Started' : 'Continue'}
-            {step < premiumSteps.length - 1 && <ArrowRightIcon size={14} />}
-          </button>
+          {/* Skip Link */}
+          {showSkip && !isLastStep && (
+            <div className="text-center pb-5">
+              <button
+                onClick={handleSkip}
+                className="text-xs transition-colors duration-200"
+                style={{ color: theme.text.link }}
+              >
+                Skip intro
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -772,27 +712,27 @@ function PremiumOnboardingPreview({
 // ============================================================================
 
 export function OnboardingBasicPreview() {
-  return <PremiumOnboardingPreview indicatorVariant="dots" />;
+  return <GlassOnboardingPreview dotsVariant="pills" />;
 }
 
 export function OnboardingPillsPreview() {
-  return <PremiumOnboardingPreview indicatorVariant="pills" />;
+  return <GlassOnboardingPreview dotsVariant="pills" />;
 }
 
 export function OnboardingProgressPreview() {
-  return <PremiumOnboardingPreview showProgress progressVariant="bar" />;
+  return <GlassOnboardingPreview dotsVariant="line" />;
 }
 
 export function OnboardingSegmentedPreview() {
-  return <PremiumOnboardingPreview showProgress progressVariant="segmented" />;
+  return <GlassOnboardingPreview dotsVariant="line" />;
 }
 
 export function OnboardingNumbersPreview() {
-  return <PremiumOnboardingPreview indicatorVariant="numbers" />;
+  return <GlassOnboardingPreview dotsVariant="numbers" />;
 }
 
 export function OnboardingMinimalPreview() {
-  return <PremiumOnboardingPreview indicatorVariant="line" />;
+  return <GlassOnboardingPreview dotsVariant="dots" showHeader={false} showSkip={false} />;
 }
 
 export function OnboardingAllIndicatorsPreview() {
@@ -801,28 +741,46 @@ export function OnboardingAllIndicatorsPreview() {
   const [numbersStep, setNumbersStep] = useState(2);
   const [lineStep, setLineStep] = useState(1);
 
-  const accentColor = '#3B82F6';
-
   return (
     <div
       className="flex flex-col gap-6 p-6 rounded-2xl"
-      style={{ background: theme.bg.primary, border: `1px solid ${theme.bg.elevated}` }}
+      style={{
+        background: `
+          radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 80%, rgba(200, 190, 180, 0.3) 0%, transparent 50%),
+          ${theme.bg.page}
+        `,
+      }}
     >
       <div>
         <p className="text-sm font-medium mb-4" style={{ color: theme.text.secondary }}>
-          Dots (default)
+          Dots
         </p>
-        <div className="rounded-xl p-4" style={{ background: theme.bg.secondary }}>
-          <PremiumDots current={dotsStep} total={4} variant="dots" accentColor={accentColor} onDotClick={setDotsStep} />
+        <div
+          className="rounded-xl p-4"
+          style={{
+            background: theme.bg.glass,
+            backdropFilter: 'blur(24px)',
+            border: `1px solid ${theme.bg.glassBorder}`,
+          }}
+        >
+          <ProgressDots current={dotsStep} total={4} variant="dots" onDotClick={setDotsStep} />
         </div>
       </div>
 
       <div>
         <p className="text-sm font-medium mb-4" style={{ color: theme.text.secondary }}>
-          Pills
+          Pills (default)
         </p>
-        <div className="rounded-xl p-4" style={{ background: theme.bg.secondary }}>
-          <PremiumDots current={pillsStep} total={4} variant="pills" accentColor={accentColor} onDotClick={setPillsStep} />
+        <div
+          className="rounded-xl p-4"
+          style={{
+            background: theme.bg.glass,
+            backdropFilter: 'blur(24px)',
+            border: `1px solid ${theme.bg.glassBorder}`,
+          }}
+        >
+          <ProgressDots current={pillsStep} total={4} variant="pills" onDotClick={setPillsStep} />
         </div>
       </div>
 
@@ -830,8 +788,15 @@ export function OnboardingAllIndicatorsPreview() {
         <p className="text-sm font-medium mb-4" style={{ color: theme.text.secondary }}>
           Numbers
         </p>
-        <div className="rounded-xl p-4" style={{ background: theme.bg.secondary }}>
-          <PremiumDots current={numbersStep} total={4} variant="numbers" accentColor={accentColor} onDotClick={setNumbersStep} />
+        <div
+          className="rounded-xl p-4"
+          style={{
+            background: theme.bg.glass,
+            backdropFilter: 'blur(24px)',
+            border: `1px solid ${theme.bg.glassBorder}`,
+          }}
+        >
+          <ProgressDots current={numbersStep} total={4} variant="numbers" onDotClick={setNumbersStep} />
         </div>
       </div>
 
@@ -839,26 +804,15 @@ export function OnboardingAllIndicatorsPreview() {
         <p className="text-sm font-medium mb-4" style={{ color: theme.text.secondary }}>
           Line Progress
         </p>
-        <div className="rounded-xl p-4" style={{ background: theme.bg.secondary }}>
-          <PremiumDots current={lineStep} total={4} variant="line" accentColor={accentColor} onDotClick={setLineStep} />
-        </div>
-      </div>
-
-      <div>
-        <p className="text-sm font-medium mb-4" style={{ color: theme.text.secondary }}>
-          Progress Bar
-        </p>
-        <div className="rounded-xl" style={{ background: theme.bg.secondary }}>
-          <PremiumProgressBar current={1} total={4} variant="bar" accentColor={accentColor} />
-        </div>
-      </div>
-
-      <div>
-        <p className="text-sm font-medium mb-4" style={{ color: theme.text.secondary }}>
-          Segmented Progress
-        </p>
-        <div className="rounded-xl" style={{ background: theme.bg.secondary }}>
-          <PremiumProgressBar current={2} total={4} variant="segmented" accentColor={accentColor} />
+        <div
+          className="rounded-xl"
+          style={{
+            background: theme.bg.glass,
+            backdropFilter: 'blur(24px)',
+            border: `1px solid ${theme.bg.glassBorder}`,
+          }}
+        >
+          <ProgressDots current={lineStep} total={4} variant="line" onDotClick={setLineStep} />
         </div>
       </div>
     </div>
