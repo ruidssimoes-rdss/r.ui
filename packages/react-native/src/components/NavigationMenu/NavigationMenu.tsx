@@ -22,6 +22,17 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { TOUCH_TARGET, isNative } from '../../utils/platform';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 // Types
 export type NavigationMenuOrientation = 'horizontal' | 'vertical';
@@ -190,6 +201,8 @@ export function NavigationMenuContent({ children, style }: NavigationMenuContent
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const translateYAnim = useRef(new Animated.Value(-10)).current;
   const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
 
   if (!context || !menuContext) {
     throw new Error('NavigationMenuContent must be used within NavigationMenuItem');
@@ -267,6 +280,48 @@ export function NavigationMenuContent({ children, style }: NavigationMenuContent
 
   const position = calculatePosition();
 
+  // Render with GlassSurface when glass mode is active
+  if (isGlass) {
+    return (
+      <Modal
+        visible={isOpen}
+        transparent
+        animationType="none"
+        onRequestClose={close}
+      >
+        {/* Click-outside backdrop to close */}
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={close}
+          accessibilityRole="none"
+        />
+        <Animated.View
+          onLayout={handleContentLayout}
+          style={[
+            styles.glassAnimatedWrapper,
+            {
+              position: 'absolute',
+              top: position.top,
+              left: position.left,
+              opacity: opacityAnim,
+              transform: [{ translateY: translateYAnim }],
+            },
+          ]}
+        >
+          <GlassSurface
+            borderRadius={radius.md}
+            shadow="md"
+            bordered
+            style={[styles.glassContent, style as ViewStyle]}
+          >
+            {children}
+          </GlassSurface>
+        </Animated.View>
+      </Modal>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <Modal
       visible={isOpen}
@@ -487,6 +542,14 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
+  // Glass-specific styles
+  glassAnimatedWrapper: {
+    minWidth: 220,
+  },
+  glassContent: {
+    padding: spacing[3],
+  },
+  // End glass-specific styles
   link: {
     paddingHorizontal: spacing[3],
     paddingVertical: spacing[3],

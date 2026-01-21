@@ -17,6 +17,17 @@ import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
 import { animations } from '../../tokens/animations';
 import { interactiveSize } from '../../utils/platform';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 export type SelectSize = 'sm' | 'md' | 'lg';
 
@@ -87,6 +98,9 @@ export function Select({
   const triggerRef = useRef<View>(null);
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
+
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
 
   const sizeConfig = sizeStyles[size];
   const selectedOption = options.find((opt) => opt.value === value);
@@ -287,7 +301,67 @@ export function Select({
           style={styles.backdrop}
           onPress={() => setIsOpen(false)}
         />
-        {triggerLayout && (
+        {triggerLayout && isGlass ? (
+          <Animated.View
+            onLayout={handleDropdownLayout}
+            style={[
+              styles.glassAnimatedWrapper,
+              {
+                position: 'absolute',
+                top: position.top,
+                left: position.left,
+                width: position.width,
+                transform: [{ scale: scaleAnim }],
+                opacity: opacityAnim,
+              },
+            ]}
+            // @ts-ignore - Web-only prop
+            onKeyDown={Platform.OS === 'web' ? handleKeyDown : undefined}
+          >
+            <GlassSurface
+              borderRadius={radius.md}
+              shadow="md"
+              bordered
+              style={styles.glassDropdown}
+            >
+              <FlatList
+                data={options}
+                keyExtractor={(item) => item.value}
+                initialScrollIndex={selectedIndex >= 0 ? selectedIndex : 0}
+                getItemLayout={(data, index) => ({
+                  length: sizeConfig.optionHeight,
+                  offset: sizeConfig.optionHeight * index,
+                  index,
+                })}
+                renderItem={({ item, index }) => (
+                  <Pressable
+                    accessibilityRole="menuitem"
+                    accessibilityState={{ selected: item.value === value }}
+                    onPress={() => handleSelect(item.value)}
+                    style={[
+                      styles.option,
+                      dynamicStyles.option,
+                      item.value === value && styles.optionSelectedGlass,
+                      highlightedIndex === index && styles.optionHighlightedGlass,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.optionTextGlass,
+                        dynamicStyles.optionText,
+                        item.value === value && styles.optionTextSelectedGlass,
+                      ]}
+                    >
+                      {item.label}
+                    </Text>
+                    {item.value === value && <CheckIcon />}
+                  </Pressable>
+                )}
+                style={styles.optionsList}
+              />
+            </GlassSurface>
+          </Animated.View>
+        ) : triggerLayout ? (
           <Animated.View
             onLayout={handleDropdownLayout}
             style={[
@@ -340,7 +414,7 @@ export function Select({
               style={styles.optionsList}
             />
           </Animated.View>
-        )}
+        ) : null}
       </Modal>
     </View>
   );
@@ -499,6 +573,29 @@ const styles = StyleSheet.create({
     color: colors.accent.blue.DEFAULT,
     fontWeight: fontWeights.medium,
   },
+  // Glass-specific styles
+  glassAnimatedWrapper: {
+    maxHeight: 300,
+  },
+  glassDropdown: {
+    overflow: 'hidden',
+  },
+  optionSelectedGlass: {
+    backgroundColor: 'rgba(0, 0, 0, 0.06)',
+  },
+  optionHighlightedGlass: {
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+  },
+  optionTextGlass: {
+    fontFamily: fontFamilies.sans,
+    color: '#1a1a1a',
+    flex: 1,
+  },
+  optionTextSelectedGlass: {
+    color: colors.accent.blue.DEFAULT,
+    fontWeight: fontWeights.medium,
+  },
+  // End glass-specific styles
   checkIcon: {
     width: 12,
     height: 10,

@@ -8,11 +8,22 @@ import {
   StyleSheet,
   ViewStyle,
   Dimensions,
+  Platform,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { useActionSheet } from './ActionSheetContext';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -25,6 +36,35 @@ export interface ActionSheetContentProps {
   style?: ViewStyle;
 }
 
+// Get content style with glass support
+function getContentStyle(isGlass: boolean): ViewStyle {
+  const base: ViewStyle = {
+    borderTopLeftRadius: radius.xl,
+    borderTopRightRadius: radius.xl,
+    maxHeight: SCREEN_HEIGHT * 0.9,
+    paddingBottom: spacing[8],
+  };
+
+  if (isGlass) {
+    return {
+      ...base,
+      backgroundColor: 'rgba(255, 255, 255, 0.65)',
+      ...(Platform.OS === 'web' ? {
+        // @ts-expect-error - web-only CSS properties
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.8)',
+      } : {}),
+    };
+  }
+
+  return {
+    ...base,
+    backgroundColor: colors.bg.elevated,
+  };
+}
+
 export function ActionSheetContent({
   children,
   showHandle = true,
@@ -33,6 +73,8 @@ export function ActionSheetContent({
   const { open, onOpenChange } = useActionSheet();
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
 
   const dismissThreshold = 100;
 
@@ -117,12 +159,12 @@ export function ActionSheetContent({
         <Animated.View
           {...panResponder.panHandlers}
           style={[
-            styles.content,
+            getContentStyle(isGlass),
             { transform: [{ translateY }] },
             style,
           ]}
         >
-          {showHandle && <View style={styles.handle} />}
+          {showHandle && <View style={[styles.handle, isGlass && styles.handleGlass]} />}
           <View style={styles.contentInner}>{children}</View>
         </Animated.View>
       </View>
@@ -139,13 +181,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.bg.overlay,
   },
-  content: {
-    backgroundColor: colors.bg.elevated,
-    borderTopLeftRadius: radius.xl,
-    borderTopRightRadius: radius.xl,
-    maxHeight: SCREEN_HEIGHT * 0.9,
-    paddingBottom: spacing[8],
-  },
   handle: {
     width: 36,
     height: 4,
@@ -154,6 +189,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: spacing[2],
     marginBottom: spacing[2],
+  },
+  handleGlass: {
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   contentInner: {
     paddingHorizontal: spacing[4],

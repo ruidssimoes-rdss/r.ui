@@ -14,6 +14,17 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
 import { useContextMenu } from './ContextMenuContext';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 export interface ContextMenuContentProps {
   /** Content */
@@ -47,6 +58,8 @@ export function ContextMenuContent({
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
 
   useEffect(() => {
     if (open) {
@@ -121,6 +134,48 @@ export function ContextMenuContent({
   }
   top = Math.max(screenMargin, Math.min(top, screenHeight - contentSize.height - screenMargin));
 
+  // Render with GlassSurface when glass mode is active
+  if (isGlass) {
+    return (
+      <Modal
+        visible={open}
+        transparent
+        animationType="none"
+        onRequestClose={() => onOpenChange(false)}
+      >
+        <Pressable
+          style={styles.backdrop}
+          onPress={() => onOpenChange(false)}
+          accessibilityRole="button"
+          accessibilityLabel="Close menu"
+        />
+        <Animated.View
+          onLayout={handleLayout}
+          style={[
+            styles.glassAnimatedWrapper,
+            {
+              position: 'absolute',
+              top,
+              left,
+              transform: [{ scale: scaleAnim }],
+              opacity: opacityAnim,
+            },
+          ]}
+        >
+          <GlassSurface
+            borderRadius={radius.md}
+            shadow="md"
+            bordered
+            style={[styles.glassContent, style as ViewStyle]}
+          >
+            {children}
+          </GlassSurface>
+        </Animated.View>
+      </Modal>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <Modal
       visible={open}
@@ -166,5 +221,12 @@ const styles = StyleSheet.create({
     minWidth: 180,
     paddingVertical: spacing[1],
     ...shadows.lg,
+  },
+  // Glass-specific styles
+  glassAnimatedWrapper: {
+    minWidth: 180,
+  },
+  glassContent: {
+    paddingVertical: spacing[1],
   },
 });

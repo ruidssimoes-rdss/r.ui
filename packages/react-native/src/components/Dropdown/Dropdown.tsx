@@ -22,6 +22,17 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
 import { TOUCH_TARGET } from '../../utils/platform';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 export type DropdownAlign = 'start' | 'center' | 'end';
 
@@ -146,6 +157,8 @@ export function DropdownContent({ children, style }: DropdownContentProps) {
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
 
   useEffect(() => {
     if (open) {
@@ -194,6 +207,38 @@ export function DropdownContent({ children, style }: DropdownContentProps) {
     top = triggerLayout.y - contentSize.height - spacing[1];
   }
 
+  // Render with GlassSurface when glass mode is active
+  if (isGlass) {
+    return (
+      <Modal visible={open} transparent animationType="none" onRequestClose={() => onOpenChange(false)}>
+        <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} accessibilityRole="button" accessibilityLabel="Close dropdown" />
+        <Animated.View
+          onLayout={handleLayout}
+          style={[
+            styles.glassAnimatedWrapper,
+            {
+              position: 'absolute',
+              top,
+              left,
+              transform: [{ scale: scaleAnim }],
+              opacity: opacityAnim,
+            },
+          ]}
+        >
+          <GlassSurface
+            borderRadius={radius.md}
+            shadow="md"
+            bordered
+            style={[styles.glassContent, style as ViewStyle]}
+          >
+            {children}
+          </GlassSurface>
+        </Animated.View>
+      </Modal>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <Modal visible={open} transparent animationType="none" onRequestClose={() => onOpenChange(false)}>
       <Pressable style={styles.backdrop} onPress={() => onOpenChange(false)} accessibilityRole="button" accessibilityLabel="Close dropdown" />
@@ -283,6 +328,14 @@ const styles = StyleSheet.create({
     paddingVertical: spacing[1],
     ...shadows.lg,
   },
+  // Glass-specific styles
+  glassAnimatedWrapper: {
+    minWidth: 180,
+  },
+  glassContent: {
+    paddingVertical: spacing[1],
+  },
+  // End glass-specific styles
   item: {
     flexDirection: 'row',
     alignItems: 'center',

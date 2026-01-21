@@ -13,6 +13,17 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { shadows } from '../../tokens/shadows';
 import { Command, CommandProps } from './Command';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 export interface CommandDialogProps extends Omit<CommandProps, 'standalone' | 'style'> {
   /** Whether the dialog is open */
@@ -35,6 +46,8 @@ export function CommandDialog({
 }: CommandDialogProps) {
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
 
   useEffect(() => {
     if (open) {
@@ -61,6 +74,56 @@ export function CommandDialog({
     onOpenChange(false);
   };
 
+  // Render with GlassSurface when glass mode is active
+  if (isGlass) {
+    return (
+      <Modal
+        visible={open}
+        transparent
+        animationType="none"
+        onRequestClose={handleClose}
+        statusBarTranslucent
+      >
+        <View style={[styles.container, style]}>
+          {/* Backdrop */}
+          <Pressable
+            style={styles.backdrop}
+            onPress={handleClose}
+            accessibilityRole="button"
+            accessibilityLabel="Close command dialog"
+          >
+            <Animated.View
+              style={[styles.backdropOverlay, { opacity: opacityAnim }]}
+            />
+          </Pressable>
+
+          {/* Content */}
+          <Animated.View
+            style={[
+              styles.glassAnimatedWrapper,
+              {
+                transform: [{ scale: scaleAnim }],
+                opacity: opacityAnim,
+              },
+            ]}
+          >
+            <GlassSurface
+              borderRadius={radius.lg}
+              shadow="lg"
+              bordered
+              style={[styles.glassContent, contentStyle as ViewStyle]}
+            >
+              <Command {...commandProps} standalone={false} style={styles.command}>
+                {children}
+              </Command>
+            </GlassSurface>
+          </Animated.View>
+        </View>
+      </Modal>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <Modal
       visible={open}
@@ -129,6 +192,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...shadows.xl,
   },
+  // Glass-specific styles
+  glassAnimatedWrapper: {
+    width: '100%',
+    maxWidth: 480,
+    maxHeight: '70%',
+  },
+  glassContent: {
+    overflow: 'hidden',
+  },
+  // End glass-specific styles
   command: {
     flex: 1,
   },
