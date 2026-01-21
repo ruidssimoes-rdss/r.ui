@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Text, Pressable, Image, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text, Pressable, Image, StyleSheet, ViewStyle, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes } from '../../tokens/typography';
 import { useFileUpload, UploadedFile } from './FileUploadContext';
 import { formatFileSize, getFileIconType } from './utils';
+import { TOUCH_TARGET, getHitSlop } from '../../utils/platform';
+
+const REMOVE_BUTTON_SIZE = 32;
 
 // ============================================================================
 // Types
@@ -80,6 +83,7 @@ export function FileUploadItem({ file, showPreview = true, style }: FileUploadIt
         onPress={handleRemove}
         disabled={disabled}
         style={[styles.removeButton, disabled && styles.removeButtonDisabled]}
+        hitSlop={getHitSlop(REMOVE_BUTTON_SIZE)}
         accessibilityLabel={`Remove ${file.name}`}
         accessibilityRole="button"
       >
@@ -197,6 +201,10 @@ const styles = StyleSheet.create({
   removeButton: {
     padding: spacing[2],
     marginLeft: spacing[2],
+    minWidth: REMOVE_BUTTON_SIZE,
+    minHeight: REMOVE_BUTTON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   removeButtonDisabled: {
     opacity: 0.5,

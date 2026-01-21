@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { useCarousel, CarouselPreviousProps, CarouselNextProps } from './CarouselContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 function ChevronArrow({ direction }: { direction: 'left' | 'right' }) {
   const isLeft = direction === 'left';
@@ -74,10 +75,10 @@ const styles = StyleSheet.create({
   arrow: {
     position: 'absolute',
     top: '50%',
-    transform: [{ translateY: -22 }],
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    transform: [{ translateY: -(TOUCH_TARGET / 2) }],
+    width: TOUCH_TARGET,
+    height: TOUCH_TARGET,
+    borderRadius: TOUCH_TARGET / 2,
     backgroundColor: colors.bg.elevated,
     justifyContent: 'center',
     alignItems: 'center',

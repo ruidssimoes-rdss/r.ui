@@ -1,10 +1,11 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { Pressable, Text, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
 import { useFileUpload } from './FileUploadContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 // ============================================================================
 // Types
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border.default,
     borderRadius: radius.md,
+    minHeight: TOUCH_TARGET,
   },
   triggerPressed: {
     backgroundColor: colors.bg.elevated,

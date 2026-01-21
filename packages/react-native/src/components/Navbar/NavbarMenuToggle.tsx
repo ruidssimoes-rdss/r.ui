@@ -1,9 +1,10 @@
 import React from 'react';
-import { Pressable, View, StyleSheet, ViewStyle } from 'react-native';
+import { Pressable, View, StyleSheet, ViewStyle, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { useNavbar } from './Navbar';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 // ============================================================================
 // Types
@@ -60,8 +61,8 @@ function HamburgerIcon({ open }: { open: boolean }) {
 
 const styles = StyleSheet.create({
   toggle: {
-    width: 40,
-    height: 40,
+    minWidth: TOUCH_TARGET,
+    minHeight: TOUCH_TARGET,
     borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',

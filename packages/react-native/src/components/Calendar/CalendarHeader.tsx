@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ViewStyle, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
 import { useCalendar } from './CalendarContext';
 import { MONTHS, addMonths } from './utils';
+import { getHitSlop, TOUCH_TARGET } from '../../utils/platform';
+
+const NAV_BUTTON_SIZE = 32;
 
 // ============================================================================
 // Types
@@ -48,6 +51,7 @@ export function CalendarHeader({ style }: CalendarHeaderProps) {
           pressed && styles.navButtonPressed,
           disabled && styles.navButtonDisabled,
         ]}
+        hitSlop={getHitSlop(NAV_BUTTON_SIZE)}
         accessibilityLabel="Previous month"
         accessibilityRole="button"
       >
@@ -66,6 +70,7 @@ export function CalendarHeader({ style }: CalendarHeaderProps) {
           pressed && styles.navButtonPressed,
           disabled && styles.navButtonDisabled,
         ]}
+        hitSlop={getHitSlop(NAV_BUTTON_SIZE)}
         accessibilityLabel="Next month"
         accessibilityRole="button"
       >

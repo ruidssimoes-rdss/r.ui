@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
+import { Text, Pressable, StyleSheet, ViewStyle, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
@@ -15,6 +15,7 @@ import {
   isDateInList,
   DateRange,
 } from './utils';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 // ============================================================================
 // Types
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
   day: {
     width: DAY_SIZE,
     aspectRatio: 1,
+    minHeight: Platform.select({ ios: 44, android: 48, default: 36 }),
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.full,

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Text, Pressable, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { Text, Pressable, StyleSheet, ViewStyle, TextStyle, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
 import { useNavbar } from './Navbar';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 // ============================================================================
 // Types
@@ -92,6 +93,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[4],
     borderRadius: radius.md,
     marginVertical: spacing[0.5] || 2,
+    minHeight: TOUCH_TARGET,
+    justifyContent: 'center',
   },
   itemActive: {
     backgroundColor: colors.bg.elevated,

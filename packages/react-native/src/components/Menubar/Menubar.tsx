@@ -21,6 +21,7 @@ import {
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 // Types
 export type MenubarOrientation = 'horizontal' | 'vertical';
@@ -575,6 +576,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[3],
     paddingVertical: spacing[2],
     borderRadius: radius.sm,
+    minHeight: TOUCH_TARGET,
+    justifyContent: 'center',
   },
   triggerActive: {
     backgroundColor: colors.bg.elevated,
@@ -612,6 +615,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing[2],
     borderRadius: radius.sm,
     gap: spacing[2],
+    minHeight: TOUCH_TARGET,
   },
   itemPressed: {
     backgroundColor: colors.bg.surface,

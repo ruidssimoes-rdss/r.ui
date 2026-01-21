@@ -10,6 +10,12 @@ import {
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
+import { isNative } from '../../utils/platform';
+
+// Handle visual width (can be small) vs touch area (hitSlop provides the touch target)
+const HANDLE_VISUAL_WIDTH = 8;
+// Padding for native touch area on each side of the handle
+const HANDLE_HIT_PADDING = Platform.select({ ios: 18, android: 20, default: 0 }) as number;
 
 // ============================================================================
 // Types
@@ -338,9 +344,17 @@ export function ResizableHandle({
     ? styles.gripHorizontal
     : styles.gripVertical;
 
+  // For native, use hitSlop to expand touch area without changing visual size
+  const hitSlop = isNative
+    ? direction === 'horizontal'
+      ? { top: 0, bottom: 0, left: HANDLE_HIT_PADDING, right: HANDLE_HIT_PADDING }
+      : { top: HANDLE_HIT_PADDING, bottom: HANDLE_HIT_PADDING, left: 0, right: 0 }
+    : undefined;
+
   return (
     <View
       {...panResponder.panHandlers}
+      hitSlop={hitSlop}
       style={[
         styles.handle,
         handleStyle,

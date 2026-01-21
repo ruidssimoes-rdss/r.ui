@@ -1,11 +1,12 @@
 import React, { useRef } from 'react';
-import { View, Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ViewStyle, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes } from '../../tokens/typography';
 import { useDateRangePicker } from './DateRangePickerContext';
 import { formatDateRange } from './utils';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 export interface DateRangePickerTriggerProps {
   /** Override placeholder text */
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border.default,
     backgroundColor: colors.bg.surface,
-    minHeight: 48,
+    minHeight: TOUCH_TARGET,
   },
   containerOpen: {
     borderColor: colors.border.strong,

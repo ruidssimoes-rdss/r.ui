@@ -6,12 +6,14 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  Platform,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes } from '../../tokens/typography';
 import { useCombobox } from './ComboboxContext';
+import { TOUCH_TARGET } from '../../utils/platform';
 
 export interface ComboboxItemProps {
   /** Unique value for the item */
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[3],
     marginHorizontal: spacing[1],
     borderRadius: radius.md,
+    minHeight: TOUCH_TARGET,
   },
   highlighted: {
     backgroundColor: colors.bg.surface,

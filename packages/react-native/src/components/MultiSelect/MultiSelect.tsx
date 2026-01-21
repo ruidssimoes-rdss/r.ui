@@ -9,11 +9,13 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  Platform,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
+import { TOUCH_TARGET, getHitSlop } from '../../utils/platform';
 
 // ============================================================================
 // Types
@@ -384,6 +386,7 @@ export function MultiSelectTag({ value: tagValue, label, style }: MultiSelectTag
         <Pressable
           onPress={() => removeValue(tagValue)}
           style={styles.tagRemove}
+          hitSlop={getHitSlop(24)}
           accessibilityLabel={`Remove ${label}`}
           accessibilityRole="button"
         >
@@ -514,7 +517,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[3],
-    minHeight: 44,
+    minHeight: TOUCH_TARGET,
   },
   triggerDisabled: {
     backgroundColor: colors.bg.elevated,
@@ -587,6 +590,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[3],
     borderRadius: radius.md,
     marginBottom: spacing[1],
+    minHeight: TOUCH_TARGET,
   },
   optionSelected: {
     backgroundColor: colors.bg.surface,
@@ -634,7 +638,11 @@ const styles = StyleSheet.create({
     marginRight: spacing[1],
   },
   tagRemove: {
-    padding: 2,
+    padding: spacing[1],
+    minWidth: 24,
+    minHeight: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   groupLabel: {
     fontFamily: fontFamilies.sans,
