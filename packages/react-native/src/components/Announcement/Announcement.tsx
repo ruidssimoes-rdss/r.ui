@@ -14,6 +14,17 @@ import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontSizes, fontWeights } from '../../tokens/typography';
 import { storage } from '../../utils/storage';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 // ============================================================================
 // Types
@@ -79,11 +90,13 @@ export interface AnnouncementCountdownProps {
 interface AnnouncementContextValue {
   variant: AnnouncementVariant;
   dismiss: () => void;
+  isGlass: boolean;
 }
 
 const AnnouncementContext = createContext<AnnouncementContextValue>({
   variant: 'info',
   dismiss: () => {},
+  isGlass: false,
 });
 
 export function useAnnouncement() {
@@ -99,22 +112,26 @@ const variantColors = {
     bg: colors.accent.blue.DEFAULT,
     text: colors.white,
     action: colors.white,
+    glassTint: 'rgba(59, 130, 246, 0.15)', // blue tint
   },
   warning: {
     bg: colors.accent.amber.DEFAULT,
     text: colors.text.inverse,
     action: colors.text.inverse,
+    glassTint: 'rgba(245, 158, 11, 0.15)', // amber tint
   },
   success: {
     bg: colors.accent.green.DEFAULT,
     text: colors.white,
     action: colors.white,
+    glassTint: 'rgba(34, 197, 94, 0.15)', // green tint
   },
   promo: {
     bg: `linear-gradient(90deg, ${colors.accent.blue.DEFAULT}, ${colors.accent.purple.DEFAULT})`,
     bgFallback: colors.accent.purple.DEFAULT,
     text: colors.white,
     action: colors.white,
+    glassTint: 'rgba(139, 92, 246, 0.15)', // purple tint
   },
 };
 
@@ -131,6 +148,8 @@ export function Announcement({
   children,
   style,
 }: AnnouncementProps) {
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
   const [isVisible, setIsVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(!!storageKey);
   const [fadeAnim] = useState(new Animated.Value(1));
@@ -172,15 +191,37 @@ export function Announcement({
   const containerStyle: ViewStyle[] = [
     styles.container,
     sticky && styles.sticky,
-    !isPromo && { backgroundColor: variantStyle.bg },
+    !isPromo && !isGlass && { backgroundColor: variantStyle.bg },
     style,
   ];
 
   const content = (
-    <AnnouncementContext.Provider value={{ variant, dismiss }}>
+    <AnnouncementContext.Provider value={{ variant, dismiss, isGlass }}>
       <View style={styles.inner}>{children}</View>
     </AnnouncementContext.Provider>
   );
+
+  // Glass mode rendering - use GlassSurface with accent tint
+  if (isGlass) {
+    return (
+      <Animated.View style={{ opacity: fadeAnim }}>
+        <GlassSurface
+          intensity={12}
+          borderRadius={radius.md}
+          shadow="sm"
+          bordered
+          style={[
+            styles.glassContainer,
+            sticky && styles.sticky,
+            { backgroundColor: variantStyle.glassTint },
+            style as ViewStyle,
+          ]}
+        >
+          {content}
+        </GlassSurface>
+      </Animated.View>
+    );
+  }
 
   // Handle gradient for promo variant on web
   if (isPromo && Platform.OS === 'web') {
@@ -218,11 +259,14 @@ export function Announcement({
 // ============================================================================
 
 export function AnnouncementContent({ children, style }: AnnouncementContentProps) {
-  const { variant } = useAnnouncement();
+  const { variant, isGlass } = useAnnouncement();
   const variantStyle = variantColors[variant];
 
+  // In glass mode, use primary text color for readability
+  const textColor = isGlass ? colors.text.primary : variantStyle.text;
+
   return (
-    <Text style={[styles.content, { color: variantStyle.text }, style]}>
+    <Text style={[styles.content, { color: textColor }, style]}>
       {children}
     </Text>
   );
@@ -238,8 +282,11 @@ export function AnnouncementAction({
   onPress,
   style,
 }: AnnouncementActionProps) {
-  const { variant } = useAnnouncement();
+  const { variant, isGlass } = useAnnouncement();
   const variantStyle = variantColors[variant];
+
+  // In glass mode, use accent color for actions
+  const actionColor = isGlass ? colors.accent.blue.DEFAULT : variantStyle.action;
 
   return (
     <Pressable
@@ -253,7 +300,7 @@ export function AnnouncementAction({
       ]}
       accessibilityRole="link"
     >
-      <Text style={[styles.action, { color: variantStyle.action }, style]}>
+      <Text style={[styles.action, { color: actionColor }, style]}>
         {children} →
       </Text>
     </Pressable>
@@ -265,8 +312,11 @@ export function AnnouncementAction({
 // ============================================================================
 
 export function AnnouncementClose({ style }: AnnouncementCloseProps) {
-  const { variant, dismiss } = useAnnouncement();
+  const { variant, dismiss, isGlass } = useAnnouncement();
   const variantStyle = variantColors[variant];
+
+  // In glass mode, use muted text for close icon
+  const iconColor = isGlass ? colors.text.muted : variantStyle.text;
 
   return (
     <Pressable
@@ -279,7 +329,7 @@ export function AnnouncementClose({ style }: AnnouncementCloseProps) {
       accessibilityLabel="Dismiss announcement"
       accessibilityRole="button"
     >
-      <Text style={[styles.closeIcon, { color: variantStyle.text }]}>×</Text>
+      <Text style={[styles.closeIcon, { color: iconColor }]}>×</Text>
     </Pressable>
   );
 }
@@ -445,5 +495,11 @@ const styles = StyleSheet.create({
   countdownLabel: {
     fontSize: fontSizes.xs,
     marginLeft: 1,
+  },
+  // Glass mode styles
+  glassContainer: {
+    width: '100%',
+    paddingVertical: spacing[2],
+    paddingHorizontal: spacing[4],
   },
 });

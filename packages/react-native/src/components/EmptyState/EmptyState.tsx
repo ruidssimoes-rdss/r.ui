@@ -4,6 +4,17 @@ import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
 import { fontFamilies, fontSizes, fontWeights } from '../../tokens/typography';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 // ============================================================================
 // Types
@@ -60,6 +71,29 @@ export interface EmptyStateActionProps {
 // ============================================================================
 
 export function EmptyState({ variant = 'default', children, style }: EmptyStateProps) {
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
+
+  // Glass mode rendering
+  if (isGlass) {
+    return (
+      <GlassSurface
+        intensity={16}
+        borderRadius={radius.lg}
+        shadow="md"
+        bordered
+        style={[
+          styles.glassContainer,
+          variant === 'compact' && styles.containerCompact,
+          style as ViewStyle,
+        ]}
+      >
+        {children}
+      </GlassSurface>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <View style={[styles.container, variant === 'compact' && styles.containerCompact, style]}>
       {children}
@@ -228,6 +262,12 @@ const styles = StyleSheet.create({
   },
   containerCompact: {
     padding: spacing[4],
+  },
+  // Glass mode styles
+  glassContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing[8],
   },
   iconContainer: {
     marginBottom: spacing[4],

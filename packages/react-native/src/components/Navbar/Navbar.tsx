@@ -2,6 +2,18 @@ import React, { useState, createContext, useContext, useMemo } from 'react';
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
+import { radius } from '../../tokens/radius';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 // ============================================================================
 // Types
@@ -75,6 +87,8 @@ export function Navbar({
   children,
   style,
 }: NavbarProps) {
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -91,6 +105,37 @@ export function Navbar({
     ? { position: 'relative', zIndex: 50 }
     : {};
 
+  // Glass mode rendering - use GlassSurface with subtle bottom radius
+  if (isGlass) {
+    return (
+      <NavbarContext.Provider value={contextValue}>
+        <GlassSurface
+          intensity={12}
+          borderRadius={0}
+          shadow="sm"
+          bordered={false}
+          style={[
+            styles.glassNavbar as ViewStyle,
+            positionStyles,
+            bordered && styles.glassNavbarBordered,
+            style as ViewStyle,
+          ]}
+        >
+          <View
+            style={[
+              styles.content,
+              { maxWidth: maxWidthValues[maxWidth] },
+            ]}
+            accessibilityRole="navigation"
+          >
+            {children}
+          </View>
+        </GlassSurface>
+      </NavbarContext.Provider>
+    );
+  }
+
+  // Default non-glass rendering
   const blurStyles = blur && Platform.OS === 'web'
     ? { backgroundColor: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(8px)' }
     : { backgroundColor: colors.bg.base };
@@ -139,5 +184,14 @@ const styles = StyleSheet.create({
     height: 56,
     width: '100%',
     marginHorizontal: 'auto',
+  },
+  // Glass mode styles
+  glassNavbar: {
+    width: '100%',
+    paddingHorizontal: spacing[4],
+  },
+  glassNavbarBordered: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
   },
 });

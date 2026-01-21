@@ -4,12 +4,24 @@
  */
 
 import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet, Dimensions } from 'react-native';
+import { View, Animated, StyleSheet, Dimensions, ViewStyle } from 'react-native';
 import { useOnboarding } from './OnboardingContext';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { animations } from '../../tokens/animations';
 import { spacing } from '../../tokens/spacing';
+import { radius } from '../../tokens/radius';
+import { GlassSurface } from '../GlassSurface';
+import { useTheme, ThemeContextValue } from '../../themes/ThemeProvider';
 import type { OnboardingStepProps, StepAnimation } from './types';
+
+// Safe hook that returns null if ThemeProvider is not present
+function useThemeOptional(): ThemeContextValue | null {
+  try {
+    return useTheme();
+  } catch {
+    return null;
+  }
+}
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -38,6 +50,8 @@ export function OnboardingStep({
     unregisterStep,
   } = useOnboarding();
   const reducedMotion = useReducedMotion();
+  const themeContext = useThemeOptional();
+  const isGlass = themeContext?.isGlass ?? false;
 
   // Animation values
   const opacity = useRef(new Animated.Value(0)).current;
@@ -158,14 +172,44 @@ export function OnboardingStep({
     return null;
   }
 
+  const animatedStyle = {
+    opacity,
+    transform: [{ translateX }, { scale }],
+  };
+
+  // Glass mode rendering - wrap content in GlassSurface for hero effect
+  if (isGlass) {
+    return (
+      <Animated.View
+        style={[
+          styles.container,
+          animatedStyle,
+          !isActive && styles.hidden,
+          style,
+        ]}
+        pointerEvents={isActive ? 'auto' : 'none'}
+        accessibilityElementsHidden={!isActive}
+        importantForAccessibility={isActive ? 'yes' : 'no-hide-descendants'}
+      >
+        <GlassSurface
+          intensity={20}
+          borderRadius={radius.xl}
+          shadow="lg"
+          bordered
+          style={styles.glassContent as ViewStyle}
+        >
+          {children}
+        </GlassSurface>
+      </Animated.View>
+    );
+  }
+
+  // Default non-glass rendering
   return (
     <Animated.View
       style={[
         styles.container,
-        {
-          opacity,
-          transform: [{ translateX }, { scale }],
-        },
+        animatedStyle,
         !isActive && styles.hidden,
         style,
       ]}
@@ -190,5 +234,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  // Glass mode styles
+  glassContent: {
+    flex: 1,
+    padding: spacing[6],
+    marginVertical: spacing[4],
   },
 });
