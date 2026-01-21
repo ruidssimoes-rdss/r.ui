@@ -1,53 +1,40 @@
 'use client';
 
 import {
-  Hero,
-  PlatformBadges,
-  ComponentGallery,
-  FeatureGrid,
-  ThemeShowcase,
-  CodeExample,
-  WhyHyena,
-  Footer,
-} from '../components/home';
+  HeroSection,
+  FlowSection,
+  ConstellationSection,
+  ThemeSection,
+  CodeSection,
+  FooterSection,
+} from '../components/home-v2';
 
 /**
- * Homepage - Portfolio-Worthy Showcase
+ * Homepage v2 - Memorable & Unique
  *
- * Premium homepage showcasing Hyena as "shadcn/ui for React Native".
- * Features live component demos, theme showcase, and clear value proposition.
+ * A dark, atmospheric homepage that creates a memorable visual experience.
+ * Features flowing light lines, platform constellation, and dramatic theme transitions.
  */
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <Hero />
+    <main className="homepage-root">
+      {/* Hero - Atmospheric opening with platform constellation */}
+      <HeroSection />
 
-      {/* Platform Badges */}
-      <PlatformBadges />
+      {/* Flow - Horizontal showcase: Code → Component → Platforms */}
+      <FlowSection />
 
-      {/* Divider */}
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="border-t border-gray-100" />
-      </div>
+      {/* Constellation - Components floating in space like stars */}
+      <ConstellationSection />
 
-      {/* Live Component Gallery */}
-      <ComponentGallery />
+      {/* Theme - Dramatic transformation between themes */}
+      <ThemeSection />
 
-      {/* Feature Grid */}
-      <FeatureGrid />
+      {/* Code - Cinematic terminal presentation */}
+      <CodeSection />
 
-      {/* Theme Showcase */}
-      <ThemeShowcase />
-
-      {/* Code Example */}
-      <CodeExample />
-
-      {/* Why Hyena */}
-      <WhyHyena />
-
-      {/* Footer */}
-      <Footer />
+      {/* Footer - Minimal and impactful */}
+      <FooterSection />
     </main>
   );
 }
