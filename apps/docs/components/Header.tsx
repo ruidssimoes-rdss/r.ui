@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { SearchModal } from './SearchModal';
-import { Logo } from './Logo';
 
 function SearchIcon({ className }: { className?: string }) {
   return (
@@ -14,12 +14,13 @@ function SearchIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.33"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
     >
       <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
+      <path d="M21 21l-4.35-4.35" />
     </svg>
   );
 }
@@ -48,6 +49,7 @@ function MenuIcon({ className }: { className?: string }) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
     >
       <line x1="4" x2="20" y1="12" y2="12" />
       <line x1="4" x2="20" y1="6" y2="6" />
@@ -68,6 +70,7 @@ function CloseIcon({ className }: { className?: string }) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
     >
       <path d="M18 6 6 18" />
       <path d="m6 6 12 12" />
@@ -78,12 +81,18 @@ function CloseIcon({ className }: { className?: string }) {
 /**
  * Header Component
  *
- * Minimal header - clean white with subtle bottom border.
- * No theme toggle.
+ * Centered nav layout with:
+ * - Logo absolute left (using Pixelify Sans)
+ * - Nav links centered
+ * - Search absolute right
+ *
+ * Uses hy-* color palette, 4px/8px grid spacing
  */
 export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuToggle?: () => void; isMobileMenuOpen?: boolean }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMac, setIsMac] = useState(true);
+  const pathname = usePathname();
+  const isHomepage = pathname === '/';
 
   useEffect(() => {
     setIsMac(navigator.platform.toLowerCase().includes('mac'));
@@ -101,59 +110,71 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
 
   return (
     <>
-      <header className="sticky top-0 z-50 h-14 border-b border-gray-200 bg-white">
-        <div className="mx-auto flex h-full items-center px-6 lg:px-48">
-          {/* Mobile: Left section */}
-          <div className="flex items-center md:hidden">
+      <header className="sticky top-0 z-50 h-14 border-b border-hy-100 bg-white" role="banner">
+        <nav className="relative flex items-center justify-center h-full max-w-6xl mx-auto px-6 lg:px-8" aria-label="Main navigation">
+          {/* Mobile: Menu button - absolute left */}
+          <div className="absolute left-6 lg:left-8 flex items-center md:hidden">
             <button
               onClick={onMobileMenuToggle}
-              className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+              className="p-2 text-hy-500 hover:text-hy-900 hover:bg-hy-50 rounded-lg transition-colors landing-focus-ring"
               aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
           </div>
 
-          {/* Desktop: Left nav */}
-          <div className="hidden md:flex items-center gap-1 flex-1">
+          {/* Logo - absolute left on desktop */}
+          <Link
+            href="/"
+            className="absolute left-6 lg:left-8 hidden md:block font-pixelify text-sm leading-5 text-hy-800 hover:text-hy-900 transition-colors landing-focus-ring rounded"
+            aria-label="Hyena home"
+          >
+            hyena
+          </Link>
+
+          {/* Mobile: Logo - centered */}
+          <Link
+            href="/"
+            className="md:hidden font-pixelify text-sm leading-5 text-hy-800"
+            aria-label="Hyena home"
+          >
+            hyena
+          </Link>
+
+          {/* Nav Links - Centered (desktop only) */}
+          <div className="hidden md:flex items-center gap-1">
             <Link
               href="/docs"
-              className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              className="px-3 py-2 text-sm font-medium text-hy-600 hover:text-hy-900 hover:bg-hy-50 rounded-lg transition-colors"
             >
-              Docs
+              docs
             </Link>
             <Link
-              href="/docs/components"
-              className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              href={isHomepage ? '#components' : '/docs/components'}
+              className="px-3 py-2 text-sm font-medium text-hy-600 hover:text-hy-900 hover:bg-hy-50 rounded-lg transition-colors"
             >
-              Components
+              components
             </Link>
             <Link
-              href="/tools"
-              className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              href={isHomepage ? '#tools' : '/tools'}
+              className="px-3 py-2 text-sm font-medium text-hy-600 hover:text-hy-900 hover:bg-hy-50 rounded-lg transition-colors"
             >
-              Tools
+              tools
             </Link>
           </div>
 
-          {/* Center: Logo */}
-          <Link
-            href="/"
-            className="absolute left-1/2 -translate-x-1/2 md:relative md:left-auto md:translate-x-0"
-          >
-            <Logo size="md" />
-          </Link>
-
-          {/* Right: Actions */}
-          <div className="flex items-center gap-1 md:gap-2 ml-auto md:flex-1 md:justify-end">
+          {/* Right: Search & GitHub - absolute right */}
+          <div className="absolute right-6 lg:right-8 flex items-center gap-2">
             {/* Search button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 text-gray-400 text-sm hover:text-gray-600 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-hy-400 hover:text-hy-600 hover:bg-hy-50 rounded-lg transition-colors landing-focus-ring"
+              aria-label="Open search dialog, keyboard shortcut Command plus K"
             >
-              <SearchIcon className="w-4 h-4" />
-              <span className="hidden lg:inline">Search</span>
-              <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-gray-100 text-[10px] font-medium text-gray-500">
+              <SearchIcon />
+              <span className="hidden lg:inline text-sm">search</span>
+              <kbd className="hidden lg:inline-flex items-center px-1 py-0.5 rounded bg-hy-100 text-[10px] font-medium text-hy-500">
                 {isMac ? '⌘' : 'Ctrl'}K
               </kbd>
             </button>
@@ -163,13 +184,13 @@ export function Header({ onMobileMenuToggle, isMobileMenuOpen }: { onMobileMenuT
               href="https://github.com/hyena-studio/hyena"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="p-2 text-hy-400 hover:text-hy-600 hover:bg-hy-50 rounded-lg transition-colors landing-focus-ring"
               aria-label="GitHub repository"
             >
               <GitHubIcon className="w-5 h-5" />
             </a>
           </div>
-        </div>
+        </nav>
       </header>
 
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

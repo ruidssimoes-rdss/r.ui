@@ -321,40 +321,6 @@ function ExternalLinkIcon({ className }: { className?: string }) {
 }
 
 // ============================================================================
-// Navigation Component
-// ============================================================================
-
-function Navigation() {
-  return (
-    <nav className="sticky top-0 bg-white z-50 h-14 border-b border-hy-100" aria-label="Main navigation">
-      <div className="relative flex items-center justify-center h-full max-w-6xl mx-auto px-6 lg:px-8">
-        {/* Logo - absolute left */}
-        <Link href="/" className="absolute left-6 lg:left-8 font-pixelify text-sm leading-5 text-hy-800" aria-label="Hyena home">
-          hyena
-        </Link>
-
-        {/* Nav Links - Centered */}
-        <div className="flex items-center gap-1">
-          <Link href="/docs" className="landing-btn-ghost">docs</Link>
-          <Link href="#components" className="landing-btn-ghost">components</Link>
-          <Link href="#tools" className="landing-btn-ghost">tools</Link>
-        </div>
-
-        {/* Search - absolute right */}
-        <button
-          className="absolute right-6 lg:right-8 flex items-center gap-2 px-3 py-2 hover:bg-hy-50 rounded-lg transition-colors landing-focus-ring"
-          aria-label="Open search dialog, keyboard shortcut Command plus K"
-        >
-          <SearchIcon className="text-hy-400" />
-          <span className="text-sm leading-5 text-hy-400">search</span>
-          <kbd className="px-2 py-1 rounded font-mono text-xs font-medium bg-hy-100 text-hy-600">⌘K</kbd>
-        </button>
-      </div>
-    </nav>
-  );
-}
-
-// ============================================================================
 // Hero Section
 // ============================================================================
 
@@ -1079,9 +1045,6 @@ export default function HomePage() {
       {/* Page vertical lines */}
       <div className="landing-page-line landing-page-line-left" aria-hidden="true" />
       <div className="landing-page-line landing-page-line-right" aria-hidden="true" />
-
-      {/* Navigation */}
-      <Navigation />
 
       {/* Hero */}
       <HeroSection />
