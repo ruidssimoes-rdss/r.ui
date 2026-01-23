@@ -1,11 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTokens } from '@/lib/studio/context';
 import { StudioToolbar } from './StudioToolbar';
 import { StudioPreview } from './StudioPreview';
 import { StudioControls } from './StudioControls';
 import { ExportModal } from './ExportModal';
+import { PresetDropdown } from './PresetSelector';
+import { ShareButton } from './ShareButton';
+import { Preset, getPresetById } from '@/lib/studio/presets';
+import { useTokenPersistence } from '@/lib/studio/hooks/useTokenPersistence';
+import { decodeTokensFromUrl, hasTokensInUrl, clearTokensFromUrl } from '@/lib/studio/utils/tokenUrl';
 import Link from 'next/link';
 
 // Icons
@@ -73,16 +78,94 @@ function DownloadIcon() {
 }
 
 export function TokenBuilder() {
-  const { reset } = useTokens();
+  const { state, reset, loadTokens, currentPresetId } = useTokens();
   const [exportOpen, setExportOpen] = useState(false);
   const [isMac, setIsMac] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
+  // Persistence hook
+  const { loadSaved, clearSaved } = useTokenPersistence(
+    state.tokens,
+    currentPresetId,
+    isInitialized // Only persist after initial load
+  );
+
+  // Show toast notification
+  const showToast = useCallback((message: string) => {
+    setToast(message);
+    setTimeout(() => setToast(null), 3000);
+  }, []);
+
+  // Initialize: check URL params first, then localStorage
+  useEffect(() => {
+    // Check URL for shared tokens first
+    if (hasTokensInUrl()) {
+      const urlData = decodeTokensFromUrl();
+      if (urlData) {
+        loadTokens(urlData.tokens, urlData.presetId);
+        // Optionally clear URL after loading
+        clearTokensFromUrl();
+        showToast('Loaded from shared link');
+        setIsInitialized(true);
+        return;
+      }
+    }
+
+    // Check localStorage
+    const savedData = loadSaved();
+    if (savedData) {
+      loadTokens(savedData.tokens, savedData.presetId);
+      showToast('Restored from last session');
+    }
+
+    setIsInitialized(true);
+  }, [loadSaved, loadTokens, showToast]);
+
+  // Detect OS for keyboard shortcut display
   useEffect(() => {
     setIsMac(navigator.platform.toLowerCase().includes('mac'));
   }, []);
 
+  // Handle preset selection
+  const handlePresetSelect = useCallback(
+    (preset: Preset) => {
+      loadTokens(preset.tokens, preset.id);
+      showToast(`Applied "${preset.name}" preset`);
+    },
+    [loadTokens, showToast]
+  );
+
+  // Handle reset
+  const handleReset = useCallback(() => {
+    reset();
+    clearSaved();
+    showToast('Reset to defaults');
+  }, [reset, clearSaved, showToast]);
+
+  // Get current preset name for display
+  const currentPresetName = currentPresetId
+    ? getPresetById(currentPresetId)?.name
+    : null;
+
+  // Loading state
+  if (!isInitialized) {
+    return (
+      <div className="h-screen flex flex-col bg-white items-center justify-center">
+        <div className="animate-pulse text-[#9CA3AF]">Loading studio...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex flex-col bg-white overflow-hidden">
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 bg-[#18181B] text-white text-sm rounded-lg shadow-lg animate-fade-in">
+          {toast}
+        </div>
+      )}
+
       {/* Site Header */}
       <header className="h-14 flex-shrink-0 border-b border-[#E5E7EB] bg-white">
         <div className="h-full flex items-center justify-between px-48">
@@ -123,7 +206,7 @@ export function TokenBuilder() {
               </kbd>
             </button>
             <a
-              href="https://github.com/hyena-studio/hyena"
+              href="https://github.com/ruidssimoes-rdss/hyena"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 text-[#9CA3AF] hover:text-[#6B7280] transition-colors"
@@ -148,21 +231,42 @@ export function TokenBuilder() {
               <div className="flex-[1.8] border-r border-[#E5E7EB] overflow-hidden flex flex-col">
                 <StudioPreview />
                 {/* Bottom Action Buttons */}
-                <div className="flex-shrink-0 px-6 py-4 border-t border-[#E5E7EB] bg-white flex items-center gap-3">
-                  <button
-                    onClick={reset}
-                    className="flex items-center gap-2 px-3 py-1.5 text-sm text-[#6B7280] hover:text-[#111827] transition-colors"
-                  >
-                    <RotateCcwIcon />
-                    Reset
-                  </button>
-                  <button
-                    onClick={() => setExportOpen(true)}
-                    className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium bg-[#18181B] text-white rounded-md hover:bg-[#27272A] transition-colors"
-                  >
-                    <DownloadIcon />
-                    Export
-                  </button>
+                <div className="flex-shrink-0 px-6 py-4 border-t border-[#E5E7EB] bg-white flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {/* Preset Selector */}
+                    <PresetDropdown
+                      onSelect={handlePresetSelect}
+                      currentPresetId={currentPresetId}
+                    />
+
+                    {/* Current preset indicator */}
+                    {currentPresetName && (
+                      <span className="text-xs text-[#9CA3AF]">
+                        Based on {currentPresetName}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleReset}
+                      className="flex items-center gap-2 px-3 py-1.5 text-sm text-[#6B7280] hover:text-[#111827] transition-colors"
+                    >
+                      <RotateCcwIcon />
+                      Reset
+                    </button>
+                    <ShareButton
+                      tokens={state.tokens}
+                      presetId={currentPresetId}
+                    />
+                    <button
+                      onClick={() => setExportOpen(true)}
+                      className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium bg-[#18181B] text-white rounded-md hover:bg-[#27272A] transition-colors"
+                    >
+                      <DownloadIcon />
+                      Export
+                    </button>
+                  </div>
                 </div>
               </div>
 

@@ -1115,3 +1115,22 @@ body {
 .landing-code-fade-in {
   animation: codeFadeIn 0.3s ease-out;
 }
+
+/* ========================================
+   Studio Toast Notification
+======================================== */
+
+@keyframes toastFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-fade-in {
+  animation: toastFadeIn 0.2s ease-out;
+}

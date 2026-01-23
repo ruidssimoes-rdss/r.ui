@@ -29,6 +29,7 @@ import { defaultTokens } from './defaults';
 
 interface TokenContextType {
   state: StudioState;
+  currentPresetId: string | undefined;
 
   // Color actions
   updateBrandColor: (id: string, value: Partial<ColorValue>) => void;
@@ -75,7 +76,8 @@ interface TokenContextType {
   zoomOut: () => void;
   zoomReset: () => void;
 
-  // Reset
+  // Load/Reset
+  loadTokens: (tokens: TokenSystem, presetId?: string) => void;
   reset: () => void;
 
   // Validation
@@ -105,6 +107,7 @@ const initialState: StudioState = {
 
 export function TokenProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<StudioState>(initialState);
+  const [currentPresetId, setCurrentPresetId] = useState<string | undefined>(undefined);
 
   // Calculate validation errors whenever tokens change
   const validationErrors = useMemo(
@@ -459,15 +462,26 @@ export function TokenProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({ ...prev, zoomLevel: 100 }));
   }, []);
 
+  // Load tokens (from preset, URL, or localStorage)
+  const loadTokens = useCallback((tokens: TokenSystem, presetId?: string) => {
+    setState((prev) => ({
+      ...prev,
+      tokens,
+    }));
+    setCurrentPresetId(presetId);
+  }, []);
+
   // Reset
   const reset = useCallback(() => {
     setState(initialState);
+    setCurrentPresetId(undefined);
   }, []);
 
   return (
     <TokenContext.Provider
       value={{
         state,
+        currentPresetId,
         updateBrandColor,
         addBrandColor,
         removeBrandColor,
@@ -496,6 +510,7 @@ export function TokenProvider({ children }: { children: ReactNode }) {
         zoomIn,
         zoomOut,
         zoomReset,
+        loadTokens,
         reset,
         validationErrors,
       }}
