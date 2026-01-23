@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle, ViewProps, TextStyle } from 'react-native';
+import { View, Text, StyleSheet, ViewStyle, ViewProps, TextStyle, AccessibilityRole } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { fontFamilies, fontSizes } from '../../tokens/typography';
@@ -38,7 +38,7 @@ export function Separator({
     return (
       <View
         style={[styles.labelContainer, style]}
-        accessibilityRole={decorative ? 'none' : 'separator'}
+        accessibilityRole={decorative ? 'none' : ('separator' as AccessibilityRole)}
         accessible={!decorative}
         {...props}
       >
@@ -67,7 +67,7 @@ export function Separator({
         isHorizontal ? styles.horizontal : styles.vertical,
         style,
       ]}
-      accessibilityRole={decorative ? 'none' : 'separator'}
+      accessibilityRole={decorative ? 'none' : ('separator' as AccessibilityRole)}
       accessible={!decorative}
       {...props}
     />

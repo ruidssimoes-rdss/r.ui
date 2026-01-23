@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext, useMemo } from 'react';
-import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
+import { View, StyleSheet, ViewStyle, Platform, AccessibilityRole, DimensionValue } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
@@ -124,9 +124,9 @@ export function Navbar({
           <View
             style={[
               styles.content,
-              { maxWidth: maxWidthValues[maxWidth] },
+              { maxWidth: maxWidthValues[maxWidth] as DimensionValue },
             ]}
-            accessibilityRole="navigation"
+            accessibilityRole={'navigation' as AccessibilityRole}
           >
             {children}
           </View>
@@ -150,12 +150,12 @@ export function Navbar({
           bordered && styles.bordered,
           style,
         ]}
-        accessibilityRole="navigation"
+        accessibilityRole={'navigation' as AccessibilityRole}
       >
         <View
           style={[
             styles.content,
-            { maxWidth: maxWidthValues[maxWidth] },
+            { maxWidth: maxWidthValues[maxWidth] as DimensionValue },
           ]}
         >
           {children}

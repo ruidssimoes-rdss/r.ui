@@ -122,11 +122,10 @@ export function FeatureGrid({
           style={[
             styles.grid,
             {
-              // @ts-ignore - web-only style
               display: 'grid',
               gridTemplateColumns: `repeat(${columns}, 1fr)`,
               gap: gapValue,
-            },
+            } as any,
             style,
           ]}
         >

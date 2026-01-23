@@ -174,7 +174,7 @@ export function OnboardingStep({
 
   const animatedStyle = {
     opacity,
-    transform: [{ translateX }, { scale }],
+    transform: [{ translateX }, { scale }] as Animated.WithAnimatedValue<ViewStyle>['transform'],
   };
 
   // Glass mode rendering - wrap content in GlassSurface for hero effect

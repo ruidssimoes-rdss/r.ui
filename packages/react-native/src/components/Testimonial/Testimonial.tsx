@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  ImageStyle,
   Image,
   ScrollView,
   Dimensions,
@@ -246,9 +247,9 @@ export function TestimonialAvatar({
     <Image
       source={{ uri: source }}
       style={[
-        styles.avatar,
+        styles.avatar as ImageStyle,
         { width: sizeValue, height: sizeValue, borderRadius: sizeValue / 2 },
-        style,
+        style as ImageStyle,
       ]}
       onError={() => setImageError(true)}
       accessible

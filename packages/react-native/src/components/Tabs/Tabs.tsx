@@ -11,6 +11,7 @@ import {
   Platform,
   NativeSyntheticEvent,
   TargetedEvent,
+  AccessibilityRole,
 } from 'react-native';
 import { colors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
@@ -354,7 +355,7 @@ export function TabsTrigger({
   const webProps = Platform.select({
     web: {
       onKeyDown: handleKeyDown,
-      tabIndex: isSelected ? 0 : -1,
+      tabIndex: (isSelected ? 0 : -1) as 0 | -1,
     },
     default: {},
   });
@@ -405,7 +406,7 @@ export function TabsContent({ value, children, style }: TabsContentProps) {
   }
 
   return (
-    <View style={[styles.content, style]} accessibilityRole="tabpanel">
+    <View style={[styles.content, style]} accessibilityRole={'tabpanel' as AccessibilityRole}>
       {children}
     </View>
   );

@@ -149,11 +149,10 @@ export function Masonry({
           style={[
             styles.webGrid,
             {
-              // @ts-ignore - CSS Grid properties
-              display: 'grid',
+              display: 'grid' as any,
               gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
               gap: gap,
-            },
+            } as any,
           ]}
         >
           {childArray.map((child, index) => (
@@ -212,24 +211,26 @@ export function MasonryItem({
 // Styles
 // ============================================================================
 
-const styles = StyleSheet.create({
+const baseStyles = {
   container: {
     flex: 1,
   },
   columnsContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: 'row' as const,
+    alignItems: 'flex-start' as const,
   },
   column: {
-    flexDirection: 'column',
+    flexDirection: 'column' as const,
   },
   item: {
-    overflow: 'hidden',
+    overflow: 'hidden' as const,
   },
   webGrid: {
     width: '100%',
   },
   webGridItem: {
-    breakInside: 'avoid' as any,
+    breakInside: 'avoid',
   },
-});
+};
+
+const styles = StyleSheet.create(baseStyles as any);

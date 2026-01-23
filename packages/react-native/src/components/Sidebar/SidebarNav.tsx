@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, AccessibilityRole } from 'react-native';
 import { spacing } from '../../tokens/spacing';
 
 // ============================================================================
@@ -19,7 +19,7 @@ export interface SidebarNavProps {
 
 export function SidebarNav({ children, style }: SidebarNavProps) {
   return (
-    <View style={[styles.nav, style]} accessibilityRole="navigation">
+    <View style={[styles.nav, style]} accessibilityRole={'navigation' as AccessibilityRole}>
       {children}
     </View>
   );

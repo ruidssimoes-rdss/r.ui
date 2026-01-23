@@ -352,7 +352,7 @@ function getTooltipPosition(position: 'bottom' | 'left' | 'right'): ViewStyle {
 // Styles
 // ============================================================================
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   container: {
     position: 'absolute',
     alignItems: 'center',

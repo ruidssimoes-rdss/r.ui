@@ -213,11 +213,10 @@ export function FooterLinks({ children, style }: FooterLinksProps) {
         style={[
           styles.links,
           {
-            // @ts-ignore - web-only style
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
             gap: spacing[8],
-          },
+          } as any,
           style,
         ]}
       >

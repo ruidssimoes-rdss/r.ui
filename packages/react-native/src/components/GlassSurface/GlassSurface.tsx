@@ -121,7 +121,7 @@ export const GlassSurface = React.forwardRef<View, GlassSurfaceProps>(
               overflow: 'hidden',
               backdropFilter: `blur(${intensity}px)`,
               WebkitBackdropFilter: `blur(${intensity}px)`,
-            },
+            } as any,
             borderStyles,
             shadowStyles,
             style,

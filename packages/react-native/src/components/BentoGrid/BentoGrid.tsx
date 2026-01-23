@@ -88,11 +88,10 @@ export function BentoGrid({
         style={[
           styles.gridWeb,
           {
-            // @ts-ignore - web-only style
             display: 'grid',
             gridTemplateColumns: `repeat(${resolvedColumns}, 1fr)`,
             gap: gapValue,
-          },
+          } as any,
           style,
         ]}
       >

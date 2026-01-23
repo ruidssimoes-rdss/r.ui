@@ -459,7 +459,7 @@ export function DataTableHeaderCell({ column, style }: DataTableHeaderCellProps)
       style={[
         styles.headerCell,
         column.sortable && styles.headerCellSortable,
-        column.width ? { width: column.width } : styles.flexCell,
+        column.width ? { width: column.width as any } : styles.flexCell,
         style,
       ]}
       accessibilityRole="button"
@@ -536,7 +536,7 @@ export function DataTableRow<T>({ row, index, style }: DataTableRowProps<T>) {
 
 export function DataTableCell({ children, width, style }: DataTableCellProps) {
   return (
-    <View style={[styles.cell, width ? { width } : styles.flexCell, style]}>
+    <View style={[styles.cell, width ? { width: width as any } : styles.flexCell, style]}>
       {typeof children === 'string' ? (
         <Text style={styles.cellText}>{children}</Text>
       ) : (

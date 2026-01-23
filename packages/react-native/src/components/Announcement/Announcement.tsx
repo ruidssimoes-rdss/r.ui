@@ -110,18 +110,21 @@ export function useAnnouncement() {
 const variantColors = {
   info: {
     bg: colors.accent.blue.DEFAULT,
+    bgFallback: colors.accent.blue.DEFAULT,
     text: colors.white,
     action: colors.white,
     glassTint: 'rgba(59, 130, 246, 0.15)', // blue tint
   },
   warning: {
     bg: colors.accent.amber.DEFAULT,
+    bgFallback: colors.accent.amber.DEFAULT,
     text: colors.text.inverse,
     action: colors.text.inverse,
     glassTint: 'rgba(245, 158, 11, 0.15)', // amber tint
   },
   success: {
     bg: colors.accent.green.DEFAULT,
+    bgFallback: colors.accent.green.DEFAULT,
     text: colors.white,
     action: colors.white,
     glassTint: 'rgba(34, 197, 94, 0.15)', // green tint
