@@ -55,6 +55,21 @@ export const colors = {
       DEFAULT: '#a855f7',
       dark: '#9333ea',
     },
+    yellow: {
+      light: '#fde047',
+      DEFAULT: '#eab308',
+      dark: '#ca8a04',
+    },
+    pink: {
+      light: '#f472b6',
+      DEFAULT: '#ec4899',
+      dark: '#db2777',
+    },
+    cyan: {
+      light: '#22d3ee',
+      DEFAULT: '#06b6d4',
+      dark: '#0891b2',
+    },
   },
 
   // Semantic colors
