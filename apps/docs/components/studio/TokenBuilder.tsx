@@ -13,7 +13,11 @@ import { ImageUpload } from './ImageUpload';
 import { Preset, getPresetById } from '@/lib/studio/presets';
 import { useTokenPersistence } from '@/lib/studio/hooks/useTokenPersistence';
 import { useVibeGeneration } from '@/lib/studio/hooks/useVibeGeneration';
+import { useSavedSystems } from '@/lib/studio/hooks/useSavedSystems';
 import { decodeTokensFromUrl, hasTokensInUrl, clearTokensFromUrl } from '@/lib/studio/utils/tokenUrl';
+import { defaultTokens } from '@/lib/studio/defaults';
+import { SystemsManager } from './SystemsManager';
+import { ValidationPanel } from './ValidationPanel';
 import Link from 'next/link';
 
 // Icons
@@ -142,6 +146,23 @@ export function TokenBuilder() {
     clearFeedback,
   } = useVibeGeneration();
 
+  // Multiple systems management hook
+  const {
+    isLoaded: systemsLoaded,
+    currentSystem,
+    allSystems,
+    systemCount,
+    maxSystems,
+    saveAsNew,
+    updateCurrent,
+    switchTo,
+    rename,
+    deleteSystem,
+    duplicate,
+    exportSystem,
+    importSystem,
+  } = useSavedSystems(defaultTokens);
+
   // Show toast notification
   const showToast = useCallback((message: string) => {
     setToast(message);
@@ -224,6 +245,57 @@ export function TokenBuilder() {
     ? getPresetById(currentPresetId)?.name
     : null;
 
+  // Auto-save current tokens to the active system (debounced)
+  useEffect(() => {
+    if (currentSystem && systemsLoaded && isInitialized) {
+      const timeout = setTimeout(() => {
+        updateCurrent(state.tokens);
+      }, 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [state.tokens, currentSystem, systemsLoaded, isInitialized, updateCurrent]);
+
+  // Handle switching systems
+  const handleSwitchSystem = useCallback(
+    (systemId: string) => {
+      const newTokens = switchTo(systemId);
+      if (newTokens) {
+        loadTokens(newTokens, undefined);
+        showToast('Switched to saved system');
+      }
+    },
+    [switchTo, loadTokens, showToast]
+  );
+
+  // Handle saving as new system
+  const handleSaveAsNew = useCallback(
+    (tokens: typeof state.tokens, name?: string) => {
+      try {
+        saveAsNew(tokens, name);
+        showToast('System saved!');
+      } catch (err) {
+        showToast(err instanceof Error ? err.message : 'Failed to save');
+      }
+    },
+    [saveAsNew, showToast]
+  );
+
+  // Handle importing system
+  const handleImportSystem = useCallback(
+    (json: string) => {
+      try {
+        const imported = importSystem(json);
+        if (imported) {
+          loadTokens(imported.tokens, undefined);
+          showToast(`Imported "${imported.name}"`);
+        }
+      } catch (err) {
+        throw err; // Re-throw to be caught by SystemsManager
+      }
+    },
+    [importSystem, loadTokens, showToast]
+  );
+
   // Loading state
   if (!isInitialized) {
     return (
@@ -274,6 +346,21 @@ export function TokenBuilder() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
+            {/* Systems Manager */}
+            <SystemsManager
+              currentSystem={currentSystem}
+              allSystems={allSystems}
+              systemCount={systemCount}
+              maxSystems={maxSystems}
+              onSaveAsNew={handleSaveAsNew}
+              onSwitchTo={handleSwitchSystem}
+              onRename={rename}
+              onDelete={deleteSystem}
+              onDuplicate={duplicate}
+              onImport={handleImportSystem}
+              onExport={exportSystem}
+              currentTokens={state.tokens}
+            />
             <button className="flex items-center gap-2 px-3 py-1.5 text-[#9CA3AF] hover:text-[#6B7280] transition-colors">
               <SearchIcon />
               <span className="text-sm">Search</span>
@@ -393,6 +480,11 @@ export function TokenBuilder() {
                       )}
                     </div>
                   )}
+                </div>
+
+                {/* Validation Panel */}
+                <div className="flex-shrink-0 px-6 py-3 border-t border-[#E5E7EB] bg-white">
+                  <ValidationPanel tokens={state.tokens} />
                 </div>
 
                 {/* Bottom Action Buttons */}

@@ -6,6 +6,7 @@ import { generateCSS } from '@/lib/studio/generators/css';
 import { generateTailwind } from '@/lib/studio/generators/tailwind';
 import { generateRUITheme } from '@/lib/studio/generators/rui-theme';
 import { generateJSON } from '@/lib/studio/generators/json';
+import { generateReactNativeStyleSheet, generateHyenaTheme } from '@/lib/studio/generators/react-native';
 import { ExportFormat } from '@/lib/studio/types';
 import { cn } from '@/lib/utils';
 
@@ -13,7 +14,7 @@ export function TokenExport() {
   const { state, setExportFormat } = useTokens();
   const [copied, setCopied] = useState(false);
 
-  const getCode = () => {
+  const getCode = (): string => {
     switch (state.exportFormat) {
       case 'css':
         return generateCSS(state.tokens);
@@ -23,6 +24,12 @@ export function TokenExport() {
         return generateRUITheme(state.tokens);
       case 'json':
         return generateJSON(state.tokens);
+      case 'react-native':
+        return generateReactNativeStyleSheet(state.tokens);
+      case 'hyena-rn':
+        return generateHyenaTheme(state.tokens);
+      default:
+        return generateCSS(state.tokens);
     }
   };
 

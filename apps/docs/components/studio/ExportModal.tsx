@@ -6,6 +6,7 @@ import { generateCSS } from '@/lib/studio/generators/css';
 import { generateTailwind } from '@/lib/studio/generators/tailwind';
 import { generateRUITheme } from '@/lib/studio/generators/rui-theme';
 import { generateJSON } from '@/lib/studio/generators/json';
+import { generateReactNativeStyleSheet, generateHyenaTheme } from '@/lib/studio/generators/react-native';
 import { ExportFormat } from '@/lib/studio/types';
 import { cn } from '@/lib/utils';
 
@@ -31,6 +32,10 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
         return generateRUITheme(state.tokens);
       case 'json':
         return generateJSON(state.tokens);
+      case 'react-native':
+        return generateReactNativeStyleSheet(state.tokens);
+      case 'hyena-rn':
+        return generateHyenaTheme(state.tokens);
     }
   };
 
@@ -48,6 +53,10 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
         return 'theme.ts';
       case 'json':
         return `${baseName}-tokens.json`;
+      case 'react-native':
+        return `${baseName}-theme.ts`;
+      case 'hyena-rn':
+        return `${baseName}-hyena-theme.ts`;
     }
   };
 
@@ -71,11 +80,13 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
     URL.revokeObjectURL(url);
   };
 
-  const formats: { id: ExportFormat; label: string; description: string }[] = [
-    { id: 'css', label: 'CSS Variables', description: 'Standard CSS custom properties' },
-    { id: 'tailwind', label: 'Tailwind Config', description: 'tailwind.config.ts theme extension' },
-    { id: 'rui', label: 'Hyena Theme', description: 'Hyena createTheme configuration' },
-    { id: 'json', label: 'Design Tokens', description: 'W3C Design Tokens JSON format' },
+  const formats: { id: ExportFormat; label: string; description: string; category?: string }[] = [
+    { id: 'css', label: 'CSS Variables', description: 'Standard CSS custom properties', category: 'Web' },
+    { id: 'tailwind', label: 'Tailwind Config', description: 'tailwind.config.ts theme extension', category: 'Web' },
+    { id: 'json', label: 'Design Tokens', description: 'W3C Design Tokens JSON format', category: 'Web' },
+    { id: 'react-native', label: 'React Native', description: 'StyleSheet with Platform-specific styles', category: 'Mobile' },
+    { id: 'hyena-rn', label: 'Hyena RN Theme', description: 'Hyena createTheme for React Native', category: 'Mobile' },
+    { id: 'rui', label: 'Hyena Web', description: 'Hyena createTheme configuration', category: 'Web' },
   ];
 
   return (
@@ -117,23 +128,53 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
         {/* Content */}
         <div className="flex-1 flex min-h-0">
           {/* Format Selection */}
-          <div className="w-48 border-r border-[#E5E7EB] p-3 flex-shrink-0 bg-[#F9FAFB]">
-            <div className="space-y-1">
-              {formats.map(({ id, label, description }) => (
-                <button
-                  key={id}
-                  onClick={() => setFormat(id)}
-                  className={cn(
-                    'w-full text-left p-3 rounded-xl transition-colors',
-                    format === id
-                      ? 'bg-white text-[#111827] shadow-sm border border-[#E5E7EB]'
-                      : 'text-[#6B7280] hover:bg-white hover:text-[#374151]'
-                  )}
-                >
-                  <div className="text-sm font-medium">{label}</div>
-                  <div className="text-xs text-[#9CA3AF]">{description}</div>
-                </button>
-              ))}
+          <div className="w-52 border-r border-[#E5E7EB] p-3 flex-shrink-0 bg-[#F9FAFB] overflow-y-auto">
+            {/* Web Formats */}
+            <div className="mb-4">
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-[#9CA3AF] px-3 mb-2">
+                Web
+              </div>
+              <div className="space-y-1">
+                {formats.filter(f => f.category === 'Web').map(({ id, label, description }) => (
+                  <button
+                    key={id}
+                    onClick={() => setFormat(id)}
+                    className={cn(
+                      'w-full text-left p-3 rounded-xl transition-colors',
+                      format === id
+                        ? 'bg-white text-[#111827] shadow-sm border border-[#E5E7EB]'
+                        : 'text-[#6B7280] hover:bg-white hover:text-[#374151]'
+                    )}
+                  >
+                    <div className="text-sm font-medium">{label}</div>
+                    <div className="text-xs text-[#9CA3AF]">{description}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile Formats */}
+            <div>
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-[#9CA3AF] px-3 mb-2">
+                Mobile
+              </div>
+              <div className="space-y-1">
+                {formats.filter(f => f.category === 'Mobile').map(({ id, label, description }) => (
+                  <button
+                    key={id}
+                    onClick={() => setFormat(id)}
+                    className={cn(
+                      'w-full text-left p-3 rounded-xl transition-colors',
+                      format === id
+                        ? 'bg-white text-[#111827] shadow-sm border border-[#E5E7EB]'
+                        : 'text-[#6B7280] hover:bg-white hover:text-[#374151]'
+                    )}
+                  >
+                    <div className="text-sm font-medium">{label}</div>
+                    <div className="text-xs text-[#9CA3AF]">{description}</div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 

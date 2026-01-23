@@ -154,7 +154,7 @@ export type TokenTab =
   | 'animations';
 export type PreviewMode = 'light' | 'dark';
 export type PreviewDevice = 'mobile' | 'tablet' | 'desktop';
-export type ExportFormat = 'css' | 'tailwind' | 'rui' | 'json';
+export type ExportFormat = 'css' | 'tailwind' | 'rui' | 'json' | 'react-native' | 'hyena-rn';
 export type ViewMode = 'preview' | 'code';
 
 export interface StudioState {
@@ -172,5 +172,50 @@ export interface ValidationError {
   type: 'error' | 'warning';
   category: string;
   message: string;
+  suggestion?: string;
+}
+
+// ============================================
+// SAVED SYSTEMS (Multiple token systems)
+// ============================================
+
+export interface SavedSystem {
+  id: string;
+  name: string;
+  tokens: TokenSystem;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface StudioStorage {
+  version: 1;
+  currentSystemId: string | null;
+  systems: Record<string, SavedSystem>;
+}
+
+// Helper to generate unique IDs
+export function generateSystemId(): string {
+  return `sys_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+// ============================================
+// EXTENDED VALIDATION
+// ============================================
+
+export type ValidationSeverity = 'error' | 'warning' | 'info';
+export type ValidationCategory =
+  | 'contrast'
+  | 'typography'
+  | 'spacing'
+  | 'touch-target'
+  | 'general';
+
+export interface ValidationIssue {
+  id: string;
+  severity: ValidationSeverity;
+  category: ValidationCategory;
+  title: string;
+  description: string;
+  affectedTokens?: string[];
   suggestion?: string;
 }
