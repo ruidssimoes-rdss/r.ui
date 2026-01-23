@@ -7,8 +7,10 @@ import { generateTailwind } from '@/lib/studio/generators/tailwind';
 import { generateRUITheme } from '@/lib/studio/generators/rui-theme';
 import { generateJSON } from '@/lib/studio/generators/json';
 import { generateReactNativeStyleSheet, generateHyenaTheme } from '@/lib/studio/generators/react-native';
+import { generateFigmaVariables, generateFigmaTokensStudio } from '@/lib/studio/generators/figma';
 import { ExportFormat } from '@/lib/studio/types';
 import { cn } from '@/lib/utils';
+import { FigmaImportGuide } from './FigmaImportGuide';
 
 interface ExportModalProps {
   open: boolean;
@@ -36,6 +38,10 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
         return generateReactNativeStyleSheet(state.tokens);
       case 'hyena-rn':
         return generateHyenaTheme(state.tokens);
+      case 'figma-variables':
+        return generateFigmaVariables(state.tokens);
+      case 'figma-tokens-studio':
+        return generateFigmaTokensStudio(state.tokens);
     }
   };
 
@@ -57,6 +63,10 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
         return `${baseName}-theme.ts`;
       case 'hyena-rn':
         return `${baseName}-hyena-theme.ts`;
+      case 'figma-variables':
+        return `${baseName}-figma-variables.json`;
+      case 'figma-tokens-studio':
+        return `${baseName}-tokens-studio.json`;
     }
   };
 
@@ -80,13 +90,15 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
     URL.revokeObjectURL(url);
   };
 
-  const formats: { id: ExportFormat; label: string; description: string; category?: string }[] = [
+  const formats: { id: ExportFormat; label: string; description: string; category: string }[] = [
     { id: 'css', label: 'CSS Variables', description: 'Standard CSS custom properties', category: 'Web' },
     { id: 'tailwind', label: 'Tailwind Config', description: 'tailwind.config.ts theme extension', category: 'Web' },
     { id: 'json', label: 'Design Tokens', description: 'W3C Design Tokens JSON format', category: 'Web' },
     { id: 'react-native', label: 'React Native', description: 'StyleSheet with Platform-specific styles', category: 'Mobile' },
     { id: 'hyena-rn', label: 'Hyena RN Theme', description: 'Hyena createTheme for React Native', category: 'Mobile' },
     { id: 'rui', label: 'Hyena Web', description: 'Hyena createTheme configuration', category: 'Web' },
+    { id: 'figma-variables', label: 'Figma Variables', description: 'Native Figma variables format', category: 'Design' },
+    { id: 'figma-tokens-studio', label: 'Tokens Studio', description: 'For Figma Tokens Studio plugin', category: 'Design' },
   ];
 
   return (
@@ -154,12 +166,36 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
             </div>
 
             {/* Mobile Formats */}
-            <div>
+            <div className="mb-4">
               <div className="text-[10px] font-semibold uppercase tracking-wider text-[#9CA3AF] px-3 mb-2">
                 Mobile
               </div>
               <div className="space-y-1">
                 {formats.filter(f => f.category === 'Mobile').map(({ id, label, description }) => (
+                  <button
+                    key={id}
+                    onClick={() => setFormat(id)}
+                    className={cn(
+                      'w-full text-left p-3 rounded-xl transition-colors',
+                      format === id
+                        ? 'bg-white text-[#111827] shadow-sm border border-[#E5E7EB]'
+                        : 'text-[#6B7280] hover:bg-white hover:text-[#374151]'
+                    )}
+                  >
+                    <div className="text-sm font-medium">{label}</div>
+                    <div className="text-xs text-[#9CA3AF]">{description}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Design Tools Formats */}
+            <div>
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-[#9CA3AF] px-3 mb-2">
+                Design Tools
+              </div>
+              <div className="space-y-1">
+                {formats.filter(f => f.category === 'Design').map(({ id, label, description }) => (
                   <button
                     key={id}
                     onClick={() => setFormat(id)}
@@ -229,31 +265,38 @@ export function ExportModal({ open, onOpenChange }: ExportModalProps) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-4 border-t border-[#E5E7EB]">
-          <button
-            onClick={() => onOpenChange(false)}
-            className="px-4 py-2 text-sm text-[#6B7280] hover:text-[#374151] hover:bg-[#F3F4F6] rounded-lg transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleDownload}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-[#18181B] text-white rounded-lg hover:bg-[#27272A] transition-colors font-medium"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
+        <div className="flex items-center justify-between p-4 border-t border-[#E5E7EB]">
+          <div className="flex-1">
+            {(format === 'figma-variables' || format === 'figma-tokens-studio') && (
+              <FigmaImportGuide format={format} />
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => onOpenChange(false)}
+              className="px-4 py-2 text-sm text-[#6B7280] hover:text-[#374151] hover:bg-[#F3F4F6] rounded-lg transition-colors"
             >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Download {getFileName()}
-          </button>
+              Cancel
+            </button>
+            <button
+              onClick={handleDownload}
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-[#18181B] text-white rounded-lg hover:bg-[#27272A] transition-colors font-medium"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download {getFileName()}
+            </button>
+          </div>
         </div>
       </div>
     </>

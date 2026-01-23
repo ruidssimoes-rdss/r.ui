@@ -154,7 +154,15 @@ export type TokenTab =
   | 'animations';
 export type PreviewMode = 'light' | 'dark';
 export type PreviewDevice = 'mobile' | 'tablet' | 'desktop';
-export type ExportFormat = 'css' | 'tailwind' | 'rui' | 'json' | 'react-native' | 'hyena-rn';
+export type ExportFormat =
+  | 'css'
+  | 'tailwind'
+  | 'rui'
+  | 'json'
+  | 'react-native'
+  | 'hyena-rn'
+  | 'figma-variables'
+  | 'figma-tokens-studio';
 export type ViewMode = 'preview' | 'code';
 
 export interface StudioState {
