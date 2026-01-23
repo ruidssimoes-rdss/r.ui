@@ -494,6 +494,7 @@ export {
   PaginationPrevious,
   PaginationNext,
   PaginationEllipsis,
+  getPageNumbers,
 } from './components/Pagination';
 export type {
   PaginationProps,

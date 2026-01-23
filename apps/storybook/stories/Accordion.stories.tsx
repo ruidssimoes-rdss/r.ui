@@ -263,7 +263,7 @@ export const CustomStyling: Story = {
             <View style={styles.customTrigger}>
               <Text style={styles.customIcon}>📥</Text>
               <Text style={styles.customTriggerText}>Inbox</Text>
-              <Badge variant="primary" size="sm">12</Badge>
+              <Badge variant="default" size="sm">12</Badge>
             </View>
           </AccordionTrigger>
           <AccordionContent>

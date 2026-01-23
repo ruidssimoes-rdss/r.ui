@@ -402,7 +402,7 @@ export const SettingsTabs: Story = {
                 <Text style={styles.settingsItemLabel}>Profile Visibility</Text>
                 <Text style={styles.settingsItemDesc}>Who can see your profile</Text>
               </View>
-              <Badge variant="primary">Public</Badge>
+              <Badge variant="default">Public</Badge>
             </View>
             <Separator />
             <View style={styles.settingsItem}>

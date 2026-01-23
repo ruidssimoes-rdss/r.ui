@@ -8,7 +8,8 @@
     "lint": "pnpm -r lint",
     "lint:design": "pnpm --filter @hyena-studio/lint build && pnpm --filter @hyena-studio/lint test",
     "clean": "pnpm -r clean",
-    "storybook": "pnpm --filter @hyena-studio/storybook start"
+    "storybook": "pnpm --filter @hyena-studio/storybook start",
+    "chromatic": "pnpm --filter @hyena-studio/storybook chromatic"
   },
   "devDependencies": {
     "typescript": "^5.3.3"

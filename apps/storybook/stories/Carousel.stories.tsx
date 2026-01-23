@@ -158,7 +158,7 @@ export const ProductGallery: Story = {
               <CarouselItem key={product.id}>
                 <View style={[styles.productSlide, { backgroundColor: product.color }]}>
                   {product.badge && (
-                    <Badge variant="primary" size="sm" style={styles.productBadge}>
+                    <Badge variant="default" size="sm" style={styles.productBadge}>
                       {product.badge}
                     </Badge>
                   )}
