@@ -1,0 +1,42 @@
+
+> @hyena-studio/storybook@0.1.0 build-storybook /Users/ruisimoes/r-ui-showcase/r-ui/apps/storybook
+> storybook build --config-dir .storybook-web --output-dir storybook-static "--output-dir=/var/folders/2k/3_37s01d6ls9m9t8vqsdr6500000gn/T/chromatic--67557-ObW32pKQOqko"
+
+
+[90m┌[39m  Building storybook v10.2.0
+[90m│[39m
+[32m◇[39m  Cleaning outputDir:
+[90m│[39m  [36m../../../../../../var/folders/2k/3_37s01d6ls9m9t8vqsdr6500000gn/T/chromatic--67557-ObW32pKQOqko[39m
+[90m│[39m
+[32m◇[39m  Loading presets
+[90m│[39m
+[32m◇[39m  Building manager..
+[90m│[39m
+[34m●[39m  Building preview..
+[90m│[39m
+[34m●[39m  Using implicit CSS loaders
+[90m│[39m
+[34m●[39m  Using default Webpack5 setup
+[90m│[39m
+[33m▲[39m  asset size limit: The following asset(s) exceed the recommended size
+[90m│[39m  limit (244 KiB).
+[90m│[39m  This can impact web performance.
+[90m│[39m  Assets:
+[90m│[39m  main.11b139aa.iframe.bundle.js (785 KiB)
+[90m│[39m  3069.ad151fcf.iframe.bundle.js (1.19 MiB)
+[90m│[39m
+[33m▲[39m  entrypoint size limit: The following entrypoint(s) combined asset size
+[90m│[39m  exceeds the recommended limit (244 KiB). This can impact web
+[90m│[39m  performance.
+[90m│[39m  Entrypoints:
+[90m│[39m  main (1.97 MiB)
+[90m│[39m  runtime~main.806e9b8e.iframe.bundle.js
+[90m│[39m  3069.ad151fcf.iframe.bundle.js
+[90m│[39m  main.11b139aa.iframe.bundle.js
+
+[90m│[39m
+[32m◇[39m  Output directory:
+[90m│[39m  /var/folders/2k/3_37s01d6ls9m9t8vqsdr6500000gn/T/chromatic--67557-ObW32pKQOqko
+[90m│[39m
+[90m└[39m  Storybook build completed successfully
+
